@@ -25,6 +25,7 @@ from models.schemas import (
 from services.question_service import generate_session_questions
 from services import ai_service
 from cache import session_cache
+from docs_loader import load_template_meta
 
 router = APIRouter(prefix="/api/session")
 logger = logging.getLogger(__name__)
@@ -42,7 +43,6 @@ def _build_results_table(session: dict) -> str:
     Format: Q# | VC Code | Topic | Student answer | Correct answer | Result
     (per docs/ai_prompts.md)
     """
-    from docs_loader import load_template_meta
     rows = []
     for i, resp in enumerate(session["responses"], 1):
         q = session["questions"].get(resp["question_id"])

@@ -5,6 +5,7 @@ import pytest
 from unittest.mock import AsyncMock, patch
 
 from docs_loader import load_template_meta
+from services.verification import VerificationEngine
 from services.question_service import (
     _fallback_params,
     _resolve_derived_params,
@@ -48,7 +49,6 @@ def test_fallback_params_t8a02_integer_solution():
     x = -10/7 which the verifier silently truncated to -1 (wrong answer).
     """
     template = load_template_meta("T-8A-02")
-    from services.verification import VerificationEngine
     engine = VerificationEngine()
     for _ in range(50):
         params = _fallback_params(template, "standard")

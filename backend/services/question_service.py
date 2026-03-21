@@ -40,9 +40,12 @@ def _solution_is_integer(template_id: str, params: dict) -> bool:
     """
     if template_id == "T-8A-02":
         try:
-            a = int(params["a"]);  c = int(params["c"])
-            b = int(params["b"]);  d = int(params["d"])
-            op1 = params.get("op1", "+");  op2 = params.get("op2", "+")
+            a = int(params["a"])
+            b = int(params["b"])
+            c = int(params["c"])
+            d = int(params["d"])
+            op1 = params.get("op1", "+")
+            op2 = params.get("op2", "+")
             b_signed = b if op1 == "+" else -b
             d_signed = d if op2 == "+" else -d
             denom = a - c
