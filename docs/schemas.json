@@ -1,0 +1,170 @@
+{
+  "_meta": {
+    "note": "All Pydantic models in backend/models/schemas.py must match these definitions exactly.",
+    "version": "1.0"
+  },
+
+  "QuestionObject": {
+    "_description": "A single drill question, fully assembled and verified. This is what gets stored in cache and served to the frontend.",
+    "fields": {
+      "question_id":          { "type": "string", "format": "uuid4", "generated_by": "backend" },
+      "template_id":          { "type": "string", "example": "T-8A-02" },
+      "vc_code":              { "type": "string", "example": "VC2M8A02" },
+      "year_level":           { "type": "integer", "enum": [7, 8, 9] },
+      "strand":               { "type": "string", "enum": ["Number", "Algebra", "Measurement", "Space", "Statistics", "Probability"] },
+      "difficulty":           { "type": "string", "enum": ["foundation", "standard", "advanced"] },
+      "question_text":        { "type": "string", "description": "Fully rendered question with params substituted" },
+      "options":              { "type": "array", "items": "string", "minItems": 4, "maxItems": 4, "description": "Shuffled; one correct, three distractors" },
+      "correct_index":        { "type": "integer", "minimum": 0, "maximum": 3, "description": "Index into options[]. Set by verification engine, never by AI." },
+      "explanation":          { "type": "string", "description": "Step-by-step working for the correct answer" },
+      "params":               { "type": "object", "description": "Raw parameter values — needed to re-verify at any time" },
+      "generated_at":         { "type": "string", "format": "iso_datetime" }
+    },
+    "required": ["question_id", "template_id", "vc_code", "year_level", "strand", "difficulty", "question_text", "options", "correct_index", "explanation", "params"]
+  },
+
+  "SessionStartRequest": {
+    "_description": "Sent by frontend to begin a new session.",
+    "fields": {
+      "year_level":   { "type": "integer", "enum": [7, 8, 9] },
+      "strand":       { "type": "string", "enum": ["Number", "Algebra", "Measurement", "Space", "Statistics", "Probability", "Mixed"], "description": "Mixed = all strands" },
+      "difficulty":   { "type": "string", "enum": ["foundation", "standard", "advanced"] },
+      "count":        { "type": "integer", "minimum": 5, "maximum": 20, "default": 10 }
+    },
+    "required": ["year_level", "difficulty"]
+  },
+
+  "SessionStartResponse": {
+    "_description": "Returned by backend when session is created. Contains the full question set.",
+    "fields": {
+      "session_id":   { "type": "string", "format": "uuid4" },
+      "questions":    { "type": "array", "items": "QuestionObject_WithoutCorrectIndex", "description": "correct_index is EXCLUDED from this response — only sent after submission" },
+      "created_at":   { "type": "string", "format": "iso_datetime" },
+      "config": {
+        "year_level": "integer",
+        "strand":     "string",
+        "difficulty": "string",
+        "count":      "integer"
+      }
+    },
+    "_implementation_note": "Strip correct_index from QuestionObject before returning to frontend. Server stores the full QuestionObject in memory."
+  },
+
+  "SessionSubmitRequest": {
+    "_description": "Sent by frontend when student has answered all questions.",
+    "fields": {
+      "responses": {
+        "type": "array",
+        "items": {
+          "question_id":     { "type": "string" },
+          "selected_index":  { "type": "integer", "minimum": 0, "maximum": 3 },
+          "time_taken_ms":   { "type": "integer", "minimum": 0, "description": "optional" }
+        }
+      }
+    },
+    "required": ["responses"]
+  },
+
+  "SessionResultResponse": {
+    "_description": "Returned after submission. Contains score, per-question breakdown, and AI analysis.",
+    "fields": {
+      "session_id":   { "type": "string" },
+      "score":        { "type": "integer" },
+      "total":        { "type": "integer" },
+      "score_pct":    { "type": "integer" },
+      "responses": {
+        "type": "array",
+        "items": {
+          "question_id":      "string",
+          "question_text":    "string",
+          "options":          "array[string]",
+          "selected_index":   "integer",
+          "correct_index":    "integer",
+          "correct":          "boolean",
+          "explanation":      "string",
+          "vc_code":          "string"
+        }
+      },
+      "analysis":     { "$ref": "AnalysisObject", "description": "null while AI is computing; poll GET /api/session/{id}/result" },
+      "completed_at": { "type": "string", "format": "iso_datetime" }
+    }
+  },
+
+  "AnalysisObject": {
+    "_description": "Returned by AI analysis call. One per session. Describes performance and next steps.",
+    "_generated_by": "AI (claude-sonnet-4-6 model) — see ai_prompts.md",
+    "fields": {
+      "overall_score_pct":  { "type": "integer", "minimum": 0, "maximum": 100 },
+      "performance_band":   { "type": "string", "enum": ["needs_support", "developing", "strong", "exceeding"] },
+      "strong_areas": {
+        "type": "array",
+        "items": {
+          "vc_code":     "string",
+          "description": "string — e.g. 'Solving two-step equations'",
+          "score_pct":   "integer"
+        }
+      },
+      "weak_areas": {
+        "type": "array",
+        "items": {
+          "vc_code":       "string",
+          "description":   "string",
+          "score_pct":     "integer",
+          "error_pattern": "string — e.g. 'Sign errors when moving terms to opposite side'",
+          "tip":           "string — one concrete study tip, max 2 sentences"
+        }
+      },
+      "next_session_recommendation": {
+        "focus_vc_codes": "array[string] — max 3",
+        "difficulty":     "string — foundation | standard | advanced",
+        "rationale":      "string — 1 sentence"
+      },
+      "motivational_note": "string — 1-2 sentences, age-appropriate, encouraging"
+    },
+    "required": ["overall_score_pct", "performance_band", "weak_areas", "next_session_recommendation"],
+    "_validation": "Backend must validate this JSON before storing. If AI returns invalid JSON, retry once. If retry fails, store null and return analysis: null."
+  },
+
+  "ProgressRecord": {
+    "_description": "Stored in client localStorage. Key: 'gensheet_progress'.",
+    "_storage": "localStorage only — no server persistence in Phase 1",
+    "fields": {
+      "student_id":    { "type": "string", "description": "device fingerprint — set on first session" },
+      "created_at":    { "type": "string", "format": "iso_datetime" },
+      "sessions": {
+        "type": "array",
+        "items": {
+          "session_id":   "string",
+          "date":         "string — ISO date",
+          "year_level":   "integer",
+          "strand":       "string",
+          "difficulty":   "string",
+          "score":        "integer",
+          "total":        "integer",
+          "score_pct":    "integer",
+          "weak_vc_codes":"array[string]",
+          "analysis_band":"string"
+        }
+      },
+      "aggregate": {
+        "total_questions_attempted": "integer",
+        "total_correct":             "integer",
+        "by_vc_code": {
+          "_example": { "VC2M8A02": { "attempted": 12, "correct": 9 } }
+        },
+        "by_strand": {
+          "_example": { "Algebra": { "attempted": 40, "correct": 31 } }
+        },
+        "last_updated": "string — iso_datetime"
+      }
+    }
+  },
+
+  "HealthResponse": {
+    "fields": {
+      "status":    { "type": "string", "value": "ok" },
+      "ts":        { "type": "string", "format": "iso_datetime" },
+      "cache_size": { "type": "integer", "description": "number of questions currently cached" }
+    }
+  }
+}

@@ -1,0 +1,1395 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "scope": "Victorian Curriculum Mathematics v2.0, Years 7-9",
+    "total_templates": 60,
+    "generation_modes": {
+      "parametric": "AI picks parameter values from declared ranges. Backend constructs question text and computes answer.",
+      "curated_bank": "Answers come from a hardcoded lookup table. AI selects a question_key from the bank."
+    },
+    "difficulty_levels": ["foundation", "standard", "advanced"],
+    "distractor_strategies": {
+      "OFF_BY_ONE":    "correct±1, correct±2",
+      "SIGN_FLIP":     "negate correct answer; also correct±1",
+      "OP_SWAP":       "result of applying wrong operation",
+      "PARTIAL":       "result of stopping one step early",
+      "INVERSION":     "reciprocal or swapped ratio",
+      "FACTOR_SKIP":   "missing a factor or wrong exponent",
+      "FORMULA_MIX":   "result of a related but wrong formula",
+      "UNIT_ERROR":    "correct calculation, wrong unit scale",
+      "COMPLEMENT":    "180-answer or 360-answer or 90-answer",
+      "CURATED_WRONG": "hand-picked plausible wrong answers (for curated_bank mode)"
+    }
+  },
+
+  "templates": [
+
+    {
+      "_comment": "=== YEAR 7 — NUMBER (9 templates) ===",
+      "id": "T-7N-01",
+      "vc_code": "VC2M7N01",
+      "year": 7, "strand": "Number",
+      "topic": "Square roots of perfect squares",
+      "generation_mode": "parametric",
+      "question_template": "What is √{n}?",
+      "context_variants": ["Evaluate √{n}.", "What is the square root of {n}?", "√{n} = ?"],
+      "params": {
+        "n": {
+          "type": "choice",
+          "foundation": [4,9,16,25,36,49,64,81,100],
+          "standard":   [4,9,16,25,36,49,64,81,100,121,144,169,196,225],
+          "advanced":   [4,9,16,25,36,49,64,81,100,121,144,169,196,225,256,289,324,361,400]
+        }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "sqrt_perfect",
+      "distractor_strategy": "OFF_BY_ONE",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-7N-02",
+      "vc_code": "VC2M7N02",
+      "year": 7, "strand": "Number",
+      "topic": "Express as product of prime factors in index form",
+      "generation_mode": "parametric",
+      "question_template": "Express {n} as a product of prime factors in index form.",
+      "context_variants": ["Write {n} as a product of its prime factors.", "Prime factorise {n}."],
+      "params": {
+        "n": {
+          "type": "choice",
+          "foundation": [12,18,20,24,28,30,36,40],
+          "standard":   [48,50,60,72,80,90,100,108],
+          "advanced":   [120,126,144,160,180,200,216,252]
+        }
+      },
+      "answer_type": "factored_string",
+      "verifier_fn": "prime_factorisation",
+      "distractor_strategy": "FACTOR_SKIP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-7N-03",
+      "vc_code": "VC2M7N03",
+      "year": 7, "strand": "Number",
+      "topic": "Order rational numbers (fractions, decimals, mixed)",
+      "generation_mode": "curated_bank",
+      "question_template": "Which list is in ascending order?",
+      "answer_lookup": "rational_ordering_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Each entry: 4 options, each a list of 3 numbers. One option is correct ascending order."
+    },
+
+    {
+      "id": "T-7N-04",
+      "vc_code": "VC2M7N04",
+      "year": 7, "strand": "Number",
+      "topic": "Round decimals to specified decimal places",
+      "generation_mode": "parametric",
+      "question_template": "Round {x} to {dp} decimal place(s).",
+      "context_variants": ["What is {x} rounded to {dp} decimal place(s)?"],
+      "params": {
+        "x":  { "type": "random_float", "min": 1.000, "max": 99.999, "decimal_places": 3 },
+        "dp": {
+          "type": "choice",
+          "foundation": [1],
+          "standard":   [1, 2],
+          "advanced":   [1, 2]
+        }
+      },
+      "answer_type": "decimal",
+      "verifier_fn": "round_decimal",
+      "distractor_strategy": "OFF_BY_ONE",
+      "options_count": 4,
+      "generation_constraint": "x must have non-zero digit at dp+1 position to make rounding non-trivial"
+    },
+
+    {
+      "id": "T-7N-05",
+      "vc_code": "VC2M7N05",
+      "year": 7, "strand": "Number",
+      "topic": "Multiply and divide fractions",
+      "generation_mode": "parametric",
+      "question_template": "Calculate {a}/{b} {op} {c}/{d}. Express in simplest form.",
+      "context_variants": ["What is {a}/{b} {op} {c}/{d}?", "Evaluate {a}/{b} {op} {c}/{d}."],
+      "params": {
+        "a": { "type": "randint", "min": 1, "max": 9 },
+        "b": { "type": "randint", "min": 2, "max": 10 },
+        "c": { "type": "randint", "min": 1, "max": 9 },
+        "d": { "type": "randint", "min": 2, "max": 10 },
+        "op": {
+          "type": "choice",
+          "foundation": ["×"],
+          "standard":   ["×", "÷"],
+          "advanced":   ["×", "÷"]
+        }
+      },
+      "answer_type": "fraction_string",
+      "verifier_fn": "fraction_multiply_divide",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "result denominator ≤ 30 after simplification; result must not simplify to integer for interesting MCQ"
+    },
+
+    {
+      "id": "T-7N-06",
+      "vc_code": "VC2M7N06",
+      "year": 7, "strand": "Number",
+      "topic": "Order of operations with positive rational numbers",
+      "generation_mode": "parametric",
+      "question_template": "Evaluate: {expr}",
+      "params": {
+        "expr": {
+          "type": "generated_expression",
+          "foundation": "a op b op c where a,b,c ∈ [1..20], op ∈ {+,-,×}; no brackets; result positive integer",
+          "standard":   "a op (b op c) where brackets change the result; result positive integer",
+          "advanced":   "a × b + c ÷ d; a,b,c,d chosen so result is positive integer"
+        }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "eval_expression",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "expressions must have unambiguous integer answer; no division resulting in non-terminating decimal"
+    },
+
+    {
+      "id": "T-7N-07",
+      "vc_code": "VC2M7N07",
+      "year": 7, "strand": "Number",
+      "topic": "Percentage of amount; express one quantity as percentage of another",
+      "generation_mode": "parametric",
+      "question_template": "What is {pct}% of {amount}?",
+      "context_variants": [
+        "Calculate {pct}% of {amount}.",
+        "{amount} students are in a school. {pct}% play sport. How many is that?"
+      ],
+      "params": {
+        "pct": {
+          "type": "choice",
+          "foundation": [10, 25, 50, 75],
+          "standard":   [5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 80],
+          "advanced":   [5, 10, 12.5, 15, 20, 25, 30, 35, 40, 45, 50, 60, 66.67, 75, 80]
+        },
+        "amount": {
+          "type": "choice",
+          "foundation": [20, 40, 60, 80, 100, 120, 200],
+          "standard":   [40, 60, 80, 120, 150, 200, 240, 300, 400, 500],
+          "advanced":   [24, 48, 60, 120, 150, 180, 240, 360, 480, 600]
+        }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "percentage_of_amount",
+      "distractor_strategy": "UNIT_ERROR",
+      "options_count": 4,
+      "generation_constraint": "pct × amount must be divisible by 100 to yield integer answer"
+    },
+
+    {
+      "id": "T-7N-08",
+      "vc_code": "VC2M7N08",
+      "year": 7, "strand": "Number",
+      "topic": "Add and subtract directed numbers (integers)",
+      "generation_mode": "parametric",
+      "question_template": "Calculate {a} {op} {b}.",
+      "context_variants": ["Evaluate {a} {op} {b}.", "What is {a} {op} {b}?"],
+      "params": {
+        "a":  { "type": "randint", "min": -20, "max": 20 },
+        "b":  { "type": "randint", "min": -20, "max": 20 },
+        "op": {
+          "type": "choice",
+          "foundation": ["+"],
+          "standard":   ["+", "-"],
+          "advanced":   ["+", "-", "×"]
+        }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "integer_operation",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4,
+      "generation_constraint": "result ∈ [-100, 100]; for advanced ×, |a|,|b| ≤ 12"
+    },
+
+    {
+      "id": "T-7N-09",
+      "vc_code": "VC2M7N09",
+      "year": 7, "strand": "Number",
+      "topic": "Divide a quantity in a given ratio",
+      "generation_mode": "parametric",
+      "question_template": "Share {total} in the ratio {a}:{b}. What is the larger share?",
+      "context_variants": [
+        "Divide ${total} between two people in the ratio {a}:{b}. How much does the person with the larger share receive?",
+        "A recipe uses flour and sugar in the ratio {a}:{b}. If {total}g is used in total, how much flour is there?"
+      ],
+      "params": {
+        "a": { "type": "randint", "min": 1, "max": 5 },
+        "b": { "type": "randint", "min": 1, "max": 5 },
+        "total": { "type": "derived", "rule": "total = (a+b) × k where k ∈ [2..20]", "result_range": [12, 300] }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "ratio_share",
+      "distractor_strategy": "INVERSION",
+      "options_count": 4,
+      "generation_constraint": "a ≠ b; total divisible by (a+b); result is positive integer"
+    },
+
+    {
+      "_comment": "=== YEAR 7 — ALGEBRA (3 templates) ===",
+      "id": "T-7A-01",
+      "vc_code": "VC2M7A01",
+      "year": 7, "strand": "Algebra",
+      "topic": "Substitute a value into a linear expression",
+      "generation_mode": "parametric",
+      "question_template": "If {var} = {val}, what is the value of {expr}?",
+      "params": {
+        "var": { "type": "choice", "all": ["x", "y", "n", "m", "a"] },
+        "val": { "type": "randint", "min": -5, "max": 15, "foundation_min": 1 },
+        "expr_template": {
+          "type": "choice",
+          "foundation": ["{c}×{var}", "{var}+{d}", "{var}-{d}"],
+          "standard":   ["{a}×{var}+{b}", "{a}×{var}-{b}", "{var}²"],
+          "advanced":   ["{a}×{var}²+{b}", "{a}×({var}+{b})", "({var}+{a})×({var}-{b})"]
+        },
+        "a": { "type": "randint", "min": 2, "max": 6 },
+        "b": { "type": "randint", "min": 1, "max": 10 },
+        "c": { "type": "randint", "min": 2, "max": 9 },
+        "d": { "type": "randint", "min": 1, "max": 15 }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "substitution",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "result ∈ [-50, 200]"
+    },
+
+    {
+      "id": "T-7A-02",
+      "vc_code": "VC2M7A02",
+      "year": 7, "strand": "Algebra",
+      "topic": "Solve one-step and two-step linear equations",
+      "generation_mode": "parametric",
+      "question_template": "Solve: {a}{var} {op} {b} = {c}",
+      "context_variants": ["Find {var}: {a}{var} {op} {b} = {c}", "What value of {var} makes {a}{var} {op} {b} = {c} true?"],
+      "params": {
+        "var": { "type": "choice", "all": ["x", "n", "m", "y"] },
+        "a": { "type": "randint", "min": 1, "max": 6 },
+        "b": { "type": "randint", "min": 1, "max": 20 },
+        "op": { "type": "choice", "foundation": ["+"], "standard": ["+", "-"], "advanced": ["+", "-"] },
+        "solution": { "type": "randint", "min": -5, "max": 20, "foundation_min": 1 },
+        "c": { "type": "derived", "rule": "c = a×solution op b" }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "solve_linear_one_var",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "a=1 for foundation; solution is always an integer"
+    },
+
+    {
+      "id": "T-7A-03",
+      "vc_code": "VC2M7A03",
+      "year": 7, "strand": "Algebra",
+      "topic": "Continue arithmetic sequence; identify common difference",
+      "generation_mode": "parametric",
+      "question_template": "A sequence starts: {t1}, {t2}, {t3}, {t4}, … What is the next term?",
+      "context_variants": [
+        "What is the 5th term of the sequence {t1}, {t2}, {t3}, {t4}, …?",
+        "Find the common difference of the sequence {t1}, {t2}, {t3}, {t4}."
+      ],
+      "params": {
+        "t1": { "type": "randint", "min": 1, "max": 20 },
+        "d":  { "type": "randint", "min": -10, "max": 15, "exclude": [0],
+                "foundation_min": 1, "foundation_max": 10 }
+      },
+      "derived": {
+        "t2": "t1 + d", "t3": "t1 + 2d", "t4": "t1 + 3d", "t5": "t1 + 4d"
+      },
+      "answer_type": "integer",
+      "verifier_fn": "arithmetic_sequence_next",
+      "distractor_strategy": "OFF_BY_ONE",
+      "options_count": 4
+    },
+
+    {
+      "_comment": "=== YEAR 7 — MEASUREMENT (4 templates) ===",
+      "id": "T-7M-01",
+      "vc_code": "VC2M7M01",
+      "year": 7, "strand": "Measurement",
+      "topic": "Area of triangles and parallelograms",
+      "generation_mode": "parametric",
+      "question_template": "A {shape} has base {b} cm and perpendicular height {h} cm. What is its area?",
+      "params": {
+        "shape": {
+          "type": "choice",
+          "foundation": ["triangle"],
+          "standard":   ["triangle", "parallelogram"],
+          "advanced":   ["triangle", "parallelogram"]
+        },
+        "b": { "type": "randint", "min": 4, "max": 24, "step": 2 },
+        "h": { "type": "randint", "min": 3, "max": 18, "step": 1 }
+      },
+      "answer_type": "integer_or_half_integer",
+      "verifier_fn": "area_triangle_parallelogram",
+      "distractor_strategy": "FORMULA_MIX",
+      "options_count": 4,
+      "generation_constraint": "for triangle: b×h divisible by 2; for parallelogram: b×h ≤ 400"
+    },
+
+    {
+      "id": "T-7M-02",
+      "vc_code": "VC2M7M02",
+      "year": 7, "strand": "Measurement",
+      "topic": "Volume of rectangular prisms",
+      "generation_mode": "parametric",
+      "question_template": "A rectangular prism has length {l} cm, width {w} cm, and height {h} cm. What is its volume?",
+      "params": {
+        "l": { "type": "randint", "min": 2, "max": 15 },
+        "w": { "type": "randint", "min": 2, "max": 12 },
+        "h": { "type": "randint", "min": 2, "max": 10 }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "volume_rectangular_prism",
+      "distractor_strategy": "FORMULA_MIX",
+      "options_count": 4,
+      "generation_constraint": "l×w×h ≤ 1500"
+    },
+
+    {
+      "id": "T-7M-03",
+      "vc_code": "VC2M7M03",
+      "year": 7, "strand": "Measurement",
+      "topic": "Unit conversions (length, mass, capacity)",
+      "generation_mode": "curated_bank",
+      "question_template": "Convert {value} {from_unit} to {to_unit}.",
+      "answer_lookup": "unit_conversion_bank",
+      "distractor_strategy": "UNIT_ERROR",
+      "options_count": 4,
+      "bank_note": "Bank covers: km↔m, m↔cm, cm↔mm, kg↔g, L↔mL, and combinations. All results clean integers or 1dp."
+    },
+
+    {
+      "id": "T-7M-04",
+      "vc_code": "VC2M7M04",
+      "year": 7, "strand": "Measurement",
+      "topic": "Angle relationships (supplementary, complementary, vertically opposite, angles at a point)",
+      "generation_mode": "parametric",
+      "question_template": "Two angles are {relationship}. One angle is {a}°. What is the other angle?",
+      "params": {
+        "relationship": {
+          "type": "choice",
+          "foundation": ["supplementary"],
+          "standard":   ["supplementary", "complementary"],
+          "advanced":   ["supplementary", "complementary", "vertically opposite", "co-interior (same-side interior)"]
+        },
+        "a": {
+          "type": "randint",
+          "supplementary_range": [15, 165],
+          "complementary_range": [5, 85],
+          "step": 5
+        }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "angle_relationship",
+      "distractor_strategy": "COMPLEMENT",
+      "options_count": 4
+    },
+
+    {
+      "_comment": "=== YEAR 7 — SPACE (3 templates) ===",
+      "id": "T-7SP-01",
+      "vc_code": "VC2M7SP01",
+      "year": 7, "strand": "Space",
+      "topic": "Classify triangles and quadrilaterals by properties",
+      "generation_mode": "curated_bank",
+      "question_template": "A triangle has {property_description}. What type of triangle is it?",
+      "answer_lookup": "shape_classification_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Covers: equilateral, isosceles, scalene, right-angled, obtuse, acute; also square, rectangle, rhombus, parallelogram, trapezium, kite."
+    },
+
+    {
+      "id": "T-7SP-02",
+      "vc_code": "VC2M7SP02",
+      "year": 7, "strand": "Space",
+      "topic": "Find image coordinates after a single transformation",
+      "generation_mode": "parametric",
+      "question_template": "Point {label}({x},{y}) is {transformation}. What are the coordinates of the image?",
+      "params": {
+        "x":  { "type": "randint", "min": -6, "max": 6 },
+        "y":  { "type": "randint", "min": -6, "max": 6 },
+        "label": { "type": "choice", "all": ["A", "B", "P", "Q"] },
+        "transformation": {
+          "type": "choice",
+          "foundation": ["reflected in the x-axis", "reflected in the y-axis"],
+          "standard":   ["reflected in the x-axis", "reflected in the y-axis", "translated by ({tx},{ty})"],
+          "advanced":   ["reflected in the x-axis", "reflected in the y-axis", "translated by ({tx},{ty})", "rotated 90° clockwise about the origin", "rotated 180° about the origin"]
+        },
+        "tx": { "type": "randint", "min": -4, "max": 4, "exclude": [0] },
+        "ty": { "type": "randint", "min": -4, "max": 4, "exclude": [0] }
+      },
+      "answer_type": "coordinate_pair",
+      "verifier_fn": "transformation_coordinates",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-7SP-03",
+      "vc_code": "VC2M7SP03",
+      "year": 7, "strand": "Space",
+      "topic": "Read coordinates from Cartesian plane; identify quadrant",
+      "generation_mode": "curated_bank",
+      "question_template": "Which point has coordinates ({x},{y})?",
+      "answer_lookup": "cartesian_plane_bank",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4,
+      "bank_note": "Diagram described textually with 4 labelled points. Student identifies which label matches the coordinate."
+    },
+
+    {
+      "_comment": "=== YEAR 7 — STATISTICS (2 templates) ===",
+      "id": "T-7ST-01",
+      "vc_code": "VC2M7ST01",
+      "year": 7, "strand": "Statistics",
+      "topic": "Calculate mean, median, mode, range from a data set",
+      "generation_mode": "parametric",
+      "question_template": "The data set is: {data}. What is the {measure}?",
+      "params": {
+        "data": {
+          "type": "generated_list",
+          "foundation": "5–6 small integers ∈ [1..20], at least one repeated value",
+          "standard":   "7–8 integers ∈ [1..50], may have two modes or no mode",
+          "advanced":   "8–10 integers ∈ [1..100], even count for non-integer median"
+        },
+        "measure": {
+          "type": "choice",
+          "foundation": ["mean", "median", "mode", "range"],
+          "standard":   ["mean", "median", "mode", "range"],
+          "advanced":   ["mean", "median", "mode", "range"]
+        }
+      },
+      "answer_type": "number",
+      "verifier_fn": "statistics_measure",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "mean must be clean integer or 1dp; median of even list must be 0.5-step"
+    },
+
+    {
+      "id": "T-7ST-02",
+      "vc_code": "VC2M7ST02",
+      "year": 7, "strand": "Statistics",
+      "topic": "Choose appropriate graph type for a described data situation",
+      "generation_mode": "curated_bank",
+      "question_template": "A student wants to display {scenario}. Which type of graph is most appropriate?",
+      "answer_lookup": "graph_type_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Scenarios map to: column/bar chart (categories), line graph (change over time), pie chart (parts of a whole), scatter plot (relationship between two variables), histogram (continuous grouped data)."
+    },
+
+    {
+      "_comment": "=== YEAR 7 — PROBABILITY (3 templates) ===",
+      "id": "T-7P-01",
+      "vc_code": "VC2M7P01",
+      "year": 7, "strand": "Probability",
+      "topic": "Assign probability as a fraction to a simple event",
+      "generation_mode": "parametric",
+      "question_template": "A bag contains {r} red and {b} blue marbles. What is the probability of picking a red marble?",
+      "context_variants": [
+        "A die has {n} sides numbered 1 to {n}. What is the probability of rolling a {target}?",
+        "A spinner has {total} equal sections, {favourable} of which are green. What is the probability of landing on green?"
+      ],
+      "params": {
+        "r": { "type": "randint", "min": 1, "max": 8 },
+        "b": { "type": "randint", "min": 1, "max": 8 }
+      },
+      "answer_type": "fraction_string",
+      "verifier_fn": "simple_probability",
+      "distractor_strategy": "INVERSION",
+      "options_count": 4,
+      "generation_constraint": "total = r+b ≤ 12; fraction already in simplest form OR simplification is obvious"
+    },
+
+    {
+      "id": "T-7P-02",
+      "vc_code": "VC2M7P02",
+      "year": 7, "strand": "Probability",
+      "topic": "List the sample space for a simple single-stage event",
+      "generation_mode": "curated_bank",
+      "question_template": "A fair coin is flipped and a {die_type} die is rolled. How many outcomes are in the sample space?",
+      "answer_lookup": "sample_space_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Covers: coins, dice (4, 6, 8 sides), spinners with n sections, drawing from a small set."
+    },
+
+    {
+      "id": "T-7P-03",
+      "vc_code": "VC2M7P03",
+      "year": 7, "strand": "Probability",
+      "topic": "Complementary events: P(A') = 1 - P(A)",
+      "generation_mode": "parametric",
+      "question_template": "The probability of event A is {p}. What is the probability of A NOT occurring?",
+      "context_variants": [
+        "P(rain tomorrow) = {p}. What is P(no rain tomorrow)?",
+        "The probability of winning a game is {p}. What is the probability of NOT winning?"
+      ],
+      "params": {
+        "p_numerator":   { "type": "randint", "min": 1, "max": 7 },
+        "p_denominator": { "type": "choice", "all": [4, 5, 6, 8, 10, 12] },
+        "p_constraint":  "p_numerator < p_denominator"
+      },
+      "answer_type": "fraction_string",
+      "verifier_fn": "complementary_probability",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4
+    },
+
+    {
+      "_comment": "=== YEAR 8 — NUMBER (5 templates) ===",
+      "id": "T-8N-01",
+      "vc_code": "VC2M8N01",
+      "year": 8, "strand": "Number",
+      "topic": "Evaluate integer powers and roots; classify as rational/irrational",
+      "generation_mode": "parametric",
+      "question_template": "Evaluate {expr}.",
+      "params": {
+        "expr": {
+          "type": "choice_template",
+          "foundation": ["{b}²", "{b}³", "√{n}"],
+          "standard":   ["{b}²", "{b}³", "(-{b})²", "(-{b})³", "√{n}", "∛{c}"],
+          "advanced":   ["{b}⁴", "(-{b})⁴", "√{n}", "∛{c}", "{b}^5"]
+        },
+        "b": { "type": "randint", "min": 2, "max": 8 },
+        "n": { "type": "choice", "all": [4,9,16,25,36,49,64,81,100,121,144,169,196,225] },
+        "c": { "type": "choice", "all": [8,27,64,125,216,343] }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "power_root_eval",
+      "distractor_strategy": "OFF_BY_ONE",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-8N-02",
+      "vc_code": "VC2M8N02",
+      "year": 8, "strand": "Number",
+      "topic": "Apply index laws: product, quotient, zero exponent",
+      "generation_mode": "parametric",
+      "question_template": "Simplify: {expr}",
+      "params": {
+        "law": {
+          "type": "choice",
+          "foundation": ["product: a^m × a^n = a^(m+n)"],
+          "standard":   ["product", "quotient: a^m ÷ a^n = a^(m-n)", "zero exponent: a^0 = 1"],
+          "advanced":   ["product", "quotient", "zero exponent", "power of power: (a^m)^n = a^(mn)"]
+        },
+        "a": { "type": "randint", "min": 2, "max": 5 },
+        "m": { "type": "randint", "min": 1, "max": 6 },
+        "n": { "type": "randint", "min": 1, "max": 5 }
+      },
+      "answer_type": "power_string",
+      "verifier_fn": "index_laws",
+      "distractor_strategy": "FACTOR_SKIP",
+      "options_count": 4,
+      "generation_constraint": "for quotient: m > n; answer exponent ∈ [0..9]"
+    },
+
+    {
+      "id": "T-8N-03",
+      "vc_code": "VC2M8N03",
+      "year": 8, "strand": "Number",
+      "topic": "Highest Common Factor and Lowest Common Multiple",
+      "generation_mode": "parametric",
+      "question_template": "What is the {measure} of {a} and {b}?",
+      "params": {
+        "a": { "type": "randint", "min": 6, "max": 60 },
+        "b": { "type": "randint", "min": 6, "max": 60 },
+        "measure": {
+          "type": "choice",
+          "foundation": ["HCF (highest common factor)"],
+          "standard":   ["HCF (highest common factor)", "LCM (lowest common multiple)"],
+          "advanced":   ["HCF", "LCM"]
+        }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "hcf_lcm",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "gcd(a,b) > 1 to make HCF non-trivial; LCM ≤ 300"
+    },
+
+    {
+      "id": "T-8N-04",
+      "vc_code": "VC2M8N04",
+      "year": 8, "strand": "Number",
+      "topic": "Operations with integers and rational numbers (all four operations)",
+      "generation_mode": "parametric",
+      "question_template": "Calculate: {expr}",
+      "params": {
+        "expr": {
+          "type": "generated_expression",
+          "foundation": "integer × integer, integer ÷ integer (clean result), int + frac",
+          "standard":   "frac op frac op int, mixed ops including ÷",
+          "advanced":   "mixed operations with negatives: (-a/b) op (c/d) op e"
+        }
+      },
+      "answer_type": "rational_string",
+      "verifier_fn": "rational_arithmetic",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4,
+      "generation_constraint": "result denominator ≤ 20 after simplification; no surds"
+    },
+
+    {
+      "id": "T-8N-05",
+      "vc_code": "VC2M8N05",
+      "year": 8, "strand": "Number",
+      "topic": "Percentage increase, decrease, and error",
+      "generation_mode": "parametric",
+      "question_template": "A price of ${original} is {change_type} by {pct}%. What is the new price?",
+      "context_variants": [
+        "A value of {original} increases by {pct}%. What is the new value?",
+        "An item originally costs ${original}. It is discounted by {pct}%. What is the sale price?"
+      ],
+      "params": {
+        "original": { "type": "choice", "all": [20,25,40,50,60,80,100,120,150,200,250,300,400,500] },
+        "pct": {
+          "type": "choice",
+          "foundation": [10, 25, 50],
+          "standard":   [5, 10, 15, 20, 25, 30, 40, 50],
+          "advanced":   [5, 10, 12.5, 15, 20, 25, 30, 35, 40, 50, 60, 75]
+        },
+        "change_type": { "type": "choice", "all": ["increased", "decreased"] }
+      },
+      "answer_type": "number",
+      "verifier_fn": "percentage_change",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "result must be clean integer or 2dp decimal"
+    },
+
+    {
+      "_comment": "=== YEAR 8 — ALGEBRA (3 templates) ===",
+      "id": "T-8A-01",
+      "vc_code": "VC2M8A01",
+      "year": 8, "strand": "Algebra",
+      "topic": "Expand using distributive law; simplify algebraic expressions",
+      "generation_mode": "parametric",
+      "question_template": "Expand and simplify: {expr}",
+      "params": {
+        "expr_template": {
+          "type": "choice",
+          "foundation": ["{a}({b}x + {c})", "{a}({b}x - {c})"],
+          "standard":   ["{a}({b}x + {c})", "{a}({b}x - {c})", "{a}({b}x + {c}) + {d}x", "{a}(x + {c}) + {b}(x + {d})"],
+          "advanced":   ["{a}({b}x + {c}) - {d}({e}x - {f})", "{a}(x + {b})²"]
+        },
+        "a": { "type": "randint", "min": 2, "max": 6 },
+        "b": { "type": "randint", "min": 1, "max": 4 },
+        "c": { "type": "randint", "min": 1, "max": 10 },
+        "d": { "type": "randint", "min": 1, "max": 5 },
+        "e": { "type": "randint", "min": 1, "max": 4 },
+        "f": { "type": "randint", "min": 1, "max": 8 }
+      },
+      "answer_type": "polynomial_string",
+      "verifier_fn": "expand_simplify",
+      "distractor_strategy": "PARTIAL",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-8A-02",
+      "vc_code": "VC2M8A02",
+      "year": 8, "strand": "Algebra",
+      "topic": "Solve linear equations including with pronumerals on both sides",
+      "generation_mode": "parametric",
+      "question_template": "Solve: {a}x {op1} {b} = {c}x {op2} {d}",
+      "params": {
+        "a": { "type": "randint", "min": 1, "max": 8 },
+        "c": { "type": "randint", "min": 1, "max": 8, "constraint": "c ≠ a" },
+        "b": { "type": "randint", "min": 1, "max": 15 },
+        "d": { "type": "randint", "min": 1, "max": 15 },
+        "op1": { "type": "choice", "all": ["+", "-"] },
+        "op2": { "type": "choice", "all": ["+", "-"] },
+        "solution_constraint": "solution is integer ∈ [-8, 15]"
+      },
+      "answer_type": "integer",
+      "verifier_fn": "solve_linear_both_sides",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-8A-03",
+      "vc_code": "VC2M8A03",
+      "year": 8, "strand": "Algebra",
+      "topic": "Gradient from two points; identify gradient and y-intercept from y=mx+c",
+      "generation_mode": "parametric",
+      "question_template": "What is the gradient of the line passing through ({x1},{y1}) and ({x2},{y2})?",
+      "context_variants": [
+        "A line has equation y = {m}x + {c}. What is its gradient?",
+        "A line has equation y = {m}x + {c}. What is its y-intercept?"
+      ],
+      "params": {
+        "x1": { "type": "randint", "min": -4, "max": 4 },
+        "x2": { "type": "randint", "min": -4, "max": 8, "constraint": "x2 ≠ x1" },
+        "rise": { "type": "randint", "min": -8, "max": 8, "exclude": [0] },
+        "y1": { "type": "randint", "min": -6, "max": 6 },
+        "y2": { "type": "derived", "rule": "y2 = y1 + rise" },
+        "m":  { "type": "derived", "rule": "m = rise / (x2 - x1), must be integer or simple fraction" }
+      },
+      "answer_type": "fraction_or_integer_string",
+      "verifier_fn": "gradient_two_points",
+      "distractor_strategy": "INVERSION",
+      "options_count": 4,
+      "generation_constraint": "gradient must be integer or fraction with denominator ≤ 4"
+    },
+
+    {
+      "_comment": "=== YEAR 8 — MEASUREMENT (6 templates) ===",
+      "id": "T-8M-01",
+      "vc_code": "VC2M8M01",
+      "year": 8, "strand": "Measurement",
+      "topic": "Area of composite shapes",
+      "generation_mode": "curated_bank",
+      "question_template": "Find the area of the composite shape formed by {description}.",
+      "answer_lookup": "composite_area_bank",
+      "distractor_strategy": "PARTIAL",
+      "options_count": 4,
+      "bank_note": "Bank uses L-shapes, shapes with a rectangle and triangle combined. All dimensions given; integer answers only."
+    },
+
+    {
+      "id": "T-8M-02",
+      "vc_code": "VC2M8M02",
+      "year": 8, "strand": "Measurement",
+      "topic": "Volume of prisms with various cross-sections",
+      "generation_mode": "parametric",
+      "question_template": "A {prism_type} prism has a {base_shape} cross-section with {base_dims}. Its length is {l} cm. What is its volume?",
+      "params": {
+        "prism_type": {
+          "type": "choice",
+          "foundation": ["rectangular"],
+          "standard":   ["rectangular", "triangular"],
+          "advanced":   ["rectangular", "triangular", "trapezoidal"]
+        },
+        "base_dims_and_area": "generated to give integer cross-sectional area",
+        "l": { "type": "randint", "min": 3, "max": 20 }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "volume_prism",
+      "distractor_strategy": "FORMULA_MIX",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-8M-03",
+      "vc_code": "VC2M8M03",
+      "year": 8, "strand": "Measurement",
+      "topic": "Circumference and area of circles",
+      "generation_mode": "parametric",
+      "question_template": "A circle has {dimension_type} {value} cm. Find its {measure}. Use π ≈ 3.14. Give your answer to 2 decimal places.",
+      "params": {
+        "dimension_type": {
+          "type": "choice",
+          "foundation": ["radius"],
+          "standard":   ["radius", "diameter"],
+          "advanced":   ["radius", "diameter"]
+        },
+        "value": { "type": "randint", "min": 2, "max": 15 },
+        "measure": {
+          "type": "choice",
+          "foundation": ["circumference"],
+          "standard":   ["circumference", "area"],
+          "advanced":   ["circumference", "area"]
+        }
+      },
+      "answer_type": "decimal_2dp",
+      "verifier_fn": "circle_measure",
+      "distractor_strategy": "FORMULA_MIX",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-8M-04",
+      "vc_code": "VC2M8M04",
+      "year": 8, "strand": "Measurement",
+      "topic": "Calculate time duration and convert across time zones",
+      "generation_mode": "curated_bank",
+      "question_template": "It is {time} in {city1}. What time is it in {city2}?",
+      "answer_lookup": "time_zone_bank",
+      "distractor_strategy": "OFF_BY_ONE",
+      "options_count": 4,
+      "bank_note": "Uses AEST, AEDT, UTC, London, New York, Los Angeles. Offsets are whole hours. No DST complications unless advanced."
+    },
+
+    {
+      "id": "T-8M-05",
+      "vc_code": "VC2M8M05",
+      "year": 8, "strand": "Measurement",
+      "topic": "Rate problems: speed, unit rate, best buy",
+      "generation_mode": "parametric",
+      "question_template": "A car travels {dist} km in {time} hours. What is its average speed?",
+      "context_variants": [
+        "If speed is {speed} km/h, how far does a car travel in {time} hours?",
+        "A car travels {dist} km at {speed} km/h. How long does the journey take?"
+      ],
+      "params": {
+        "speed": { "type": "choice", "all": [30, 40, 50, 60, 70, 80, 90, 100, 110, 120] },
+        "time":  { "type": "choice", "all": [1, 1.5, 2, 2.5, 3, 4, 5] },
+        "dist":  { "type": "derived", "rule": "dist = speed × time" }
+      },
+      "answer_type": "number",
+      "verifier_fn": "rate_speed_distance_time",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-8M-06",
+      "vc_code": "VC2M8M06",
+      "year": 8, "strand": "Measurement",
+      "topic": "Pythagoras' theorem: find unknown side of right triangle",
+      "generation_mode": "parametric",
+      "question_template": "A right triangle has {known_description}. Find the {unknown_side}.",
+      "params": {
+        "triple_family": {
+          "type": "choice",
+          "all": [[3,4,5],[5,12,13],[8,15,17],[7,24,25],[9,40,41],[6,8,10],[9,12,15],[12,16,20],[15,20,25]]
+        },
+        "scale": {
+          "type": "choice",
+          "foundation": [1, 2],
+          "standard":   [1, 2, 3],
+          "advanced":   [1, 2, 3, 4]
+        },
+        "unknown_side": {
+          "type": "choice",
+          "foundation": ["hypotenuse"],
+          "standard":   ["hypotenuse", "shorter leg"],
+          "advanced":   ["hypotenuse", "shorter leg", "longer leg"]
+        }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "pythagoras",
+      "distractor_strategy": "PARTIAL",
+      "options_count": 4
+    },
+
+    {
+      "_comment": "=== YEAR 8 — SPACE (3 templates) ===",
+      "id": "T-8SP-01",
+      "vc_code": "VC2M8SP01",
+      "year": 8, "strand": "Space",
+      "topic": "Identify congruence condition from given information (SSS, SAS, AAS, RHS)",
+      "generation_mode": "curated_bank",
+      "question_template": "Two triangles have {given_info}. Which congruence condition proves they are congruent?",
+      "answer_lookup": "congruence_condition_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "4 options always: SSS, SAS, AAS, RHS. One is correct for the described scenario."
+    },
+
+    {
+      "id": "T-8SP-02",
+      "vc_code": "VC2M8SP02",
+      "year": 8, "strand": "Space",
+      "topic": "Properties of quadrilaterals (angles, sides, diagonals)",
+      "generation_mode": "curated_bank",
+      "question_template": "Which quadrilateral has {property_description}?",
+      "answer_lookup": "quadrilateral_properties_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Covers: square, rectangle, rhombus, parallelogram, trapezium, kite. Properties tested: equal sides, parallel sides, equal angles, bisecting diagonals, perpendicular diagonals."
+    },
+
+    {
+      "id": "T-8SP-03",
+      "vc_code": "VC2M8SP03",
+      "year": 8, "strand": "Space",
+      "topic": "Find coordinates after combined transformations",
+      "generation_mode": "parametric",
+      "question_template": "Point ({x},{y}) is {transformation}. What are the new coordinates?",
+      "params": {
+        "x": { "type": "randint", "min": -5, "max": 5 },
+        "y": { "type": "randint", "min": -5, "max": 5 },
+        "transformation": {
+          "type": "choice",
+          "standard": ["rotated 90° clockwise about the origin", "rotated 180° about the origin"],
+          "advanced":  ["rotated 90° clockwise about the origin", "rotated 180° about the origin", "reflected in the line y=x"]
+        }
+      },
+      "answer_type": "coordinate_pair",
+      "verifier_fn": "transformation_coordinates",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4
+    },
+
+    {
+      "_comment": "=== YEAR 8 — STATISTICS (2 templates) ===",
+      "id": "T-8ST-01",
+      "vc_code": "VC2M8ST01",
+      "year": 8, "strand": "Statistics",
+      "topic": "Calculate mean from a frequency table",
+      "generation_mode": "parametric",
+      "question_template": "The frequency table shows: {table_description}. What is the mean?",
+      "params": {
+        "values": "list of 4–6 distinct integers ∈ [1..20]",
+        "frequencies": "list of corresponding frequencies ∈ [1..8]; total n ∈ [10..30]"
+      },
+      "answer_type": "decimal_1dp",
+      "verifier_fn": "mean_from_frequency_table",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "mean is not a whole number to distinguish from mode"
+    },
+
+    {
+      "id": "T-8ST-03",
+      "vc_code": "VC2M8ST03",
+      "year": 8, "strand": "Statistics",
+      "topic": "Effect of an outlier on mean vs median",
+      "generation_mode": "curated_bank",
+      "question_template": "A data set is {data}. An outlier of {outlier} is added. Which statement is true?",
+      "answer_lookup": "outlier_effect_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Options always cover: mean increases/decreases more than median; median unaffected; both equally affected."
+    },
+
+    {
+      "_comment": "=== YEAR 8 — PROBABILITY (3 templates) ===",
+      "id": "T-8P-01",
+      "vc_code": "VC2M8P01",
+      "year": 8, "strand": "Probability",
+      "topic": "Theoretical vs experimental probability; relative frequency",
+      "generation_mode": "curated_bank",
+      "question_template": "A coin is flipped {n} times. It lands heads {h} times. What is the experimental probability of heads?",
+      "answer_lookup": "experimental_probability_bank",
+      "distractor_strategy": "INVERSION",
+      "options_count": 4,
+      "bank_note": "Also includes questions comparing theoretical (1/2) vs experimental to test conceptual understanding."
+    },
+
+    {
+      "id": "T-8P-02",
+      "vc_code": "VC2M8P02",
+      "year": 8, "strand": "Probability",
+      "topic": "Probability from two-step experiments using tree diagrams",
+      "generation_mode": "parametric",
+      "question_template": "A bag has {r} red and {b} blue balls. One ball is drawn, then replaced, and another is drawn. What is the probability of drawing {outcome}?",
+      "params": {
+        "r": { "type": "randint", "min": 1, "max": 5 },
+        "b": { "type": "randint", "min": 1, "max": 5 },
+        "outcome": {
+          "type": "choice",
+          "foundation": ["two red balls", "two blue balls"],
+          "standard":   ["two red balls", "two blue balls", "one of each colour"],
+          "advanced":   ["two red balls", "two blue balls", "one of each colour", "at least one red ball"]
+        }
+      },
+      "answer_type": "fraction_string",
+      "verifier_fn": "two_step_probability",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "r+b ≤ 6; answer denominator ≤ 36"
+    },
+
+    {
+      "id": "T-8P-03",
+      "vc_code": "VC2M8P03",
+      "year": 8, "strand": "Probability",
+      "topic": "Relative frequency from a frequency table",
+      "generation_mode": "parametric",
+      "question_template": "In {n} trials, outcome A occurred {a} times. What is the relative frequency of A?",
+      "params": {
+        "n": { "type": "choice", "all": [10, 20, 25, 40, 50, 100, 200] },
+        "a": { "type": "derived", "rule": "a = n × p where p ∈ [0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 0.8]" }
+      },
+      "answer_type": "fraction_or_decimal",
+      "verifier_fn": "relative_frequency",
+      "distractor_strategy": "INVERSION",
+      "options_count": 4
+    },
+
+    {
+      "_comment": "=== YEAR 9 — NUMBER (4 templates) ===",
+      "id": "T-9N-01",
+      "vc_code": "VC2M9N01",
+      "year": 9, "strand": "Number",
+      "topic": "Classify real numbers as rational or irrational",
+      "generation_mode": "curated_bank",
+      "question_template": "Which of the following is an irrational number?",
+      "answer_lookup": "rational_irrational_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Options include: √4 (rational), √2 (irrational), 0.333... (rational), π (irrational), 22/7 (rational), 1.41421... (irrational if non-terminating non-recurring)."
+    },
+
+    {
+      "id": "T-9N-02",
+      "vc_code": "VC2M9N02",
+      "year": 9, "strand": "Number",
+      "topic": "Scientific notation: convert to/from standard form; multiply/divide",
+      "generation_mode": "parametric",
+      "question_template": "Express {value} in scientific notation.",
+      "context_variants": [
+        "Write {sci_value} as an ordinary number.",
+        "Calculate ({a} × 10^{m}) × ({b} × 10^{n}). Express in scientific notation."
+      ],
+      "params": {
+        "value": {
+          "type": "choice",
+          "foundation": [0.0034, 0.000056, 3400, 56000, 0.00001, 1200000],
+          "standard":   [0.000034, 0.0000056, 340000, 5600000, 0.000000123, 9870000000],
+          "advanced":   "any value requiring 2 or 3 significant figures"
+        }
+      },
+      "answer_type": "scientific_notation_string",
+      "verifier_fn": "scientific_notation_convert",
+      "distractor_strategy": "UNIT_ERROR",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9N-03",
+      "vc_code": "VC2M9N03",
+      "year": 9, "strand": "Number",
+      "topic": "Simple and compound interest",
+      "generation_mode": "parametric",
+      "question_template": "Calculate the {interest_type} interest on ${principal} at {rate}% per annum for {years} years.",
+      "context_variants": [
+        "What is the total amount after {years} years on a ${principal} investment at {rate}% p.a. compound interest?"
+      ],
+      "params": {
+        "principal": { "type": "choice", "all": [500, 1000, 2000, 2500, 5000, 10000] },
+        "rate":      { "type": "choice", "all": [2, 3, 4, 5, 6, 8, 10, 12] },
+        "years":     { "type": "choice", "all": [1, 2, 3, 4, 5] },
+        "interest_type": {
+          "type": "choice",
+          "foundation": ["simple"],
+          "standard":   ["simple", "compound"],
+          "advanced":   ["simple", "compound"]
+        }
+      },
+      "answer_type": "currency_2dp",
+      "verifier_fn": "simple_compound_interest",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9N-04",
+      "vc_code": "VC2M9N04",
+      "year": 9, "strand": "Number",
+      "topic": "Direct and inverse proportion",
+      "generation_mode": "parametric",
+      "question_template": "If {y} is directly proportional to {x}, and {y}={y1} when {x}={x1}, find {y} when {x}={x2}.",
+      "params": {
+        "x1": { "type": "randint", "min": 2, "max": 10 },
+        "y1": { "type": "derived", "rule": "y1 = k × x1 where k ∈ {2,3,4,5,6}" },
+        "x2": { "type": "randint", "min": 2, "max": 15, "constraint": "x2 ≠ x1" }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "direct_proportion",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4
+    },
+
+    {
+      "_comment": "=== YEAR 9 — ALGEBRA (5 templates) ===",
+      "id": "T-9A-01",
+      "vc_code": "VC2M9A01",
+      "year": 9, "strand": "Algebra",
+      "topic": "Expand and simplify binomial products; factorise simple expressions",
+      "generation_mode": "parametric",
+      "question_template": "Expand and simplify: ({ax} {op1} {b})({cx} {op2} {d})",
+      "context_variants": [
+        "Factorise: {expanded_form}",
+        "Expand: ({ax} + {b})²"
+      ],
+      "params": {
+        "a": { "type": "randint", "min": 1, "max": 4 },
+        "b": { "type": "randint", "min": 1, "max": 9 },
+        "c": { "type": "randint", "min": 1, "max": 4 },
+        "d": { "type": "randint", "min": 1, "max": 9 },
+        "op1": { "type": "choice", "all": ["+", "-"] },
+        "op2": { "type": "choice", "all": ["+", "-"] }
+      },
+      "answer_type": "polynomial_string",
+      "verifier_fn": "expand_binomial",
+      "distractor_strategy": "PARTIAL",
+      "options_count": 4,
+      "generation_constraint": "all coefficients must be integers; result has form ax²+bx+c"
+    },
+
+    {
+      "id": "T-9A-02",
+      "vc_code": "VC2M9A02",
+      "year": 9, "strand": "Algebra",
+      "topic": "Solve linear equations including with fractions",
+      "generation_mode": "parametric",
+      "question_template": "Solve: {lhs} = {rhs}",
+      "params": {
+        "lhs_template": {
+          "type": "choice",
+          "foundation": ["{a}x + {b}", "{a}x - {b}"],
+          "standard":   ["{a}x + {b}", "{a}(x + {b})", "x/{a} + {b}"],
+          "advanced":   ["(x + {a})/{b}", "{a}x/{b} + {c}", "{a}(x + {b}) - {c}(x - {d})"]
+        },
+        "solution": { "type": "randint", "min": -8, "max": 15 }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "solve_linear_with_fractions",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9A-03",
+      "vc_code": "VC2M9A03",
+      "year": 9, "strand": "Algebra",
+      "topic": "Equation of a straight line; gradient and intercept from y=mx+c",
+      "generation_mode": "parametric",
+      "question_template": "A line has gradient {m} and y-intercept {c}. What is the equation of the line?",
+      "context_variants": [
+        "What is the gradient of the line y = {m}x + {c}?",
+        "What is the y-intercept of the line y = {m}x + {c}?",
+        "A line passes through ({x1},{y1}) with gradient {m}. What is its equation?"
+      ],
+      "params": {
+        "m": {
+          "type": "choice",
+          "foundation": [-3,-2,-1,1,2,3],
+          "standard":   [-4,-3,-2,-1,0.5,1,2,3,4],
+          "advanced":   [-4,-3,-2,-1,-0.5,0.5,1,2,3,4]
+        },
+        "c": { "type": "randint", "min": -8, "max": 8 }
+      },
+      "answer_type": "equation_string",
+      "verifier_fn": "line_equation",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9A-04",
+      "vc_code": "VC2M9A04",
+      "year": 9, "strand": "Algebra",
+      "topic": "Solve simultaneous linear equations by substitution",
+      "generation_mode": "parametric",
+      "question_template": "Solve simultaneously:\n  y = {a}x + {b}\n  y = {c}x + {d}\nWhat is the value of x?",
+      "context_variants": [
+        "Find the intersection point of y = {a}x + {b} and y = {c}x + {d}."
+      ],
+      "params": {
+        "a": { "type": "randint", "min": -4, "max": 4, "exclude": [0] },
+        "c": { "type": "randint", "min": -4, "max": 4, "constraint": "c ≠ a, c ≠ 0" },
+        "solution_x": { "type": "randint", "min": -5, "max": 8 },
+        "b": { "type": "randint", "min": -8, "max": 8 },
+        "d": { "type": "derived", "rule": "d = a×solution_x + b - c×solution_x" }
+      },
+      "answer_type": "integer",
+      "verifier_fn": "simultaneous_equations",
+      "distractor_strategy": "SIGN_FLIP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9A-05",
+      "vc_code": "VC2M9A05",
+      "year": 9, "strand": "Algebra",
+      "topic": "Classify non-linear relationships from equation or graph shape",
+      "generation_mode": "curated_bank",
+      "question_template": "Which equation represents a {relationship_type} relationship?",
+      "answer_lookup": "nonlinear_classification_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Types: linear (y=mx+c), quadratic (y=ax²+bx+c), hyperbola (y=k/x), exponential (y=a^x). Options are 4 different equations."
+    },
+
+    {
+      "_comment": "=== YEAR 9 — MEASUREMENT (4 templates) ===",
+      "id": "T-9M-01",
+      "vc_code": "VC2M9M01",
+      "year": 9, "strand": "Measurement",
+      "topic": "Surface area of prisms and cylinders",
+      "generation_mode": "parametric",
+      "question_template": "A {shape} has {dimensions}. Find its surface area. Use π ≈ 3.14 where needed.",
+      "params": {
+        "shape": {
+          "type": "choice",
+          "foundation": ["rectangular prism"],
+          "standard":   ["rectangular prism", "triangular prism"],
+          "advanced":   ["rectangular prism", "triangular prism", "cylinder"]
+        },
+        "dimensions": "generated to give integer or 2dp answer"
+      },
+      "answer_type": "number",
+      "verifier_fn": "surface_area",
+      "distractor_strategy": "PARTIAL",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9M-02",
+      "vc_code": "VC2M9M02",
+      "year": 9, "strand": "Measurement",
+      "topic": "Volume of pyramids, cones, and spheres",
+      "generation_mode": "parametric",
+      "question_template": "A {shape} has {dimensions}. Find its volume. Use π ≈ 3.14 where needed.",
+      "params": {
+        "shape": {
+          "type": "choice",
+          "foundation": ["square pyramid"],
+          "standard":   ["square pyramid", "cone"],
+          "advanced":   ["square pyramid", "cone", "sphere"]
+        },
+        "dimensions": {
+          "pyramid": "base side {s} cm, height {h} cm; s ∈ [3..12], h ∈ [4..15]",
+          "cone":     "radius {r} cm, height {h} cm; r ∈ [3..9], h ∈ [4..15]",
+          "sphere":   "radius {r} cm; r ∈ [3..9]"
+        }
+      },
+      "answer_type": "decimal_2dp",
+      "verifier_fn": "volume_pyramid_cone_sphere",
+      "distractor_strategy": "FORMULA_MIX",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9M-03",
+      "vc_code": "VC2M9M03",
+      "year": 9, "strand": "Measurement",
+      "topic": "Trigonometry: find an unknown side using sin, cos, or tan",
+      "generation_mode": "parametric",
+      "question_template": "In a right-angled triangle, angle θ = {theta}° and the {known_side} = {value} cm. Find the {unknown_side} (to 2 dp).",
+      "params": {
+        "theta": {
+          "type": "choice",
+          "foundation": [30, 45, 60],
+          "standard":   [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70],
+          "advanced":   [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75]
+        },
+        "known_side":   { "type": "choice", "all": ["hypotenuse", "adjacent side", "opposite side"] },
+        "unknown_side": { "type": "derived", "rule": "different from known_side; requires sin/cos/tan" },
+        "value": { "type": "randint", "min": 5, "max": 30 }
+      },
+      "answer_type": "decimal_2dp",
+      "verifier_fn": "trigonometry_find_side",
+      "distractor_strategy": "FORMULA_MIX",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9M-04",
+      "vc_code": "VC2M9M04",
+      "year": 9, "strand": "Measurement",
+      "topic": "Find missing length in similar figures",
+      "generation_mode": "parametric",
+      "question_template": "Two similar triangles have corresponding sides {a} cm and {b} cm. Another side of the smaller triangle is {c} cm. What is the corresponding side of the larger triangle?",
+      "params": {
+        "a": { "type": "randint", "min": 2, "max": 8 },
+        "b": { "type": "derived", "rule": "b = a × k where k ∈ {2, 3, 4, 1.5, 2.5}" },
+        "c": { "type": "randint", "min": 3, "max": 15 }
+      },
+      "answer_type": "number",
+      "verifier_fn": "similar_figures",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4,
+      "generation_constraint": "answer is integer or clean 1dp decimal"
+    },
+
+    {
+      "_comment": "=== YEAR 9 — STATISTICS (1 template) ===",
+      "id": "T-9ST-03",
+      "vc_code": "VC2M9ST03",
+      "year": 9, "strand": "Statistics",
+      "topic": "Compare summary statistics between two data sets",
+      "generation_mode": "parametric",
+      "question_template": "Data set A has mean {meanA} and range {rangeA}. Data set B has mean {meanB} and range {rangeB}. Which statement is true?",
+      "params": {
+        "meanA":  { "type": "randint", "min": 10, "max": 80 },
+        "meanB":  { "type": "randint", "min": 10, "max": 80 },
+        "rangeA": { "type": "randint", "min": 5, "max": 40 },
+        "rangeB": { "type": "randint", "min": 5, "max": 40 }
+      },
+      "answer_type": "statement_selection",
+      "verifier_fn": "compare_statistics",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Options are always: 4 statements comparing the two sets. Exactly one is factually correct based on the given params."
+    },
+
+    {
+      "_comment": "=== YEAR 9 — PROBABILITY (2 templates) ===",
+      "id": "T-9P-01",
+      "vc_code": "VC2M9P01",
+      "year": 9, "strand": "Probability",
+      "topic": "Venn diagrams: union, intersection, complement",
+      "generation_mode": "parametric",
+      "question_template": "In a group of {total} students, {a} study Maths, {b} study Science, and {ab} study both. What is the probability that a randomly chosen student studies {query}?",
+      "params": {
+        "total": { "type": "choice", "all": [20, 25, 30, 40, 50] },
+        "ab":    { "type": "randint", "min": 2, "max": 8 },
+        "a":     { "type": "derived", "rule": "a = ab + randint(3,10)" },
+        "b":     { "type": "derived", "rule": "b = ab + randint(3,10); a+b-ab ≤ total" },
+        "query": {
+          "type": "choice",
+          "foundation": ["Maths only", "Science only"],
+          "standard":   ["Maths only", "Science only", "both subjects", "at least one subject"],
+          "advanced":   ["Maths only", "Science only", "both subjects", "at least one subject", "neither subject"]
+        }
+      },
+      "answer_type": "fraction_string",
+      "verifier_fn": "venn_diagram_probability",
+      "distractor_strategy": "OP_SWAP",
+      "options_count": 4
+    },
+
+    {
+      "id": "T-9P-03",
+      "vc_code": "VC2M9P03",
+      "year": 9, "strand": "Probability",
+      "topic": "Two-way tables: read frequencies and calculate probability",
+      "generation_mode": "parametric",
+      "question_template": "A two-way table shows: {table_description}. What is the probability that a randomly selected person {query}?",
+      "params": {
+        "table_structure": "2×2 table: two categories (e.g. Gender × Preference), each cell integer ∈ [5..30]",
+        "query": {
+          "type": "choice",
+          "foundation": ["is in a specific cell"],
+          "standard":   ["is in a specific cell", "is in a specific row or column", "is in one category given another"],
+          "advanced":   ["conditional probability given a row or column"]
+        }
+      },
+      "answer_type": "fraction_string",
+      "verifier_fn": "two_way_table_probability",
+      "distractor_strategy": "PARTIAL",
+      "options_count": 4
+    }
+
+  ],
+
+  "curated_banks": {
+    "_note": "These banks must be populated before the system goes live. Each bank is a list of items. Each item has a question_key, question_params, correct_answer, and three wrong_answers.",
+    "rational_ordering_bank":        { "status": "MUST_POPULATE", "min_items": 30, "covers": "fractions, decimals, mixed numbers in ascending/descending order" },
+    "unit_conversion_bank":          { "status": "MUST_POPULATE", "min_items": 40, "covers": "km/m/cm/mm, kg/g, L/mL, hours/minutes/seconds" },
+    "shape_classification_bank":     { "status": "MUST_POPULATE", "min_items": 30, "covers": "triangles by sides and angles, quadrilaterals by properties" },
+    "cartesian_plane_bank":          { "status": "MUST_POPULATE", "min_items": 20, "covers": "identify coordinates of labelled points on described plane" },
+    "graph_type_bank":               { "status": "MUST_POPULATE", "min_items": 25, "covers": "scenario → appropriate graph type" },
+    "sample_space_bank":             { "status": "MUST_POPULATE", "min_items": 20, "covers": "count outcomes for simple probability experiments" },
+    "composite_area_bank":           { "status": "MUST_POPULATE", "min_items": 25, "covers": "L-shapes, rectangle+triangle, rectangle+semicircle" },
+    "time_zone_bank":                { "status": "MUST_POPULATE", "min_items": 25, "covers": "AEST/AEDT/UTC/London/New York conversions" },
+    "congruence_condition_bank":     { "status": "MUST_POPULATE", "min_items": 20, "covers": "SSS/SAS/AAS/RHS scenarios" },
+    "quadrilateral_properties_bank": { "status": "MUST_POPULATE", "min_items": 25, "covers": "identify quadrilateral from described properties" },
+    "outlier_effect_bank":           { "status": "MUST_POPULATE", "min_items": 15, "covers": "effect of outlier on mean vs median" },
+    "experimental_probability_bank": { "status": "MUST_POPULATE", "min_items": 20, "covers": "relative frequency from trial data" },
+    "rational_irrational_bank":      { "status": "MUST_POPULATE", "min_items": 20, "covers": "classify real numbers" },
+    "nonlinear_classification_bank": { "status": "MUST_POPULATE", "min_items": 20, "covers": "identify relationship type from equation" }
+  }
+}
