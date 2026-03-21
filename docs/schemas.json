@@ -13,14 +13,16 @@
       "year_level":           { "type": "integer", "enum": [7, 8, 9] },
       "strand":               { "type": "string", "enum": ["Number", "Algebra", "Measurement", "Space", "Statistics", "Probability"] },
       "difficulty":           { "type": "string", "enum": ["foundation", "standard", "advanced"] },
+      "question_type":        { "type": "string", "enum": ["single_select", "multi_select"], "default": "single_select" },
       "question_text":        { "type": "string", "description": "Fully rendered question with params substituted" },
-      "options":              { "type": "array", "items": "string", "minItems": 4, "maxItems": 4, "description": "Shuffled; one correct, three distractors" },
-      "correct_index":        { "type": "integer", "minimum": 0, "maximum": 3, "description": "Index into options[]. Set by verification engine, never by AI." },
+      "options":              { "type": "array", "items": "string", "minItems": 4, "maxItems": 5, "description": "Shuffled. single_select: 4 options (1 correct, 3 distractors). multi_select: 5 options (2–3 correct)." },
+      "correct_index":        { "type": "integer", "description": "Index into options[]. Set by verification engine, never by AI. -1 sentinel for multi_select (use correct_indices instead)." },
+      "correct_indices":      { "type": "array", "items": "integer", "description": "multi_select only. Sorted list of correct option indices. null for single_select." },
       "explanation":          { "type": "string", "description": "Step-by-step working for the correct answer" },
       "params":               { "type": "object", "description": "Raw parameter values — needed to re-verify at any time" },
       "generated_at":         { "type": "string", "format": "iso_datetime" }
     },
-    "required": ["question_id", "template_id", "vc_code", "year_level", "strand", "difficulty", "question_text", "options", "correct_index", "explanation", "params"]
+    "required": ["question_id", "template_id", "vc_code", "year_level", "strand", "difficulty", "question_type", "question_text", "options", "correct_index", "explanation", "params"]
   },
 
   "SessionStartRequest": {
@@ -56,10 +58,12 @@
       "responses": {
         "type": "array",
         "items": {
-          "question_id":     { "type": "string" },
-          "selected_index":  { "type": "integer", "minimum": 0, "maximum": 3 },
-          "time_taken_ms":   { "type": "integer", "minimum": 0, "description": "optional" }
-        }
+          "question_id":       { "type": "string" },
+          "selected_index":    { "type": "integer", "minimum": 0, "maximum": 4, "description": "single_select only — mutually exclusive with selected_indices" },
+          "selected_indices":  { "type": "array", "items": "integer", "description": "multi_select only — mutually exclusive with selected_index" },
+          "time_taken_ms":     { "type": "integer", "minimum": 0, "description": "optional" }
+        },
+        "_note": "Exactly one of selected_index or selected_indices must be present per response item."
       }
     },
     "required": ["responses"]
@@ -78,8 +82,11 @@
           "question_id":      "string",
           "question_text":    "string",
           "options":          "array[string]",
-          "selected_index":   "integer",
-          "correct_index":    "integer",
+          "question_type":    "string — single_select | multi_select",
+          "selected_index":   "integer | null — null for multi_select",
+          "correct_index":    "integer | null — null for multi_select",
+          "selected_indices": "array[integer] | null — null for single_select",
+          "correct_indices":  "array[integer] | null — null for single_select",
           "correct":          "boolean",
           "explanation":      "string",
           "vc_code":          "string"

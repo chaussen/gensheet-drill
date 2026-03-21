@@ -132,9 +132,15 @@ The results table format is:
 def build_results_table(session, questions):
     rows = []
     for i, (resp, q) in enumerate(zip(session.responses, questions), 1):
+        if q.question_type == "multi_select":
+            student_answer = ", ".join(q.options[i] for i in (resp.selected_indices or []))
+            correct_answer = ", ".join(q.options[i] for i in (q.correct_indices or []))
+        else:
+            student_answer = q.options[resp.selected_index]
+            correct_answer = q.options[q.correct_index]
         rows.append(
             f"Q{i} | {q.vc_code} | {get_topic(q.template_id)} | "
-            f"{q.options[resp.selected_index]} | {q.options[q.correct_index]} | "
+            f"{student_answer} | {correct_answer} | "
             f"{'✓' if resp.correct else '✗'}"
         )
     return "\n".join(rows)
