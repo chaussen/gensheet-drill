@@ -8,6 +8,7 @@ from docs_loader import load_template_meta
 from services.question_service import (
     _fallback_params,
     _resolve_derived_params,
+    _solution_is_integer,
     _format_answer,
     build_question,
     generate_session_questions,
@@ -38,6 +39,31 @@ def test_fallback_params_choice_difficulty():
     advanced = _fallback_params(template, "advanced")
     # Advanced pool is larger; foundation values are a subset of advanced
     assert foundation["n"] in [4, 9, 16, 25, 36, 49, 64, 81, 100]
+
+
+def test_fallback_params_t8a02_integer_solution():
+    """
+    Regression: T-8A-02 fallback must produce params whose solution is an
+    exact integer. Before the fix, random params like a=1,b=2,c=8,d=12 gave
+    x = -10/7 which the verifier silently truncated to -1 (wrong answer).
+    """
+    template = load_template_meta("T-8A-02")
+    from services.verification import VerificationEngine
+    engine = VerificationEngine()
+    for _ in range(50):
+        params = _fallback_params(template, "standard")
+        assert _solution_is_integer("T-8A-02", params), \
+            f"Non-integer solution for params {params}"
+        answer = engine.verify("T-8A-02", params)
+        assert isinstance(answer, int), f"Expected int answer, got {type(answer)}: {answer}"
+        # Verify the answer is actually correct (not a truncation artefact)
+        a, c = int(params["a"]), int(params["c"])
+        b, d = int(params["b"]), int(params["d"])
+        op1, op2 = params.get("op1", "+"), params.get("op2", "+")
+        b_s = b if op1 == "+" else -b
+        d_s = d if op2 == "+" else -d
+        expected = (d_s - b_s) // (a - c)
+        assert answer == expected, f"Verifier returned {answer}, expected {expected}"
 
 
 # ── _resolve_derived_params ───────────────────────────────────────────────────

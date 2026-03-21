@@ -25,60 +25,97 @@ _engine = VerificationEngine()
 
 # ── Param helpers ─────────────────────────────────────────────────────────────
 
+def _has_integer_solution_constraint(schema: dict) -> bool:
+    """Return True if the schema declares a solution_constraint requiring integer answers."""
+    sol = schema.get("solution_constraint", "")
+    return isinstance(sol, str) and "integer" in sol.lower()
+
+
+def _solution_is_integer(template_id: str, params: dict) -> bool:
+    """
+    Pre-verify that params produce an exact integer solution, without calling
+    the main verifier (which truncates non-integers silently via int(sol[0])).
+    Currently handles T-8A-02 (ax ± b = cx ± d).  Returns True for all other
+    templates so the caller can pass through without disruption.
+    """
+    if template_id == "T-8A-02":
+        try:
+            a = int(params["a"]);  c = int(params["c"])
+            b = int(params["b"]);  d = int(params["d"])
+            op1 = params.get("op1", "+");  op2 = params.get("op2", "+")
+            b_signed = b if op1 == "+" else -b
+            d_signed = d if op2 == "+" else -d
+            denom = a - c
+            if denom == 0:
+                return False
+            return (d_signed - b_signed) % denom == 0
+        except (KeyError, ValueError, TypeError):
+            return False
+    return True
+
+
 def _fallback_params(template: dict, difficulty: str) -> dict:
     """
     Generate random parameter values locally without the AI.
     Used when the AI call fails (per docs/ai_prompts.md error handling).
     """
-    params: dict = {}
     schema = template.get("params", {})
+    needs_integer = _has_integer_solution_constraint(schema)
+    max_attempts = 40 if needs_integer else 1
 
-    # First pass: non-derived params
-    for key, spec in schema.items():
-        if not isinstance(spec, dict):
-            continue
-        ptype = spec.get("type")
-        if ptype == "choice":
-            choices = spec.get(difficulty) or spec.get("all") or spec.get("standard") or []
-            if choices:
-                params[key] = random.choice(choices)
-        elif ptype == "randint":
-            lo = spec.get(f"{difficulty}_min", spec.get("min", 1))
-            hi = spec.get(f"{difficulty}_max", spec.get("max", 10))
-            exclude = spec.get("exclude", [])
-            for _ in range(20):
-                val = random.randint(int(lo), int(hi))
-                if val not in exclude:
-                    params[key] = val
-                    break
-        elif ptype == "random_float":
-            lo = float(spec.get("min", 1.0))
-            hi = float(spec.get("max", 100.0))
-            dp = int(spec.get("decimal_places", 2))
-            params[key] = round(random.uniform(lo, hi), dp)
-        # "derived" and "generated_expression" handled in second pass
+    for _ in range(max_attempts):
+        params: dict = {}
 
-    # Second pass: enforce inter-param inequality constraints (e.g. "c ≠ a")
-    for key, spec in schema.items():
-        if not isinstance(spec, dict):
-            continue
-        constraint = spec.get("constraint", "")
-        neq = re.search(r'(\w+)\s*≠\s*(\w+)', constraint)
-        if neq:
-            lhs, rhs = neq.group(1), neq.group(2)
-            # key is lhs; rhs is the param it must differ from
-            if lhs == key and rhs in params and params.get(lhs) == params.get(rhs):
-                lo = int(spec.get("min", 1))
-                hi = int(spec.get("max", 10))
+        # First pass: non-derived params
+        for key, spec in schema.items():
+            if not isinstance(spec, dict):
+                continue
+            ptype = spec.get("type")
+            if ptype == "choice":
+                choices = spec.get(difficulty) or spec.get("all") or spec.get("standard") or []
+                if choices:
+                    params[key] = random.choice(choices)
+            elif ptype == "randint":
+                lo = spec.get(f"{difficulty}_min", spec.get("min", 1))
+                hi = spec.get(f"{difficulty}_max", spec.get("max", 10))
+                exclude = spec.get("exclude", [])
                 for _ in range(20):
-                    val = random.randint(lo, hi)
-                    if val != params[rhs]:
+                    val = random.randint(int(lo), int(hi))
+                    if val not in exclude:
                         params[key] = val
                         break
+            elif ptype == "random_float":
+                lo = float(spec.get("min", 1.0))
+                hi = float(spec.get("max", 100.0))
+                dp = int(spec.get("decimal_places", 2))
+                params[key] = round(random.uniform(lo, hi), dp)
+            # "derived" and "generated_expression" handled in second pass
 
-    # Third pass: derived params
-    params = _resolve_derived_params(template, params)
-    return params
+        # Second pass: enforce inter-param inequality constraints (e.g. "c ≠ a")
+        for key, spec in schema.items():
+            if not isinstance(spec, dict):
+                continue
+            constraint = spec.get("constraint", "")
+            neq = re.search(r'(\w+)\s*≠\s*(\w+)', constraint)
+            if neq:
+                lhs, rhs = neq.group(1), neq.group(2)
+                if lhs == key and rhs in params and params.get(lhs) == params.get(rhs):
+                    lo = int(spec.get("min", 1))
+                    hi = int(spec.get("max", 10))
+                    for _ in range(20):
+                        val = random.randint(lo, hi)
+                        if val != params[rhs]:
+                            params[key] = val
+                            break
+
+        # Third pass: derived params
+        params = _resolve_derived_params(template, params)
+
+        # Fourth pass: validate integer solution constraint before returning
+        if not needs_integer or _solution_is_integer(template["id"], params):
+            return params
+
+    return params  # return last attempt if all retries exhausted
 
 
 def _safe_eval(expr_str: str, namespace: dict):
