@@ -31,6 +31,10 @@ export function useSession() {
   useEffect(() => {
     if (!state.result || state.result.analysis !== null) return
 
+    // Capture stable values so the interval callback has no stale closure issues
+    const sessionId = state.sessionId
+    const onAnalysis = updateAnalysis
+
     setState(s => ({ ...s, analysisPolling: true }))
     const deadline = Date.now() + POLL_TIMEOUT_MS
 
@@ -41,11 +45,11 @@ export function useSession() {
         return
       }
       try {
-        const fresh = await api.getResult(state.sessionId)
+        const fresh = await api.getResult(sessionId)
         if (fresh.analysis !== null) {
           clearInterval(pollRef.current)
           setState(s => ({ ...s, result: fresh, analysisPolling: false }))
-          updateAnalysis(state.sessionId, fresh.analysis)
+          onAnalysis(sessionId, fresh.analysis)
         }
       } catch {
         // keep polling until deadline
@@ -53,7 +57,7 @@ export function useSession() {
     }, POLL_INTERVAL_MS)
 
     return () => clearInterval(pollRef.current)
-  }, [state.result?.session_id, state.result?.analysis])   // re-run only when result identity changes
+  }, [state.result?.session_id, state.result?.analysis])  // re-run only when result identity changes
 
   // ── Actions ──────────────────────────────────────────────────────────────────
 
@@ -117,7 +121,7 @@ export function useSession() {
 
   function resetSession() {
     clearInterval(pollRef.current)
-    setState(initialState)
+    setState({ ...initialState, answers: new Map() })
   }
 
   return {

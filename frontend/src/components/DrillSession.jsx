@@ -1,12 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import DrillQuestion from './DrillQuestion.jsx'
 
-export default function DrillSession({ session, onSubmit }) {
+export default function DrillSession({ session }) {
   const { currentQuestion, questionIndex, totalQuestions, config, loading, answerQuestion, submitSession } = session
+
+  // Keep a ref to the latest submitSession so the effect never has a stale closure
+  const submitRef = useRef(submitSession)
+  submitRef.current = submitSession
 
   useEffect(() => {
     if (totalQuestions > 0 && questionIndex >= totalQuestions) {
-      submitSession().then(() => onSubmit())
+      submitRef.current()
     }
   }, [questionIndex, totalQuestions])
 

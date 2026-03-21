@@ -11,17 +11,18 @@ export default function App() {
 
   // loading → drill once questions arrive
   useEffect(() => {
-    if (view === 'loading' && session.questions.length > 0) {
-      setView('drill')
-    }
+    if (view === 'loading' && session.questions.length > 0) setView('drill')
   }, [session.questions.length, view])
 
   // loading → setup on error
   useEffect(() => {
-    if (view === 'loading' && session.error) {
-      setView('setup')
-    }
+    if (view === 'loading' && session.error) setView('setup')
   }, [session.error, view])
+
+  // drill → results once submit resolves (result becomes non-null)
+  useEffect(() => {
+    if (view === 'drill' && session.result) setView('results')
+  }, [session.result, view])
 
   function handleStart(config) {
     setView('loading')
@@ -38,7 +39,6 @@ export default function App() {
       <SessionSetup
         onStart={handleStart}
         onViewHistory={() => setView('progress')}
-        loading={false}
         error={session.error}
       />
     )
@@ -56,15 +56,10 @@ export default function App() {
   }
 
   if (view === 'drill') {
-    return (
-      <DrillSession
-        session={session}
-        onSubmit={() => setView('results')}
-      />
-    )
+    return <DrillSession session={session} />
   }
 
-  if (view === 'results') {
+  if (view === 'results' && session.result) {
     return (
       <ResultsScreen
         result={session.result}

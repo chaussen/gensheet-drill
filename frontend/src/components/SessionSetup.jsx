@@ -5,7 +5,7 @@ const DIFFICULTIES = [
   { value: 'advanced',   label: 'Advanced'   },
 ]
 
-export default function SessionSetup({ onStart, onViewHistory, loading, error }) {
+export default function SessionSetup({ onStart, onViewHistory, error }) {
   function handleSubmit(e) {
     e.preventDefault()
     const fd = new FormData(e.target)
@@ -66,10 +66,9 @@ export default function SessionSetup({ onStart, onViewHistory, loading, error })
             </div>
           )}
 
-          <button type="submit" disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed
-                       text-white font-semibold py-2.5 rounded-xl transition-colors">
-            {loading ? 'Generating questions…' : 'Start Session'}
+          <button type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition-colors">
+            Start Session
           </button>
         </form>
 
