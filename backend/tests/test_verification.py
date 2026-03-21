@@ -131,6 +131,25 @@ def test_solve_linear_both_sides():
     assert engine.verify("T-8A-02", {"a": 3, "b": 2, "c": 1, "d": 8, "op1": "+", "op2": "+"}) == 3
 
 
+def test_solve_linear_both_sides_fractional_returns_rational():
+    """
+    Regression for the int()-truncation bug: 1x + 3 = 8x + 13 → x = -10/7.
+    Before the fix, int(Rational(-10, 7)) = -1 was returned silently.
+    After the fix, the verifier returns sympy.Rational(-10, 7) so the caller
+    can decide how to render it.
+    """
+    from sympy import Rational
+    result = engine.verify("T-8A-02", {"a": 1, "b": 3, "c": 8, "d": 13, "op1": "+", "op2": "+"})
+    assert result == Rational(-10, 7), f"Expected -10/7, got {result!r}"
+    # Must NOT silently truncate to -1
+    assert result != -1
+
+
+def test_solve_linear_both_sides_with_subtraction_op():
+    # 5x - 4 = 2x + 5 → x = 3
+    assert engine.verify("T-8A-02", {"a": 5, "b": 4, "c": 2, "d": 5, "op1": "-", "op2": "+"}) == 3
+
+
 def test_gradient_two_points():
     # (1,2) to (3,8): rise=6, run=2, gradient=3
     result = engine.verify("T-8A-03", {"x1": 1, "y1": 2, "x2": 3, "y2": 8})
@@ -162,6 +181,17 @@ def test_simultaneous_equations():
     # y = 2x + 1, y = -x + 7 → x = 2
     result = engine.verify("T-9A-04", {"a": 2, "b": 1, "c": -1, "d": 7})
     assert result == 2
+
+
+def test_simultaneous_equations_fractional_returns_rational():
+    """
+    Same truncation bug as T-8A-02: y = 3x + 1, y = x + 2 → x = 1/2.
+    Must return Rational(1, 2), not the truncated 0.
+    """
+    from sympy import Rational
+    result = engine.verify("T-9A-04", {"a": 3, "b": 1, "c": 1, "d": 2})
+    assert result == Rational(1, 2), f"Expected 1/2, got {result!r}"
+    assert result != 0
 
 
 def test_trigonometry():

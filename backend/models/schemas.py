@@ -1,7 +1,7 @@
 """
 Pydantic models matching docs/schemas.json exactly.
 """
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from typing import Literal
 from datetime import datetime, timezone
 import uuid
@@ -19,9 +19,11 @@ class QuestionObject(BaseModel):
     year_level: int
     strand: str
     difficulty: str
+    question_type: Literal["single_select", "multi_select"] = "single_select"
     question_text: str
     options: list[str]
     correct_index: int
+    correct_indices: list[int] | None = None  # multi_select only; correct_index is -1 sentinel
     explanation: str
     params: dict
     generated_at: str = Field(default_factory=_now_iso)
@@ -35,6 +37,7 @@ class QuestionObjectPublic(BaseModel):
     year_level: int
     strand: str
     difficulty: str
+    question_type: Literal["single_select", "multi_select"] = "single_select"
     question_text: str
     options: list[str]
     explanation: str
@@ -65,8 +68,19 @@ class SessionStartResponse(BaseModel):
 
 class ResponseItem(BaseModel):
     question_id: str
-    selected_index: int = Field(ge=0, le=3)
+    selected_index: int | None = Field(default=None, ge=0, le=4)
+    selected_indices: list[int] | None = None
     time_taken_ms: int | None = None
+
+    @model_validator(mode="after")
+    def check_exactly_one_selection(self) -> "ResponseItem":
+        has_single = self.selected_index is not None
+        has_multi = self.selected_indices is not None
+        if has_single == has_multi:
+            raise ValueError(
+                "Exactly one of selected_index or selected_indices must be provided"
+            )
+        return self
 
 
 class SessionSubmitRequest(BaseModel):
@@ -77,8 +91,11 @@ class ResponseResultItem(BaseModel):
     question_id: str
     question_text: str
     options: list[str]
-    selected_index: int
-    correct_index: int
+    question_type: Literal["single_select", "multi_select"] = "single_select"
+    selected_index: int | None = None
+    correct_index: int | None = None
+    selected_indices: list[int] | None = None
+    correct_indices: list[int] | None = None
     correct: bool
     explanation: str
     vc_code: str

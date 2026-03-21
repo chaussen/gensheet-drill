@@ -83,14 +83,19 @@ export function useSession() {
     }
   }
 
-  function answerQuestion(selectedIndex) {
+  function answerQuestion(selectionOrArray) {
     const q = state.questions[state.questionIndex]
     if (!q) return
     const timeTakenMs = state.questionStartedAt ? Date.now() - state.questionStartedAt : null
+    const isMulti = Array.isArray(selectionOrArray)
 
     setState(s => {
       const answers = new Map(s.answers)
-      answers.set(q.question_id, { selectedIndex, timeTakenMs })
+      answers.set(q.question_id, {
+        selectedIndex:   isMulti ? null : selectionOrArray,
+        selectedIndices: isMulti ? selectionOrArray : null,
+        timeTakenMs,
+      })
       return {
         ...s,
         answers,
@@ -105,11 +110,11 @@ export function useSession() {
     try {
       const responses = state.questions.map(q => {
         const ans = state.answers.get(q.question_id)
-        return {
-          question_id:    q.question_id,
-          selected_index: ans?.selectedIndex ?? 0,
-          time_taken_ms:  ans?.timeTakenMs ?? null,
+        const base = { question_id: q.question_id, time_taken_ms: ans?.timeTakenMs ?? null }
+        if (q.question_type === 'multi_select') {
+          return { ...base, selected_indices: ans?.selectedIndices ?? [] }
         }
+        return { ...base, selected_index: ans?.selectedIndex ?? 0 }
       })
       const result = await api.submitSession(state.sessionId, responses)
       saveSession(result, state.config)

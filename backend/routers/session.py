@@ -54,14 +54,39 @@ def _build_results_table(session: dict) -> str:
         except Exception:
             topic = q["template_id"]
 
-        student_answer = q["options"][resp["selected_index"]]
-        correct_answer = q["options"][q["correct_index"]]
+        if q.get("question_type") == "multi_select":
+            student_answer = ", ".join(
+                q["options"][i] for i in (resp.get("selected_indices") or [])
+            ) or "(none)"
+            correct_answer = ", ".join(
+                q["options"][i] for i in (q.get("correct_indices") or [])
+            )
+        else:
+            student_answer = q["options"][resp["selected_index"]]
+            correct_answer = q["options"][q["correct_index"]]
         result = "✓" if resp["correct"] else "✗"
         rows.append(
             f"Q{i} | {q['vc_code']} | {topic} | "
             f"{student_answer} | {correct_answer} | {result}"
         )
     return "\n".join(rows)
+
+
+def _make_response_result_item(r: dict, q: dict) -> ResponseResultItem:
+    q_type = q.get("question_type", "single_select")
+    return ResponseResultItem(
+        question_id=r["question_id"],
+        question_text=q["question_text"],
+        options=q["options"],
+        question_type=q_type,
+        selected_index=r.get("selected_index") if q_type == "single_select" else None,
+        correct_index=q.get("correct_index") if q_type == "single_select" else None,
+        selected_indices=r.get("selected_indices") if q_type == "multi_select" else None,
+        correct_indices=q.get("correct_indices") if q_type == "multi_select" else None,
+        correct=r["correct"],
+        explanation=q["explanation"],
+        vc_code=q["vc_code"],
+    )
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
@@ -118,6 +143,7 @@ async def start_session(req: SessionStartRequest):
             year_level=q.year_level,
             strand=q.strand,
             difficulty=q.difficulty,
+            question_type=q.question_type,
             question_text=q.question_text,
             options=q.options,
             explanation=q.explanation,
@@ -185,12 +211,16 @@ async def submit_session(
             logger.warning("Unknown question_id %s in submit for session %s",
                            resp.question_id, session_id)
             continue
-        correct = resp.selected_index == q["correct_index"]
+        if q.get("question_type") == "multi_select":
+            correct = set(resp.selected_indices or []) == set(q.get("correct_indices") or [])
+        else:
+            correct = resp.selected_index == q["correct_index"]
         if correct:
             score += 1
         marked.append({
             "question_id": resp.question_id,
             "selected_index": resp.selected_index,
+            "selected_indices": resp.selected_indices,
             "time_taken_ms": resp.time_taken_ms,
             "correct": correct,
         })
@@ -210,16 +240,7 @@ async def submit_session(
     background_tasks.add_task(_run_analysis, session_id)
 
     response_items = [
-        ResponseResultItem(
-            question_id=r["question_id"],
-            question_text=session["questions"][r["question_id"]]["question_text"],
-            options=session["questions"][r["question_id"]]["options"],
-            selected_index=r["selected_index"],
-            correct_index=session["questions"][r["question_id"]]["correct_index"],
-            correct=r["correct"],
-            explanation=session["questions"][r["question_id"]]["explanation"],
-            vc_code=session["questions"][r["question_id"]]["vc_code"],
-        )
+        _make_response_result_item(r, session["questions"][r["question_id"]])
         for r in marked
     ]
 
@@ -254,16 +275,7 @@ async def get_result(session_id: str):
             logger.warning("Failed to parse analysis for session %s: %s", session_id, e)
 
     response_items = [
-        ResponseResultItem(
-            question_id=r["question_id"],
-            question_text=session["questions"][r["question_id"]]["question_text"],
-            options=session["questions"][r["question_id"]]["options"],
-            selected_index=r["selected_index"],
-            correct_index=session["questions"][r["question_id"]]["correct_index"],
-            correct=r["correct"],
-            explanation=session["questions"][r["question_id"]]["explanation"],
-            vc_code=session["questions"][r["question_id"]]["vc_code"],
-        )
+        _make_response_result_item(r, session["questions"][r["question_id"]])
         for r in session["responses"]
     ]
 

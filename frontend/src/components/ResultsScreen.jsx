@@ -22,6 +22,18 @@ function Spinner() {
   )
 }
 
+function renderSelected(r) {
+  if (r.question_type === 'multi_select')
+    return (r.selected_indices || []).map(i => r.options[i]).join(', ') || '(none)'
+  return r.options[r.selected_index]
+}
+
+function renderCorrect(r) {
+  if (r.question_type === 'multi_select')
+    return (r.correct_indices || []).map(i => r.options[i]).join(', ')
+  return r.options[r.correct_index]
+}
+
 export default function ResultsScreen({ result, analysisPolling, onNewSession, onViewHistory }) {
   const [expanded, setExpanded] = useState(null)
   const analysis = result.analysis
@@ -127,13 +139,13 @@ export default function ResultsScreen({ result, analysisPolling, onNewSession, o
                       <div>
                         <span className="text-slate-500">Your answer: </span>
                         <span className={r.correct ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
-                          {r.options[r.selected_index]}
+                          {renderSelected(r)}
                         </span>
                       </div>
                       {!r.correct && (
                         <div>
                           <span className="text-slate-500">Correct: </span>
-                          <span className="text-green-700 font-medium">{r.options[r.correct_index]}</span>
+                          <span className="text-green-700 font-medium">{renderCorrect(r)}</span>
                         </div>
                       )}
                     </div>

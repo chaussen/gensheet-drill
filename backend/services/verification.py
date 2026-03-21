@@ -284,7 +284,7 @@ class VerificationEngine:
         lhs = a * xv + (b_val if op1 == "+" else -b_val)
         rhs = c_val * xv + (d_val if op2 == "+" else -d_val)
         sol = solve(SymEq(lhs, rhs), xv)
-        return int(sol[0])
+        return sol[0]
 
     def _gradient_two_points(self, p):
         x1, y1 = int(p["x1"]), int(p["y1"])
@@ -415,7 +415,7 @@ class VerificationEngine:
         a, b_val, c_val, d_val = int(p["a"]), int(p["b"]), int(p["c"]), int(p["d"])
         xv, yv = symbols("x y")
         sol = solve([SymEq(yv, a * xv + b_val), SymEq(yv, c_val * xv + d_val)], [xv, yv])
-        return int(sol[xv])
+        return sol[xv]
 
     def _surface_area(self, p):
         shape = p["shape"]
