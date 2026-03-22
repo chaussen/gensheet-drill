@@ -32,5 +32,8 @@ backend/static/
 # OS
 .DS_Store
 
-# Scratch / notes
+# Scratch / notes — allow tracked project docs
 *.md
+!BUGS.md
+!BACKLOG.md
+!CLAUDE.md

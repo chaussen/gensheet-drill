@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { InlineMath } from 'react-katex'
+import MathText from './MathText.jsx'
+import { toLatex } from '../utils/math.js'
+import { TEST_IDS } from '../testing/testIds.ts'
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E']
 
@@ -12,13 +16,6 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
   // Multi-select state
   const [checkedSet, setCheckedSet] = useState(new Set())
   const [confirmed, setConfirmed]   = useState(false)
-
-  useEffect(() => {
-    setSelected(null)
-    setLocked(false)
-    setCheckedSet(new Set())
-    setConfirmed(false)
-  }, [question.question_id])
 
   function handleSingleSelect(index) {
     if (locked) return
@@ -48,12 +45,14 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
         Question {questionNumber} of {totalQuestions}
       </p>
 
-      <p className="text-lg font-medium text-slate-800 mb-6 leading-relaxed">
-        {question.question_text}
-      </p>
+      <MathText
+        text={question.question_text}
+        latex={!!question.latex_notation}
+        className="text-lg font-medium text-slate-800 mb-6 leading-relaxed block"
+      />
 
       {isMultiSelect && (
-        <p className="text-xs font-medium text-amber-600 uppercase tracking-wide mb-3">
+        <p data-testid={TEST_IDS.drill.multiWarning} className="text-xs font-medium text-amber-600 uppercase tracking-wide mb-3">
           Select all that apply
         </p>
       )}
@@ -65,6 +64,7 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
             return (
               <label
                 key={i}
+                data-testid={TEST_IDS.drill.optionLabel(i)}
                 className={[
                   'w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-colors',
                   isChecked
@@ -86,7 +86,9 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
                 ].join(' ')}>
                   {OPTION_LABELS[i]}
                 </span>
-                <span>{opt}</span>
+                {question.latex_notation
+                  ? <InlineMath math={toLatex(opt)} renderError={() => <span>{opt}</span>} />
+                  : <span>{opt}</span>}
               </label>
             )
           }
@@ -96,6 +98,7 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
           return (
             <button
               key={i}
+              data-testid={TEST_IDS.drill.optionBtn(i)}
               onClick={() => handleSingleSelect(i)}
               disabled={locked && !isSelected}
               className={[
@@ -112,7 +115,9 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
               ].join(' ')}>
                 {OPTION_LABELS[i]}
               </span>
-              <span>{opt}</span>
+              {question.latex_notation
+                ? <InlineMath math={toLatex(opt)} renderError={() => <span>{opt}</span>} />
+                : <span>{opt}</span>}
             </button>
           )
         })}
@@ -120,6 +125,7 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
 
       {isMultiSelect && (
         <button
+          data-testid={TEST_IDS.drill.confirmBtn}
           onClick={handleConfirm}
           disabled={checkedSet.size === 0 || confirmed}
           className="mt-4 w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors"

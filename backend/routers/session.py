@@ -51,6 +51,7 @@ def _make_response_result_item(r: dict, q: dict) -> ResponseResultItem:
         correct=r["correct"],
         explanation=q["explanation"],
         vc_code=q["vc_code"],
+        latex_notation=q.get("latex_notation", False),
         time_taken_ms=r.get("time_taken_ms"),
     )
 
@@ -125,6 +126,7 @@ async def start_session(req: SessionStartRequest):
             options=q.options,
             explanation=q.explanation,
             params=q.params,
+            latex_notation=q.latex_notation,
             generated_at=q.generated_at,
         )
         for q in questions

@@ -529,7 +529,7 @@ class VerificationEngine:
         return sol  # The solution is pre-defined; verifier confirms it
 
     def _transversal_angle(self, p):
-        """corresponding/alternate → equal; co-interior → supplementary (180 - a)."""
+        """corresponding/alternate → equal; co-interior/supplementary → 180 - a."""
         a = int(p["a"])
         rel = p["relationship"].lower()
         if "corresponding" in rel:
@@ -537,6 +537,8 @@ class VerificationEngine:
         elif "alternate" in rel:
             return a
         elif "co-interior" in rel or "co interior" in rel or "same-side" in rel:
+            return 180 - a
+        elif "supplementary" in rel:
             return 180 - a
         raise ValueError(f"Unknown transversal relationship: {rel}")
 

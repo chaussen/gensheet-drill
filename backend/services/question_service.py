@@ -25,7 +25,7 @@ _engine = VerificationEngine()
 # ── Validation gate ────────────────────────────────────────────────────────────
 
 _PLACEHOLDER_RE = re.compile(r'\{[a-z_][a-z_0-9]*\}')
-_BAD_OPTION_PATTERNS = ("_wrong", "_0", "_1", "_2", "**")
+_BAD_OPTION_PATTERNS = ("_wrong", "_0", "_1", "_2", "**", "_neg", "_a", "_b", "_c", "?")
 
 # T-9A-04: this context_variant asks for (x,y) but the verifier only returns x.
 _T9A04_EXCLUDED_VARIANTS: frozenset[str] = frozenset([
@@ -194,13 +194,13 @@ MULTI_SELECT_BANKS: dict[str, dict] = {
                 "explanation": "x² + 3x − 4 = 0 and x² = 9 are quadratic (highest degree 2). 2x + 5 = 0 and y = x + 1 are linear; x³ − 1 = 0 is cubic.",
             },
             {
-                "question_text": "Select all quadratic equations.",
+                "question_text": "Which of the following are quadratic equations?",
                 "options": ["y = x²", "y = 2x + 1", "3x² − 2x + 1 = 0", "y = 1/x", "x³ = 8"],
                 "correct_indices": [0, 2],
                 "explanation": "y = x² and 3x² − 2x + 1 = 0 are quadratic. y = 2x + 1 is linear, y = 1/x is a hyperbola, and x³ = 8 is cubic.",
             },
             {
-                "question_text": "Select all quadratic equations.",
+                "question_text": "Identify all quadratic equations from the list.",
                 "options": ["x² − 5x + 6 = 0", "x = 4", "2x² + x = 0", "y = 3/x", "4x − 1 = 0"],
                 "correct_indices": [0, 2],
                 "explanation": "x² − 5x + 6 = 0 and 2x² + x = 0 are quadratic. x = 4 is a constant equation, y = 3/x is a hyperbola, and 4x − 1 = 0 is linear.",
@@ -633,6 +633,49 @@ def _apply_composite_placeholders(text: str, params: dict) -> str:
     return re.sub(r'\{([a-z_]\w*)x\}', _replace, text)
 
 
+def _clean_math_coefficients(text: str) -> str:
+    """
+    Post-process rendered question text to fix invalid math notation produced when
+    numeric params are substituted into templates with patterns like {a}x + {b}.
+
+    Fixes:
+    1. "1x" → "x", "-1x" → "-x" (leading coefficient 1)
+    2. "0x + c" → "c", "0x - c" → "-c", bare "0x" → "0" (zero coefficient)
+    3. "+ -N" → "- N", "- -N" → "+ N" (sign collapsing after negative substitution)
+    """
+    # Sign collapsing: must run before coefficient rules so "= -1x" is clean afterwards
+    # "+ -"  →  "- "    e.g. "y = 2x + -4"  →  "y = 2x - 4"
+    text = re.sub(r'\+\s*-\s*(\d)', r'- \1', text)
+    # "- -"  →  "+ "    e.g. "y = 2x - -3"  →  "y = 2x + 3"
+    text = re.sub(r'-\s*-\s*(\d)', r'+ \1', text)
+
+    # Zero coefficient: "0x + c" → "c", "0x - c" → "-c", standalone "0x" → "0"
+    # Match: optional leading "= " or space, then 0x, then optional " +/- constant"
+    def _zero_coef(m: re.Match) -> str:
+        prefix = m.group(1)   # e.g. "= " or "  "
+        sign = m.group(2)     # "+" or "-" or None
+        const = m.group(3)    # constant string or None
+        if const is None:
+            return f"{prefix}0"
+        if sign == "-":
+            return f"{prefix}-{const}"
+        return f"{prefix}{const}"
+
+    text = re.sub(
+        r'(=\s*|(?<=\s))0x(?:\s*([+\-])\s*(\S+))?',
+        _zero_coef,
+        text,
+    )
+
+    # Leading-1 coefficient: "1x" → "x", "-1x" → "-x"
+    # Use word boundary on the right so "10x", "11x" etc. are untouched.
+    # Allow optional sign prefix so "= -1x" → "= -x" and "= 1x" → "= x".
+    text = re.sub(r'(?<![0-9])-1x(?![0-9])', '-x', text)
+    text = re.sub(r'(?<![0-9])1x(?![0-9])', 'x', text)
+
+    return text
+
+
 def _render_question_text(
     template: dict,
     params: dict,
@@ -641,7 +684,8 @@ def _render_question_text(
     """
     Substitute params into a randomly chosen context variant or the base template.
     Returns (rendered_text, chosen_template_str).
-    Applies a second pass to resolve composite {ax}/{bx}/… placeholders.
+    Applies a second pass to resolve composite {ax}/{bx}/… placeholders, then a
+    third pass (_clean_math_coefficients) to fix "1x", "0x + c", and "+ -N" artifacts.
     """
     raw_variants = template.get("context_variants", [])
     if exclude_variants:
@@ -652,11 +696,17 @@ def _render_question_text(
     base = template.get("question_template", "")
     try:
         text = template_str.format(**params)
-        return _apply_composite_placeholders(text, params), template_str
+        cleaned = _clean_math_coefficients(_apply_composite_placeholders(text, params))
+        return cleaned, template_str
     except (KeyError, ValueError):
+        # TODO: 6 context_variants in docs/question_templates.json reference placeholders
+        # that are not present in their params dict (T-7M-04b, T-7P-01, T-8A-03, T-9N-02,
+        # T-9A-01, T-9A-03). Those variants silently fall through to the base template here.
+        # Fix by removing the invalid variants from the JSON or adding the missing params.
         try:
             text = base.format(**params)
-            return _apply_composite_placeholders(text, params), base
+            cleaned = _clean_math_coefficients(_apply_composite_placeholders(text, params))
+            return cleaned, base
         except Exception:
             return base, base
 
@@ -694,6 +744,7 @@ def _build_multi_select_question(
             correct_indices=shuffled_correct,
             explanation=item["explanation"],
             params=params,
+            latex_notation=bank.get("strand") in ("Number", "Algebra"),
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
     except Exception as e:
@@ -751,6 +802,7 @@ def _build_t7n02_multi_select(params: dict, difficulty: str) -> QuestionObject |
             correct_indices=correct_indices,
             explanation=explanation,
             params=params,
+            latex_notation=True,
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
     except Exception as e:
@@ -816,6 +868,7 @@ def _build_curated_bank_question(
                 correct_indices=correct_indices,
                 explanation=explanation,
                 params={},
+                latex_notation=template.get("latex_notation", False),
                 generated_at=datetime.now(timezone.utc).isoformat(),
             )
         except Exception as e:
@@ -846,6 +899,7 @@ def _build_curated_bank_question(
             correct_index=correct_index,
             explanation=explanation,
             params={},
+            latex_notation=template.get("latex_notation", False),
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
     except Exception as e:
@@ -951,6 +1005,7 @@ def build_question(
             correct_index=correct_index,
             explanation=explanation,
             params=params,
+            latex_notation=template.get("latex_notation", False),
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
     except Exception as e:
@@ -1124,6 +1179,27 @@ async def generate_session_questions(
                     questions.append(q)
         else:
             logger.warning("Top-up pool empty; cannot fill %d deficit slots", count - len(questions))
+
+    # Deduplicate by question_text — only for curated bank templates.
+    # Curated banks have a finite, fixed set of question texts; if the same text appears
+    # more than once (e.g. T-9A-05 before distinct texts were added, or any future bank
+    # with accidental duplicates), drop the extra. Parametric questions are excluded: their
+    # question_text is generated from varied AI params, so repetition is a test artifact only.
+    curated_template_ids: set[str] = (
+        set(MULTI_SELECT_BANKS.keys()) | {t["id"] for t in curated_single}
+    )
+    seen_curated_texts: set[str] = set()
+    deduped: list[QuestionObject] = []
+    for q in questions:
+        if q.template_id in curated_template_ids:
+            if q.question_text not in seen_curated_texts:
+                seen_curated_texts.add(q.question_text)
+                deduped.append(q)
+            else:
+                logger.warning("Dropped duplicate question_text from session (template %s)", q.template_id)
+        else:
+            deduped.append(q)
+    questions = deduped
 
     random.shuffle(questions)
     return questions[:count]

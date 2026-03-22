@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import DrillQuestion from './DrillQuestion.jsx'
+import { TEST_IDS } from '../testing/testIds.ts'
 
 function SessionTimer({ startTime }) {
   const [elapsed, setElapsed] = useState(0)
@@ -12,7 +13,7 @@ function SessionTimer({ startTime }) {
   const minutes = Math.floor(elapsed / 60000)
   const seconds = Math.floor((elapsed % 60000) / 1000)
   return (
-    <span className="text-sm text-slate-500 tabular-nums">
+    <span data-testid={TEST_IDS.drill.timer} className="text-sm text-slate-500 tabular-nums">
       ⏱ {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
     </span>
   )
@@ -47,7 +48,7 @@ export default function DrillSession({ session }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div data-testid={TEST_IDS.drill.submittingSpinner} className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-slate-600">Submitting your answers…</p>
@@ -69,7 +70,7 @@ export default function DrillSession({ session }) {
             {config?.strand} · {config?.difficulty}
           </span>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-slate-500">
+            <span data-testid={TEST_IDS.drill.questionCounter} className="text-sm text-slate-500">
               {questionIndex + 1} / {totalQuestions}
             </span>
             <SessionTimer startTime={sessionStartTime} />
@@ -78,6 +79,7 @@ export default function DrillSession({ session }) {
         {/* Progress bar */}
         <div className="max-w-2xl mx-auto bg-slate-200 rounded-full h-2">
           <div
+            data-testid={TEST_IDS.drill.progressBar}
             className="bg-indigo-500 rounded-full h-2 transition-all duration-300"
             style={{ width: `${progressPct}%` }}
           />
@@ -88,6 +90,7 @@ export default function DrillSession({ session }) {
       <div className="flex-1 flex items-start justify-center p-4 pt-8">
         <div className="w-full max-w-2xl">
           <DrillQuestion
+            key={currentQuestion.question_id}
             question={currentQuestion}
             questionNumber={questionIndex + 1}
             totalQuestions={totalQuestions}

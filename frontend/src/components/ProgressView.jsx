@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useProgress } from '../hooks/useProgress.js'
 import { analyseProgress } from '../api/client.js'
+import { TEST_IDS } from '../testing/testIds.ts'
 
 const BAND_LABELS = {
   needs_support: 'Needs Support',
@@ -172,7 +173,7 @@ export default function ProgressView({ onBack }) {
       const studentId = progress?.student_id ?? 'unknown'
       const result = await analyseProgress([...selected], studentId)
       setReport(result)
-    } catch (err) {
+    } catch {
       setReportError('Report unavailable — try again.')
     } finally {
       setReportLoading(false)
@@ -185,14 +186,14 @@ export default function ProgressView({ onBack }) {
 
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-slate-800">Progress History</h1>
-          <button onClick={onBack}
+          <button data-testid={TEST_IDS.progress.backBtn} onClick={onBack}
             className="text-sm text-indigo-600 hover:text-indigo-800 transition-colors">
             ← Back
           </button>
         </div>
 
         {sessions.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center">
+          <div data-testid={TEST_IDS.progress.emptyState} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center">
             <p className="text-slate-500">No sessions completed yet.</p>
             <p className="text-sm text-slate-400 mt-1">Start a drill session to see your history here.</p>
           </div>
@@ -260,6 +261,7 @@ export default function ProgressView({ onBack }) {
                   {sessions.map((s, i) => (
                     <tr
                       key={s.session_id}
+                      data-testid={TEST_IDS.progress.sessionRow(s.session_id)}
                       className={`cursor-pointer transition-colors ${
                         selected.has(s.session_id)
                           ? 'bg-indigo-50'
@@ -270,6 +272,7 @@ export default function ProgressView({ onBack }) {
                       <td className="px-4 py-3">
                         <input
                           type="checkbox"
+                          data-testid={TEST_IDS.progress.sessionCheckbox(s.session_id)}
                           checked={selected.has(s.session_id)}
                           className="rounded border-slate-300 text-indigo-600"
                           onClick={e => e.stopPropagation()}
@@ -297,6 +300,7 @@ export default function ProgressView({ onBack }) {
               {/* Generate Report button */}
               <div className="px-4 py-4 border-t border-slate-100">
                 <button
+                  data-testid={TEST_IDS.progress.generateReportBtn}
                   onClick={handleGenerateReport}
                   disabled={selected.size < 2 || reportLoading}
                   className={`w-full py-2.5 rounded-xl font-semibold text-sm transition-colors ${
@@ -318,16 +322,20 @@ export default function ProgressView({ onBack }) {
                   </div>
                 )}
                 {reportError && (
-                  <p className="mt-2 text-xs text-red-500 text-center">{reportError}</p>
+                  <p data-testid={TEST_IDS.progress.reportError} className="mt-2 text-xs text-red-500 text-center">{reportError}</p>
                 )}
               </div>
             </div>
 
             {/* Progress report output */}
-            {report && <ProgressReport report={report} />}
+            {report && (
+              <div data-testid={TEST_IDS.progress.reportOutput}>
+                <ProgressReport report={report} />
+              </div>
+            )}
 
             <div className="text-center">
-              <button onClick={clearProgress}
+              <button data-testid={TEST_IDS.progress.clearHistoryBtn} onClick={clearProgress}
                 className="text-xs text-slate-400 hover:text-red-500 transition-colors">
                 Clear all history
               </button>

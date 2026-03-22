@@ -240,3 +240,50 @@ After reading CLAUDE.md, read these in order:
 4. `docs/ai_prompts.md` — exact prompts for both AI calls
 
 Do not proceed to coding until you have read all four.
+
+---
+
+## 11. TypeScript Principles
+
+These rules apply to all TypeScript in this project (tests, utilities, any future frontend migration).
+
+### No `any`
+Never use `any`. Use `unknown` for data whose shape is genuinely not known at compile time (e.g. raw JSON from an external source), then narrow explicitly with type guards. The compiler is the contract — if the type is wrong, the code is wrong.
+
+### `as const satisfies T` for all constants
+Use `as const satisfies T` whenever you have a constant array or object literal and a type to validate against. `as const` narrows string/number literals to their exact values. `satisfies T` validates the shape without widening the type. The type is then **derived from the value**, not defined separately.
+
+```typescript
+// Define the constant — compiler validates shape, literal types are preserved
+const DIFFICULTIES = ['foundation', 'standard', 'advanced'] as const satisfies readonly string[]
+
+// Derive the type — no separate enum or type alias needed
+type Difficulty = typeof DIFFICULTIES[number]  // 'foundation' | 'standard' | 'advanced'
+```
+
+For objects:
+```typescript
+const BAND_LABELS = {
+  needs_support: 'Needs Support',
+  developing:    'Developing',
+  strong:        'Strong',
+  exceeding:     'Exceeding',
+} as const satisfies Record<string, string>
+
+type PerformanceBand = keyof typeof BAND_LABELS  // 'needs_support' | 'developing' | 'strong' | 'exceeding'
+```
+
+### Derive types from values, not alongside them
+Never define an enum or type union alongside a matching array or object literal — that is two sources of truth. Define the constant once, derive the type from it. If the constant changes, the type updates automatically.
+
+### `readonly` by default
+- Arrays: `readonly T[]` or `ReadonlyArray<T>`
+- Object fields that won't be mutated: `readonly`
+- Function parameters that won't be mutated: `Readonly<T>`
+
+### Narrowest possible signatures
+Function parameter types should be the minimal union the function actually handles. If a function only accepts `'foundation' | 'standard' | 'advanced'`, declare that — not `string`. This catches call-site errors at compile time.
+
+### Test ID constants
+All `data-testid` strings are defined in `frontend/src/testing/testIds.ts` as a nested `as const` object. Both frontend components and Playwright tests import from this single file. No inline string literals for test IDs in either location.
+

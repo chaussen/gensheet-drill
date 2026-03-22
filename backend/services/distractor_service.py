@@ -14,12 +14,21 @@ logger = logging.getLogger(__name__)
 _engine = VerificationEngine()
 
 
+def _is_garbage_distractor(d: str) -> bool:
+    """Return True if d is a known garbage fallback pattern from verification.py or padding."""
+    return (
+        "_wrong_" in d                          # off-by-one fallback: {answer}_wrong_N
+        or d.endswith("_neg")                   # sign_flip fallback for non-numeric
+        or d.endswith("_a") or d.endswith("_b") or d.endswith("_c")  # sign_flip fallback
+    )
+
+
 def _improve_string_distractors(correct_str: str, distractors: list) -> list:
     """
-    Replace _wrong_N-style distractors (produced by the default off-by-one fallback
-    for string answers) with more plausible alternatives.
+    Replace garbage distractors (_wrong_N, _neg, _a, _b, _c suffixes) produced by
+    fallback paths in verification.py when the answer is non-numeric (e.g. Fraction).
     """
-    if not any("_wrong_" in d for d in distractors):
+    if not any(_is_garbage_distractor(d) for d in distractors):
         return distractors
 
     alternatives = []
@@ -56,7 +65,7 @@ def _improve_string_distractors(correct_str: str, distractors: list) -> list:
     result = []
     alt_idx = 0
     for d in distractors:
-        if "_wrong_" in d:
+        if _is_garbage_distractor(d):
             if alt_idx < len(alternatives):
                 result.append(alternatives[alt_idx])
                 alt_idx += 1

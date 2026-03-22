@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { InlineMath } from 'react-katex'
+import MathText from './MathText.jsx'
+import { toLatex } from '../utils/math.js'
+import { TEST_IDS } from '../testing/testIds.ts'
 
 const BAND_STYLES = {
   needs_support: 'bg-red-100 text-red-800',
@@ -13,16 +17,30 @@ const BAND_LABELS = {
   exceeding:     'Exceeding',
 }
 
+function renderOption(text, latex) {
+  if (!latex) return text
+  return <InlineMath math={toLatex(text)} renderError={() => text} />
+}
+
 function renderSelected(r) {
-  if (r.question_type === 'multi_select')
-    return (r.selected_indices || []).map(i => r.options[i]).join(', ') || '(none)'
-  return r.options[r.selected_index]
+  if (r.question_type === 'multi_select') {
+    const texts = (r.selected_indices || []).map(i => r.options[i])
+    if (texts.length === 0) return '(none)'
+    return texts.map((t, i) => (
+      <span key={i}>{i > 0 && ', '}{renderOption(t, r.latex_notation)}</span>
+    ))
+  }
+  return renderOption(r.options[r.selected_index], r.latex_notation)
 }
 
 function renderCorrect(r) {
-  if (r.question_type === 'multi_select')
-    return (r.correct_indices || []).map(i => r.options[i]).join(', ')
-  return r.options[r.correct_index]
+  if (r.question_type === 'multi_select') {
+    const texts = (r.correct_indices || []).map(i => r.options[i])
+    return texts.map((t, i) => (
+      <span key={i}>{i > 0 && ', '}{renderOption(t, r.latex_notation)}</span>
+    ))
+  }
+  return renderOption(r.options[r.correct_index], r.latex_notation)
 }
 
 function formatMs(ms) {
@@ -50,12 +68,12 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
         {/* Score header */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 text-center">
           <p className="text-sm text-slate-500 mb-1">Your Score</p>
-          <p className="text-5xl font-bold text-slate-800 mb-3">
+          <p data-testid={TEST_IDS.results.scoreDisplay} className="text-5xl font-bold text-slate-800 mb-3">
             {result.score}<span className="text-2xl text-slate-400 font-normal"> / {result.total}</span>
           </p>
-          <p className="text-xl text-slate-600 mb-3">{result.score_pct}%</p>
+          <p data-testid={TEST_IDS.results.scorePercent} className="text-xl text-slate-600 mb-3">{result.score_pct}%</p>
           {summary && (
-            <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${BAND_STYLES[summary.performance_band] ?? 'bg-slate-100 text-slate-700'}`}>
+            <span data-testid={TEST_IDS.results.performanceBand} className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${BAND_STYLES[summary.performance_band] ?? 'bg-slate-100 text-slate-700'}`}>
               {BAND_LABELS[summary.performance_band] ?? summary.performance_band}
             </span>
           )}
@@ -63,7 +81,10 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
             <div className="mt-4 text-sm text-slate-600">
               <p>
                 <span className="font-medium">Time:</span>{' '}
-                {formatMs(summary.total_time_ms)} total · {formatMs(summary.avg_time_per_question_ms)} avg per question
+                <span data-testid={TEST_IDS.results.totalTime}>{formatMs(summary.total_time_ms)}</span>
+                {' total · '}
+                <span data-testid={TEST_IDS.results.avgTime}>{formatMs(summary.avg_time_per_question_ms)}</span>
+                {' avg per question'}
               </p>
               {summary.time_accuracy_summary && (
                 <p className="mt-1 text-slate-500 italic">{summary.time_accuracy_summary}</p>
@@ -144,6 +165,7 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
               return (
                 <div
                   key={r.question_id}
+                  data-testid={TEST_IDS.results.questionRow(r.question_id)}
                   className={`border-l-4 rounded-r-lg px-4 py-3 cursor-pointer transition-colors ${
                     r.correct ? 'border-green-500' : 'border-red-500'
                   } ${isSlow ? 'bg-amber-50 hover:bg-amber-100' : 'hover:bg-slate-50'}`}
@@ -154,7 +176,7 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
                       <span className={`flex-shrink-0 text-base ${r.correct ? 'text-green-500' : 'text-red-500'}`}>
                         {r.correct ? '✓' : '✗'}
                       </span>
-                      <p className="text-sm text-slate-700 truncate">{r.question_text}</p>
+                      <MathText text={r.question_text} latex={!!r.latex_notation} className="text-sm text-slate-700 truncate" />
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
                       {r.time_taken_ms != null && (
@@ -169,18 +191,20 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div>
                           <span className="text-slate-500">Your answer: </span>
-                          <span className={r.correct ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
+                          <span data-testid={TEST_IDS.results.yourAnswer(r.question_id)} className={r.correct ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
                             {renderSelected(r)}
                           </span>
                         </div>
                         {!r.correct && (
                           <div>
                             <span className="text-slate-500">Correct: </span>
-                            <span className="text-green-700 font-medium">{renderCorrect(r)}</span>
+                            <span data-testid={TEST_IDS.results.correctAnswer(r.question_id)} className="text-green-700 font-medium">{renderCorrect(r)}</span>
                           </div>
                         )}
                       </div>
-                      <p className="text-xs text-slate-500 italic">{r.explanation}</p>
+                      <span data-testid={TEST_IDS.results.explanation(r.question_id)}>
+                        <MathText text={r.explanation} latex={!!r.latex_notation} className="text-xs text-slate-500 italic" />
+                      </span>
                     </div>
                   )}
                 </div>
@@ -191,11 +215,11 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
 
         {/* Action buttons */}
         <div className="flex gap-3">
-          <button onClick={onNewSession}
+          <button data-testid={TEST_IDS.results.newSessionBtn} onClick={onNewSession}
             className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition-colors">
             Start New Session
           </button>
-          <button onClick={onViewHistory}
+          <button data-testid={TEST_IDS.results.historyBtn} onClick={onViewHistory}
             className="flex-1 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-2.5 rounded-xl border border-slate-300 transition-colors">
             View History
           </button>
