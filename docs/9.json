@@ -1,0 +1,1890 @@
+[
+  {
+    "code": "VC2M9A01",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "apply the exponent laws to numerical expressions with integer exponents and the zero exponent, and extend to variables",
+    "elaborations": [
+      {
+        "id": "215ba8b5-2a70-4770-8020-bb9d8bf4e6ab",
+        "text": "representing decimals in exponential form; for example, 0.475 can be represented as $0.475=\\frac{4}{10}+\\frac{7}{100}+\\frac{5}{1000}=4\\times 10^{-1}+7\\times 10^{-2}+5\\times 10^{-3}$ and 0.00023 as $23\\times 10^{-5}$",
+        "html": "<p>representing decimals in exponential form; for example, 0.475 can be represented as $0.475=\\frac{4}{10}+\\frac{7}{100}+\\frac{5}{1000}=4\\times 10^{-1}+7\\times 10^{-2}+5\\times 10^{-3}$ and 0.00023 as $23\\times 10^{-5}$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "74460432-b7da-4bb9-a4e2-4fb4682ddbc1",
+        "text": "simplifying and evaluating numerical expressions, involving both positive and negative integer exponents, explaining why; for example, $5^{-3}=\\frac{1}{5^{3}}=(\\frac{1}{5})^{3}=\\frac{1}{125}$ and connecting terms of the sequence $125,25,5,1,\\frac{1}{5},\\frac{1}{25},\\frac{1}{125}...$ to terms of the sequence $5^{3},5^{2},5^{1},5^{0},5^{-1},5^{-2},5^{-3}...$",
+        "html": "<p>simplifying and evaluating numerical expressions, involving both positive and negative integer exponents, explaining why; for example, $5^{-3}=\\frac{1}{5^{3}}=(\\frac{1}{5})^{3}=\\frac{1}{125}$ and connecting terms of the sequence $125,25,5,1,\\frac{1}{5},\\frac{1}{25},\\frac{1}{125}...$ to terms of the sequence $5^{3},5^{2},5^{1},5^{0},5^{-1},5^{-2},5^{-3}...$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "3d794774-295b-4780-b90b-265551ca9c27",
+        "text": "relating the computation of numerical expressions involving exponents to the exponent laws and the definition of an exponent; for example, $2^3 \\div 2^5 = 2^{-2} = \\frac{1}{2^2} = \\frac{1}{4}$ and $(3 \\times 5)^2 = 3^2 \\times 5^2 = 9 \\times 25 = 225$",
+        "html": "<p>relating the computation of numerical expressions involving exponents to the exponent laws and the definition of an exponent; for example, $2^3 \\div 2^5 = 2^{-2} = \\frac{1}{2^2} = \\frac{1}{4}$ and $(3 \\times 5)^2 = 3^2 \\times 5^2 = 9 \\times 25 = 225$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "02f6ca87-b37a-43b3-ab6e-4d820d159175",
+        "text": "recognising exponents in algebraic expressions and applying the relevant exponent laws and conventions; for example, for any non-zero natural number $a$, $a^0 = 1$, $x^1 = x$, $r^2 = r \\times r$, $h^3 = h \\times h \\times h$, $y^4 = y \\times y \\times y \\times y$, and $\\frac{1}{w} \\times \\frac{1}{w} = \\frac{1}{w^2} = w^{-2}$",
+        "html": "<p>recognising exponents in algebraic expressions and applying the relevant exponent laws and conventions; for example, for any non-zero natural number $a$, $a^0 = 1$, $x^1 = x$, $r^2 = r \\times r$, $h^3 = h \\times h \\times h$, $y^4 = y \\times y \\times y \\times y$, and $\\frac{1}{w} \\times \\frac{1}{w} = \\frac{1}{w^2} = w^{-2}$ </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "7b463257-d6a0-4369-b8eb-3f1f63b30746",
+        "text": "relating simplification of expressions from first principles and counting to the use of exponent laws; for example, $(a^2)^3 = (a \\times a) \\times (a \\times a) \\times (a \\times a) = a \\times a \\times a \\times a \\times a \\times a = a^6;$ $b^2 \\times b^3 = (b \\times b) \\times (b \\times b \\times b) = b \\times b \\times b \\times b \\times b = b^5;$ $\\frac{y^4}{y^2} = \\frac{y \\times y \\times y \\times y}{y \\times y} = \\frac{y^2}{1} =y^2$ and $(5a)^2 = (5 \\times a) \\times (5 \\times a) = 5 \\times 5 \\times a \\times a = 25 \\times a^2=25a^2$",
+        "html": "<p>relating simplification of expressions from first principles and counting to the use of exponent laws; for example, <br /> $(a^2)^3 = (a \\times a) \\times (a \\times a) \\times (a \\times a) = a \\times a \\times a \\times a \\times a \\times a = a^6;$ <br /> $b^2 \\times b^3 = (b \\times b) \\times (b \\times b \\times b) = b \\times b \\times b \\times b \\times b = b^5;$ <br /> $\\frac{y^4}{y^2} = \\frac{y \\times y \\times y \\times y}{y \\times y} = \\frac{y^2}{1} =y^2$ <br /> and $(5a)^2 = (5 \\times a) \\times (5 \\times a) = 5 \\times 5 \\times a \\times a = 25 \\times a^2=25a^2$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "37eaab1c-3d2f-48b5-93cb-ed98b144d6f2",
+        "text": "applying the exponent laws to simplifying expressions involving products, quotients, and powers of constants and variables; for example, $\\frac{(2xy)^3}{xy^4} = \\frac{8x^3 y^3}{xy^4} = 8x^2 y^{-1}$",
+        "html": "<p>applying the exponent laws to simplifying expressions involving products, quotients, and powers of constants and variables; for example, $\\frac{(2xy)^3}{xy^4} = \\frac{8x^3 y^3}{xy^4} = 8x^2 y^{-1}$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "53f7f17d-ac35-4649-9444-2498675ba36d",
+        "text": "relating the prefixes for SI units from pico- (trillionth) to tera- (trillion) to the corresponding powers of 10; for example, one pico-gram = $10^{-12}$ grams and one terabyte = $10^{12}$ bytes",
+        "html": "<p>relating the prefixes for SI units from pico- (trillionth) to tera- (trillion) to the corresponding powers of 10; for example, one pico-gram = $10^{-12}$ grams and one terabyte = $10^{12}$ bytes</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164936,
+        "extract": "<p>Students extend and apply the exponent laws with positive integers and the zero exponent to variables.</p>",
+        "contentDescriptions": [
+          "6cb0e4e6-c4cc-4d75-9ebb-aa2bd68e35e1"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 7,
+      "hasSubStrand": false,
+      "textLength": 118
+    }
+  },
+  {
+    "code": "VC2M9A02",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "simplify algebraic expressions, apply the distributive law to expand algebraic expressions including binomial products, and factorise monic quadratic expressions",
+    "elaborations": [
+      {
+        "id": "3a27cf92-f3d7-449e-a794-81121a9b552d",
+        "text": "expanding combinations of binomials such as $(x+7)(x+8)$, $(x+7)(x-8)$, $(x-7)(x+8)$, $(x-7)(x-8)$ to identify expansion and factorisation patterns related to $(x+a)(x+b) = x^2 + (a+b)x + ab$, where $a$ and $b$ are integers",
+        "html": "<p>expanding combinations of binomials such as $(x+7)(x+8)$, $(x+7)(x-8)$, $(x-7)(x+8)$, $(x-7)(x-8)$ to identify expansion and factorisation patterns related to $(x+a)(x+b) = x^2 + (a+b)x + ab$, where $a$ and $b$ are integers</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "75ef21e1-7ff8-4fae-b56c-39d37c0531ee",
+        "text": "using manipulatives such as algebra tiles or area models to expand or factorise algebraic expressions with readily identifiable binomial factors; for example, $(x+1)(x+3) = x^2 + 4x + 3$, $(x-5)^2 = x^2 - 10x + 25$ or $(x-3)^2 + 4 = x^2 - 6x + 9 + 4 = x^2 - 6x + 13$",
+        "html": "<p>using manipulatives such as algebra tiles or area models to expand or factorise algebraic expressions with readily identifiable binomial factors; for example, $(x+1)(x+3) = x^2 + 4x + 3$, $(x-5)^2 = x^2 - 10x + 25$ or $(x-3)^2 + 4 = x^2 - 6x + 9 + 4 = x^2 - 6x + 13$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "f9086af6-40d2-4e30-8f0b-7c5e2141408a",
+        "text": "recognising the relationship between expansion and factorisation, and using digital tools to systematically explore the factorisation of $x^2 + mx + n$ where $m$ and $n$ are integers",
+        "html": "<p>recognising the relationship between expansion and factorisation, and using digital tools to systematically explore the factorisation of $x^2 + mx + n$ where $m$ and $n$ are integers</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164941,
+        "extract": "<p>They expand binomial products and factorise monic quadratic expressions.</p>",
+        "contentDescriptions": [
+          "dca36554-d727-4af2-b1d9-c6d1a8169c52"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 161
+    }
+  },
+  {
+    "code": "VC2M9A03",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "sketch linear graphs of equations in various algebraic forms, using the coordinates of 2 points, and solve linear equations",
+    "elaborations": [
+      {
+        "id": "5e944991-8de3-4c9a-aec3-56e926a05e69",
+        "text": "determining linear rules from suitable diagrams, tables of values and graphs, and describing them using both words and algebra",
+        "html": "<p>determining linear rules from suitable diagrams, tables of values and graphs, and describing them using both words and algebra</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164946,
+        "extract": "<p>They find the distance between 2 points on the Cartesian plane, sketch linear graphs and find the gradient and midpoint of a line segment.</p>",
+        "contentDescriptions": [
+          "04a029cd-c0d6-4a15-9390-bbe991099ade",
+          "3f8ff96b-8aad-44ce-a903-79416a1a58d9"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 1,
+      "hasSubStrand": false,
+      "textLength": 123
+    }
+  },
+  {
+    "code": "VC2M9A04",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "find the gradient of a line segment, the midpoint of the line interval and the distance between 2 distinct points on the Cartesian plane",
+    "elaborations": [
+      {
+        "id": "770cd118-f87c-4841-8d16-2038558bda3c",
+        "text": "recognising that the gradient of a line is calculated using the gradient of a line segment on that line and is independent of which 2 distinct points on the line are used for this calculation",
+        "html": "<p>recognising that the gradient of a line is calculated using the gradient of a line segment on that line and is independent of which 2 distinct points on the line are used for this calculation </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5766892b-5e99-482a-8f82-e7f75b24ef3c",
+        "text": "using digital tools and transformations to illustrate that parallel lines in the Cartesian plane have the same gradient and that the relationship between the gradients of pairs of perpendicular lines is that their product is (−1)",
+        "html": "<p>using digital tools and transformations to illustrate that parallel lines in the Cartesian plane have the same gradient and that the relationship between the gradients of pairs of perpendicular lines is that their product is (−1)</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "8f61e047-4906-4e30-a279-b2cd1b883ab4",
+        "text": "using Pythagoras’ theorem to establish the distance between 2 points in the Cartesian plane and applying this using horizontal and vertical distances and coordinates",
+        "html": "<p>using Pythagoras’ theorem to establish the distance between 2 points in the Cartesian plane and applying this using horizontal and vertical distances and coordinates</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d73834ef-cfa5-4215-a245-a3be4e06ac3c",
+        "text": "investigating graphical and algebraic techniques for finding the midpoint and gradient of the line segment between 2 points",
+        "html": "<p>investigating graphical and algebraic techniques for finding the midpoint and gradient of the line segment between 2 points</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "6a7bf640-6607-4633-83cb-62158558dc07",
+        "text": "using dynamic graphing software and superimposed images (for example, playground equipment, ramps and escalators) to investigate gradients in context and their relationship to rule of a linear function, and interpret gradient as a constant rate of change in linear modelling contexts",
+        "html": "<p>using dynamic graphing software and superimposed images (for example, playground equipment, ramps and escalators) to investigate gradients in context and their relationship to rule of a linear function, and interpret gradient as a constant rate of change in linear modelling contexts</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164946,
+        "extract": "<p>They find the distance between 2 points on the Cartesian plane, sketch linear graphs and find the gradient and midpoint of a line segment.</p>",
+        "contentDescriptions": [
+          "04a029cd-c0d6-4a15-9390-bbe991099ade",
+          "3f8ff96b-8aad-44ce-a903-79416a1a58d9"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 5,
+      "hasSubStrand": false,
+      "textLength": 136
+    }
+  },
+  {
+    "code": "VC2M9A05",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "identify and graph quadratic functions, solve quadratic equations graphically and numerically, and use null factor law to solve monic quadratic equations with integer roots algebraically, using graphing software and digital tools as appropriate",
+    "elaborations": [
+      {
+        "id": "65aa7816-9cd9-4008-832f-7d7c06b7dbe9",
+        "text": "recognising that in a table of values, if the second difference between consecutive values of the dependent variable is constant, then it is a quadratic",
+        "html": "<p>recognising that in a table of values, if the second difference between consecutive values of the dependent variable is constant, then it is a quadratic</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "2c597b32-22ff-4dd5-b78a-612a5575eaff",
+        "text": "graphing quadratic functions using digital tools and comparing what is the same and what is different between these different functions and their respective graphs; interpreting features of the graphs such as symmetry, turning point, maximum and minimum values; and determining when values of the quadratic function lie within a given range",
+        "html": "<p>graphing quadratic functions using digital tools and comparing what is the same and what is different between these different functions and their respective graphs; interpreting features of the graphs such as symmetry, turning point, maximum and minimum values; and determining when values of the quadratic function lie within a given range</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "a6c8a65c-3d1b-4455-8c5f-22eaf196848a",
+        "text": "solving quadratic equations algebraically and comparing these to graphical solutions",
+        "html": "<p>solving quadratic equations algebraically and comparing these to graphical solutions</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d34029ba-32d8-4bb3-94bb-f4217d5b73e5",
+        "text": "using graphs to determine the solutions of quadratic equations; recognising that the roots of a quadratic function correspond to the 𝑥-intercepts of its graph and that if the graph has no 𝑥-intercepts, then the corresponding equation has no real solutions",
+        "html": "<p>using graphs to determine the solutions of quadratic equations; recognising that the roots of a quadratic function correspond to the 𝑥-intercepts of its graph and that if the graph has no 𝑥-intercepts, then the corresponding equation has no real solutions</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5e55b409-566b-42fa-b159-0561c1f1e744",
+        "text": "relating horizontal axis intercepts of the graph of a quadratic function to the factorised form of its rule using the null factor law; for example, the graph of the function $y=x^2-5x+6$ can be represented as $y=(x-2)(x-3)$ with $x$-axis intercepts where either $(x-2)=0$ or $(x-3)=0$",
+        "html": "<p>relating horizontal axis intercepts of the graph of a quadratic function to the factorised form of its rule using the null factor law; for example, the graph of the function $y=x^2-5x+6$ can be represented as $y=(x-2)(x-3)$ with $x$-axis intercepts where either $(x-2)=0$ or $(x-3)=0$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "4187d0d3-eb8a-4b0b-a4ae-da7c512bbf83",
+        "text": "recognising that the equation $x^2=a$, where $a>0$, has 2 solutions, $x=\\sqrt{a}$ and $x=-\\sqrt{a}$ (for example, if $x^2=39$ then $x=\\sqrt{39}=6.245$ correct to 3 decimal places, or $𝑥=-\\sqrt{39}=-6.245$ correct to 3 decimal places) and representing these graphically",
+        "html": "<p>recognising that the equation $x^2=a$, where $a>0$, has 2 solutions, $x=\\sqrt{a}$ and $x=-\\sqrt{a}$ (for example, if $x^2=39$ then $x=\\sqrt{39}=6.245$ correct to 3 decimal places, or $𝑥=-\\sqrt{39}=-6.245$ correct to 3 decimal places) and representing these graphically</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "bd7fc0d5-2c34-46e9-b140-c0e55f1ad442",
+        "text": "graphing percentages of illumination of moon phases in relation to Aboriginal and Torres Strait Islander Peoples’ understandings that describe the different phases of the moon",
+        "html": "<p>graphing percentages of illumination of moon phases in relation to Aboriginal and Torres Strait Islander Peoples’ understandings that describe the different phases of the moon</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164951,
+        "extract": "<p>They graph quadratic functions and use null factor law to solve monic quadratic equations with integer roots algebraically.</p>",
+        "contentDescriptions": [
+          "4e635b85-4d55-4e9f-b939-4f75ed3a0fe3"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 7,
+      "hasSubStrand": false,
+      "textLength": 244
+    }
+  },
+  {
+    "code": "VC2M9A06",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use mathematical modelling to solve applied problems involving change, including financial contexts involving simple interest; formulate problems, choosing to use either linear or quadratic functions or other simple variations; interpret solutions in terms of the context; evaluate the model and report methods and findings",
+    "elaborations": [
+      {
+        "id": "ed028381-c0fd-489e-8b61-0b69ab3f8694",
+        "text": "modelling practical contexts using linear functions such as cooking times that include resting or cooling times, or water leakage from water tanks, using tables and graphs or digital tools and algebraically",
+        "html": "<p>modelling practical contexts using linear functions such as cooking times that include resting or cooling times, or water leakage from water tanks, using tables and graphs or digital tools and algebraically</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d27c7bce-1f08-4e51-8714-e963dd452197",
+        "text": "modelling measurement situations and determining the perimeter and areas of rectangles where the length, 𝑙, of the rectangle is a linear function of its width, 𝑤; for example, $l=w, l=w+5, l=3w, l=2w+7$",
+        "html": "<p>modelling measurement situations and determining the perimeter and areas of rectangles where the length, 𝑙, of the rectangle is a linear function of its width, 𝑤; for example, $l=w,  l=w+5,  l=3w,  l=2w+7$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ee7f2d84-a145-4a11-b0e2-24a81fdb8556",
+        "text": "modelling practical contexts (for example, area, paths of projectiles, parabolic mirrors, satellite dishes) using simple quadratic functions, tables and graphs (hand drawn or using digital tools) and, algebraically, interpreting features of the graphs such as the turning point and intercepts in context; for example, area, paths of projectiles, parabolic mirrors, satellite dishes",
+        "html": "<p>modelling practical contexts (for example, area, paths of projectiles, parabolic mirrors, satellite dishes) using simple quadratic functions, tables and graphs (hand drawn or using digital tools) and, algebraically, interpreting features of the graphs such as the turning point and intercepts in context; for example, area, paths of projectiles, parabolic mirrors, satellite dishes </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "f20694c5-6673-433c-8eee-34e3b6531708",
+        "text": "modelling and solving problems involving financial contexts using linear functions, for example, combinations of purchases of different items when they have a set amount of money to spend, profit/loss situations and trade quotes involving call-out fees",
+        "html": "<p>modelling and solving problems involving financial contexts using linear functions, for example, combinations of purchases of different items when they have a set amount of money to spend, profit/loss situations and trade quotes involving call-out fees</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "3ec523cf-d290-4548-be8a-6d360938e5db",
+        "text": "modelling situations involving change, for example, change in daily temperature during the ski season, fluctuation of speed above and below the speed limit, and acceleration and deceleration of a car coming to and moving off from a set of traffic lights",
+        "html": "<p>modelling situations involving change, for example, change in daily temperature during the ski season, fluctuation of speed above and below the speed limit, and acceleration and deceleration of a car coming to and moving off from a set of traffic lights</p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "f66f98c9-b080-4c73-a0e1-188ce756fd14",
+                "organisingSet": "Worldviews",
+                "organisingIdeas": [
+                  {
+                    "id": "a727d08b-06d0-430f-91fc-ee8b14a9bf09",
+                    "idea": "<p>Worldviews influence local and global action and, therefore, impact the interdependence of Earth’s systems. Worldviews can play a crucial role in achieving sustainability.</p>",
+                    "code": "VC2CCPSWV1"
+                  }
+                ]
+              },
+              {
+                "id": "a09716d1-9e17-455c-90af-2e25f24ebbf5",
+                "organisingSet": "Futures thinking",
+                "organisingIdeas": [
+                  {
+                    "id": "e01559c7-00d4-4367-9478-0a01b47e27db",
+                    "idea": "<p>Sustainable futures thinking is based on informed views that consider possible and desirable futures. It leads to individual, community, organisational and political action that reduces risk.</p>",
+                    "code": "VC2CCPSFT1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "92b1c25d-a189-4a17-b2b4-06b2b999d6ad",
+        "text": "modelling the hunting techniques of Aboriginal and Torres Strait Islander Peoples using quadratic functions and exploring the effect of increasing the number of hunters to catch more prey",
+        "html": "<p>modelling the hunting techniques of Aboriginal and Torres Strait Islander Peoples using quadratic functions and exploring the effect of increasing the number of hunters to catch more prey</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164956,
+        "extract": "<p>They use mathematical modelling to solve practical problems involving direct and indirect proportion, ratio and scale, evaluating the model and communicating their methods and findings.</p>",
+        "contentDescriptions": [
+          "d445d50a-c3fd-4da5-a294-31c99ab8352e"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 6,
+      "hasSubStrand": false,
+      "textLength": 323
+    }
+  },
+  {
+    "code": "VC2M9A07",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "experiment with the effects of the variation of parameters on graphs of related functions, using digital tools, making connections between graphical and algebraic representations, and generalising emerging patterns ",
+    "elaborations": [
+      {
+        "id": "8a903643-dfb3-4c56-bbf5-6a9aa5acd7b4",
+        "text": "investigating transformations of the graph of $y=x$ to the graph of $y=ax+b$ by systematic variation of $a$ and $b$ and interpreting the effects of these transformations using digital tools; for example, $y=x \\rightarrow y=2x$ (vertical enlargement as $a \\gt 1$) $\\rightarrow 𝑦=2x−1$ (vertical translation) and $y=x \\rightarrow y=\\frac{1}{2}x$ (vertical compression as $0 \\lt a \\lt 1$) $\\rightarrow y=-\\frac{1}{2}x$ (reflection in the horizontal axis) $\\rightarrow y=-\\frac{1}{2}x + 3$ (vertical translation)",
+        "html": "<p>investigating transformations of the graph of $y=x$ to the graph of $y=ax+b$ by systematic variation of $a$ and $b$ and interpreting the effects of these transformations using digital tools; for example, <br /> $y=x \\rightarrow y=2x$ (vertical enlargement as $a \\gt 1$) $\\rightarrow 𝑦=2x−1$ (vertical translation) and <br /> $y=x \\rightarrow y=\\frac{1}{2}x$  (vertical compression as $0 \\lt a \\lt 1$) $\\rightarrow y=-\\frac{1}{2}x$ (reflection in the horizontal axis) $\\rightarrow y=-\\frac{1}{2}x + 3$ (vertical translation)</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "72c4b3f4-8fe4-44ec-aa0c-7432acdfb643",
+        "text": "investigating transformations of the parabola $y=x^2$ to the graph of $y=a(x-h)^2+b$ in the Cartesian plane using digital tools to determine the relationship between graphical and algebraic representations of quadratic functions, including the completed square form; for example, $y=x^2 \\rightarrow y=\\frac{1}{3}x^2$ (vertical compression as $0 \\lt a \\lt 1$) $\\rightarrow y=\\frac{1}{3}(x-5)^2$ (horizontal translation) $\\rightarrow y=\\frac{1}{3}(x-5)^2+7$ (vertical translation) or $y=x^2 \\rightarrow y=2x^2$ (vertical enlargement as $a \\gt 1$) $\\rightarrow y=-2x^2$ (reflection in the horizontal axis) $\\rightarrow y=-2(x+6)^2$ (horizontal translation) $\\rightarrow y=-2(x+6)^2+10$ (vertical translation)",
+        "html": "<p>investigating transformations of the parabola $y=x^2$ to the graph of $y=a(x-h)^2+b$ in the Cartesian plane using digital tools to determine the relationship between graphical and algebraic representations of quadratic functions, including the completed square form; for example,<br />$y=x^2 \\rightarrow y=\\frac{1}{3}x^2$ (vertical compression as $0 \\lt a \\lt 1$) $\\rightarrow y=\\frac{1}{3}(x-5)^2$ (horizontal translation) $\\rightarrow y=\\frac{1}{3}(x-5)^2+7$ (vertical translation) or<br />$y=x^2 \\rightarrow y=2x^2$ (vertical enlargement as $a \\gt 1$) $\\rightarrow y=-2x^2$ (reflection in the horizontal axis) $\\rightarrow y=-2(x+6)^2$ (horizontal translation) $\\rightarrow y=-2(x+6)^2+10$ (vertical translation)</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ceec44ae-cee8-4e67-a5e7-0768965463e4",
+        "text": "experimenting with digital tools by applying transformations to the graphs of functions, such as reciprocal $y=\\frac{1}{x}$, square root $y=\\sqrt{x}$, cubic $y=x^3$ and exponential functions $y=2^x$, $y=(\\frac{1}{2})^x$, identifying patterns",
+        "html": "<p>experimenting with digital tools by applying transformations to the graphs of functions, such as reciprocal $y=\\frac{1}{x}$, square root $y=\\sqrt{x}$, cubic $y=x^3$ and exponential functions $y=2^x$, $y=(\\frac{1}{2})^x$, identifying patterns</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164961,
+        "extract": "<p>Students investigate and describe the effects of variation of parameters on functions and relations, using digital tools where appropriate, and make connections between their graphical and algebraic representations.</p>",
+        "contentDescriptions": [
+          "2e4b5eaf-0d4f-4a4b-936e-cbd3f76e58b3"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 215
+    }
+  },
+  {
+    "code": "VC2M9M01",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve problems involving the volume and surface area of right prisms, cylinders and composite objects using appropriate units",
+    "elaborations": [
+      {
+        "id": "c33cf1df-2e08-4a3d-8e89-84254ccb8f22",
+        "text": "analysing nets of objects to generate short cuts and establish formulas for surface area",
+        "html": "<p>analysing nets of objects to generate short cuts and establish formulas for surface area </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "0205c626-e262-411f-970e-5ffc757a0158",
+        "text": "determining the amount of material needed to make can-coolers for a class fundraising project and working out the most cost-efficient way to cut out the pieces",
+        "html": "<p>determining the amount of material needed to make can-coolers for a class fundraising project and working out the most cost-efficient way to cut out the pieces</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "9af55bfb-6cb9-4bc5-ba46-705ceec185ee",
+        "text": "finding different prisms that have the same volume but different surface areas, making conjectures as to what type of prism would have the smallest or largest surface area",
+        "html": "<p>finding different prisms that have the same volume but different surface areas, making conjectures as to what type of prism would have the smallest or largest surface area</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "78b841ae-cac9-4bed-ad0e-12317db727dc",
+        "text": "investigating objects and technologies of Aboriginal and Torres Strait Islander Peoples, analysing and connecting surface area and volume, and exploring their relationship to their capacity",
+        "html": "<p>investigating objects and technologies of Aboriginal and Torres Strait Islander Peoples, analysing and connecting surface area and volume, and exploring their relationship to their capacity</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164966,
+        "extract": "<p>Students apply formulas to solve problems involving the surface area and volume of right prisms, cylinders and composite shapes.</p>",
+        "contentDescriptions": [
+          "d05ea4c5-efc8-4be8-9cda-9e2efadaecce"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 125
+    }
+  },
+  {
+    "code": "VC2M9M02",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve problems involving very small and very large measurements, timescales and intervals expressed in scientific notation",
+    "elaborations": [
+      {
+        "id": "0caeb24a-81c8-40e7-8616-b8dc1aee9a2a",
+        "text": "representing very large and very small real numbers in scientific notation, converting real numbers expressed in scientific notation into decimal form; for example, the approximate geological age of Earth is $4.6 \\times 10^{9}$ years, and the mass of a glucose molecule is $2.99 \\times 10^{−22}$ grams",
+        "html": "<p>representing very large and very small real numbers in scientific notation, converting real numbers expressed in scientific notation into decimal form; for example, the approximate geological age of Earth is $4.6 \\times 10^{9}$ years, and the mass of a glucose molecule is $2.99 \\times 10^{−22}$ grams</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "6431dba3-8243-418f-b860-b444c53153e6",
+        "text": "using knowledge of place value and applying exponent laws to operate with numbers expressed in scientific notation in applied contexts; for example, performing calculations involving extremely small numbers in scientific and other contexts",
+        "html": "<p>using knowledge of place value and applying exponent laws to operate with numbers expressed in scientific notation in applied contexts; for example, performing calculations involving extremely small numbers in scientific and other contexts</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "9f395aee-2668-405f-88f8-76b5652b27ee",
+        "text": "examining the degree of accuracy that different measurement instruments provide in a science laboratory, such as a measuring cylinder compared with a pipette, and recording data values to the correct degree of accuracy using appropriate scientific notation",
+        "html": "<p>examining the degree of accuracy that different measurement instruments provide in a science laboratory, such as a measuring cylinder compared with a pipette, and recording data values to the correct degree of accuracy using appropriate scientific notation</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164971,
+        "extract": "<p>Students express small and large numbers in scientific notation.</p>",
+        "contentDescriptions": [
+          "75d93a8a-1d74-4c56-adc0-0a4d3984034e"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 122
+    }
+  },
+  {
+    "code": "VC2M9M03",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve spatial problems, applying angle properties, scale, similarity, ratio, Pythagoras’ theorem and trigonometry in right-angled triangles",
+    "elaborations": [
+      {
+        "id": "620876d1-5525-4790-b76a-97f4c71d1d09",
+        "text": "investigating the applications of Pythagoras’ theorem in authentic problems, including applying Pythagoras’ theorem and trigonometry to problems in surveying and design",
+        "html": "<p>investigating the applications of Pythagoras’ theorem in authentic problems, including applying Pythagoras’ theorem and trigonometry to problems in surveying and design</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "834bbe9c-64bf-46b8-8ab7-0eb94b3ac342",
+        "text": "applying the formula for calculation of distances between points on the Cartesian plane from their coordinates, emphasising the connection to vertical and horizontal displacements between the points",
+        "html": "<p>applying the formula for calculation of distances between points on the Cartesian plane from their coordinates, emphasising the connection to vertical and horizontal displacements between the points </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "a778863b-108f-45f1-8221-b8604ccba07e",
+        "text": "understanding the relationship between the corresponding sides of similar right-angled triangles and establishing the relationship between areas of similar figures and the ratio of corresponding sides, the scale factor",
+        "html": "<p>understanding the relationship between the corresponding sides of similar right-angled triangles and establishing the relationship between areas of similar figures and the ratio of corresponding sides, the scale factor</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5519cdc0-a1eb-417c-9df9-806e33731125",
+        "text": "using images of proportional relationships to estimate actual measurements (for example, taking a photograph of a person standing in front of a tree and using the image and scale to estimate the height of the tree), discussing the findings and ways to improve the estimates",
+        "html": "<p>using images of proportional relationships to estimate actual measurements (for example, taking a photograph of a person standing in front of a tree and using the image and scale to estimate the height of the tree), discussing the findings and ways to improve the estimates</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "15fedb29-cc3d-494d-a7d7-16df11c96af7",
+        "text": "investigating theorems and conjectures involving triangles, for example, the triangle inequality and generalising links between the Pythagorean rule for right-angled triangles, and related inequalities for acute and obtuse triangles, determining the minimal sets of information for a triangle from which other measures can all be determined",
+        "html": "<p>investigating theorems and conjectures involving triangles, for example, the triangle inequality and generalising links between the Pythagorean rule for right-angled triangles, and related inequalities for acute and obtuse triangles, determining the minimal sets of information for a triangle from which other measures can all be determined</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5844bd4a-e815-4d41-8014-eda0d1da63b5",
+        "text": "using knowledge of similar triangles, Pythagoras’ theorem, rates and algebra to design and construct a Biltmore stick, used to measure the diameter and height of a tree, and calculating the density and dry mass to predict how much paper could be manufactured from the tree",
+        "html": "<p>using knowledge of similar triangles, Pythagoras’ theorem, rates and algebra to design and construct a Biltmore stick, used to measure the diameter and height of a tree, and calculating the density and dry mass to predict how much paper could be manufactured from the tree</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164976,
+        "extract": "<p>They solve problems involving ratio, similarity and scale in two-dimensional situations.</p>",
+        "contentDescriptions": [
+          "0e06c127-3fae-4244-b249-b26e3ded12fe",
+          "b04c5e7b-6d07-4853-83f1-e8850c6d8b2e"
+        ],
+        "mode": null
+      },
+      {
+        "id": 164981,
+        "extract": "<p>Students apply Pythagora<span>s’</span> theorem and use trigonometric ratios to solve problems involving right-angled triangles.</p>",
+        "contentDescriptions": [
+          "0e06c127-3fae-4244-b249-b26e3ded12fe",
+          "b04c5e7b-6d07-4853-83f1-e8850c6d8b2e"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 6,
+      "hasSubStrand": false,
+      "textLength": 139
+    }
+  },
+  {
+    "code": "VC2M9M04",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "calculate and interpret absolute, relative and percentage errors in measurements",
+    "elaborations": [
+      {
+        "id": "eed3b786-92c1-479a-830d-edee6ce9f6d1",
+        "text": "investigating error as a percentage of the exact value; for example, comparing an estimation of the number of people expected to come to an event by subtracting the actual number that turned up to give an error, then converting this into a percentage error",
+        "html": "<p>investigating error as a percentage of the exact value; for example, comparing an estimation of the number of people expected to come to an event by subtracting the actual number that turned up to give an error, then converting this into a percentage error</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "6e2b8f70-b31a-419d-a5af-b13307bef631",
+        "text": "using absolute value in a percentage error formula; considering when they would use the absolute value and when they would not, depending upon the context",
+        "html": "<p>using absolute value in a percentage error formula; considering when they would use the absolute value and when they would not, depending upon the context</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "66672f23-600c-4bb8-b67b-e8176a019d96",
+        "text": "calculating the percentage errors in expected budgets to actual expenditure",
+        "html": "<p>calculating the percentage errors in expected budgets to actual expenditure</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "575b7e6f-d5ba-455e-9094-8ae684c09684",
+        "text": "estimating the accuracy of measurements in practical contexts and giving suitable lower and upper bounds for measurement values",
+        "html": "<p>estimating the accuracy of measurements in practical contexts and giving suitable lower and upper bounds for measurement values</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164986,
+        "extract": "<p>They determine percentage errors in measurements.</p>",
+        "contentDescriptions": [
+          "966dfec7-4e80-41c1-b122-1d54533180e2"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 80
+    }
+  },
+  {
+    "code": "VC2M9M05",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use mathematical modelling to solve practical problems involving direct proportion, rates, ratio and scale, including financial contexts; formulate the problems and interpret solutions in terms of the situation; evaluate the model and report methods and findings",
+    "elaborations": [
+      {
+        "id": "751117e3-89b7-4656-b60b-40703d481158",
+        "text": "modelling situations that involve direct proportion (such as pro rata pay rates, exchange rates, multiple quotes for a job, conversion between scales or other appropriate science contexts); for example, situations that involve Hooke’s law and other science contexts involving wavelengths and frequencies",
+        "html": "<p>modelling situations that involve direct proportion (such as pro rata pay rates, exchange rates, multiple quotes for a job, conversion between scales or other appropriate science contexts); for example, situations that involve Hooke’s law and other science contexts involving wavelengths and frequencies</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "84a5054e-0e4f-482d-849c-60d96f5f6018",
+        "text": "modelling situations that impact on image editing used in social media and how proportion may not be maintained and can result in distorted images",
+        "html": "<p>modelling situations that impact on image editing used in social media and how proportion may not be maintained and can result in distorted images</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "bcfc537d-105d-434a-8ebf-5628780eaa3c",
+        "text": "modelling situations involving compliance with building and construction standards in design and construction, such as the rise and tread of staircases, and vertical and horizontal components of escalators",
+        "html": "<p>modelling situations involving compliance with building and construction standards in design and construction, such as the rise and tread of staircases, and vertical and horizontal components of escalators</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "3b55d8a0-4786-488c-9392-c167a4a3654a",
+        "text": "modelling situations involving the application of rates in practical contexts, for example, density, birth, flow or heartbeats",
+        "html": "<p>modelling situations involving the application of rates in practical contexts, for example, density, birth, flow or heartbeats</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "29ef4b71-dfc6-4ca6-90fb-e0eadde315b6",
+        "text": "exploring fire techniques in land management practices used by Aboriginal and Torres Strait Islander Peoples that use proportion relationships, including the rate of fire spread in different fuel types to wind speed, temperature and relative humidity",
+        "html": "<p>exploring fire techniques in land management practices used by Aboriginal and Torres Strait Islander Peoples that use proportion relationships, including the rate of fire spread in different fuel types to wind speed, temperature and relative humidity</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "e978bba0-98ea-4e7c-9a28-538efa4689e8",
+                "organisingSet": "Interrelationship of systems",
+                "organisingIdeas": [
+                  {
+                    "id": "b9bb5764-d9cc-4d39-aa92-8498efb9a262",
+                    "idea": "<p>All lifeforms are connected through Earth’s systems (the lithosphere, biosphere, hydrosphere and atmosphere), on which they depend for their wellbeing and survival.</p>",
+                    "code": "VC2CCPSIS1"
+                  },
+                  {
+                    "id": "605efe00-6676-4efa-a351-81b546e055c9",
+                    "idea": "<p>Sustainable patterns of living require the responsible use of resources; circular economies; maintenance of clean air, water and soils; and the restoration of healthy environments and habitats with ecological integrity.</p>",
+                    "code": "VC2CCPSIS2"
+                  },
+                  {
+                    "id": "c677416f-2c61-4f31-99b0-57bf93815adc",
+                    "idea": "<p>Economic, social, environmental and cultural systems influence the sustainability of Earth’s systems.</p>",
+                    "code": "VC2CCPSIS3"
+                  }
+                ]
+              },
+              {
+                "id": "94c50ef5-ea35-4164-9499-46763b179b5e",
+                "organisingSet": "Responsible design",
+                "organisingIdeas": [
+                  {
+                    "id": "7935ae02-e49d-4b3a-a7c4-9e640910b29d",
+                    "idea": "<p>Responsibly designed products and services aim to minimise the human impact on the environment and restore the quality, ecological integrity and diversity of economic, social, environmental and cultural systems.</p>",
+                    "code": "VC2CCPSRD1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164991,
+        "extract": "<p>Students use mathematical modelling to solve problems involving change, including simple interest in financial contexts and change in other applied contexts, choosing to use linear and quadratic functions.</p>",
+        "contentDescriptions": [
+          "950c0402-19f3-4233-a4bf-808724cf1aaa"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 5,
+      "hasSubStrand": false,
+      "textLength": 262
+    }
+  },
+  {
+    "code": "VC2M9N01",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Number",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "recognise that the real number system includes the rational numbers and the irrational numbers, and solve problems involving real numbers with and without using digital tools",
+    "elaborations": [
+      {
+        "id": "ac4a5412-ef76-4088-a67b-03b59b2d3e3d",
+        "text": "investigating the real number system by representing the relationships between irrational numbers, rational numbers, integers and natural numbers and discussing the difference between exact representations and approximate decimal representations of irrational numbers",
+        "html": "<p>investigating the real number system by representing the relationships between irrational numbers, rational numbers, integers and natural numbers and discussing the difference between exact representations and approximate decimal representations of irrational numbers</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "dca0706b-5be0-4a92-a249-ea17b2c429a0",
+        "text": "using a real number line to indicate the solution interval for inequalities of the form $ax+b\\lt c$, for example, $2x+7\\lt 0$ ; or of the form $ax+b\\gt c$ , for example, $1.2x−5.4\\gt 10.8$",
+        "html": "<p>using a real number line to indicate the solution interval for inequalities of the form $ax+b\\lt c$, for example, $2x+7\\lt 0$ ; or of the form $ax+b\\gt c$ , for example, $1.2x−5.4\\gt 10.8$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "0b403bd3-0d9a-42e6-8d02-a5f50f865e8f",
+        "text": "using positive and negative rational numbers to solve problems, for example, for financial planning such as budgeting",
+        "html": "<p>using positive and negative rational numbers to solve problems, for example, for financial planning such as budgeting </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "6aa2fc59-7e3c-4e24-8227-b8d58e24e5e3",
+        "text": "solving problems involving the substitution of real numbers into formulas, understanding that solutions can be represented in exact form or as a decimal approximation, such as calculating the area of a circle using the formula $A=\\pi r^{2}$ and specifying the answer in terms of $\\pi$ as an exact real number; for example, the circumference of a circle with diameter 5 units is $5\\pi$ units, and the exact area is $\\pi(\\frac{5}{2})^{2}=\\frac{25}{4}\\pi$ square units, which rounds to 19.63 square units, correct to 2 decimal places",
+        "html": "<p>solving problems involving the substitution of real numbers into formulas, understanding that solutions can be represented in exact form or as a decimal approximation, such as calculating the area of a circle using the formula $A=\\pi r^{2}$ and specifying the answer in terms of $\\pi$ as an exact real number; for example, the circumference of a circle with diameter 5 units is $5\\pi$ units, and the exact area is $\\pi(\\frac{5}{2})^{2}=\\frac{25}{4}\\pi$ square units, which rounds to 19.63 square units, correct to 2 decimal places</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "3f4aa8b6-8e2c-4124-a079-75ad0ddf9c9b",
+        "text": "investigating the position of rational and irrational numbers on the real number line, using geometric constructions to locate rational numbers and square roots on a number line; for example, $\\sqrt{2}$ is located at the intersection of an arc and the number line, where the radius of the arc is the length of the diagonal of a one-unit square",
+        "html": "<p>investigating the position of rational and irrational numbers on the real number line, using geometric constructions to locate rational numbers and square roots on a number line; for example, $\\sqrt{2}$ is located at the intersection of an arc and the number line, where the radius of the arc is the length of the diagonal of a one-unit square</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164931,
+        "extract": "<p>students recognise and use rational and irrational numbers to solve problems.</p>",
+        "contentDescriptions": [
+          "5c575483-f246-48f8-b6c5-2d018482ebe2"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 5,
+      "hasSubStrand": false,
+      "textLength": 174
+    }
+  },
+  {
+    "code": "VC2M9P01",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Probability",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "list all outcomes for two-step chance experiments both with and without replacement, using lists, tree diagrams, tables or arrays; assign probabilities to outcomes and events",
+    "elaborations": [
+      {
+        "id": "b7049134-2c05-4b9e-a936-e1e74cd736ee",
+        "text": "discussing two-step chance experiments, such as the game of heads and tails, describing the different outcomes and their related probabilities",
+        "html": "<p>discussing two-step chance experiments, such as the game of heads and tails, describing the different outcomes and their related probabilities </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "7a7e51da-f34c-48ff-b514-444060d3d1c5",
+        "text": "using systematic methods such as lists or arrays to record outcomes and assign probabilities, such as drawing the names of students from a bag to appoint 2 team leaders",
+        "html": "<p>using systematic methods such as lists or arrays to record outcomes and assign probabilities, such as drawing the names of students from a bag to appoint 2 team leaders</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "853aadb0-2a5e-46c4-bae4-a6041731454c",
+        "text": "using a tree diagram to represent a three-stage event and assigning probabilities to these events; for example, selecting 3 cards from a deck, assigning the probability of drawing an ace, then a king, then a queen of the same suit, with and without replacing the cards after every draw",
+        "html": "<p>using a tree diagram to represent a three-stage event and assigning probabilities to these events; for example, selecting 3 cards from a deck, assigning the probability of drawing an ace, then a king, then a queen of the same suit, with and without replacing the cards after every draw</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "e3e3fe3a-904e-4ba2-a441-0c872b9b8a55",
+        "text": "assigning probabilities to compound events involving the random selection of people from a given population; for example, selecting 2 names at random from all of the students at a high school and assigning the probability that they are both in Year 9",
+        "html": "<p>assigning probabilities to compound events involving the random selection of people from a given population; for example, selecting 2 names at random from all of the students at a high school and assigning the probability that they are both in Year 9</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165016,
+        "extract": "<p>Students determine sets of outcomes for two-step chance experiments and represent these in various ways.&nbsp;</p>",
+        "contentDescriptions": [
+          "09474ce2-8319-4b6f-8b59-8d85f2a45c98"
+        ],
+        "mode": null
+      },
+      {
+        "id": 165021,
+        "extract": "<p>They assign probabilities to the outcomes of two-step chance experiments.</p>",
+        "contentDescriptions": [
+          "09474ce2-8319-4b6f-8b59-8d85f2a45c98",
+          "9f018bb1-a6dd-4adf-85fa-cb8adea369d1"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 174
+    }
+  },
+  {
+    "code": "VC2M9P02",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Probability",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "calculate relative frequencies from given or collected data to estimate probabilities of events involving ‘and’, inclusive ‘or’ and exclusive ‘or’",
+    "elaborations": [
+      {
+        "id": "b5402269-abfd-46a5-afcc-8581d4d9e1e2",
+        "text": "understanding that relative frequencies from large data sets or long-run experiments can provide reliable measures of probability and can be used to make predictions of decisions",
+        "html": "<p>understanding that relative frequencies from large data sets or long-run experiments can provide reliable measures of probability and can be used to make predictions of decisions </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "4bca5945-3502-43b8-a36a-9a7aff22ea39",
+        "text": "using Venn diagrams or two-way tables to estimate frequencies of events involving ‘and’ and ‘or’ questions",
+        "html": "<p>using Venn diagrams or two-way tables to estimate frequencies of events involving ‘and’ and ‘or’ questions</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165021,
+        "extract": "<p>They assign probabilities to the outcomes of two-step chance experiments.</p>",
+        "contentDescriptions": [
+          "09474ce2-8319-4b6f-8b59-8d85f2a45c98",
+          "9f018bb1-a6dd-4adf-85fa-cb8adea369d1"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 2,
+      "hasSubStrand": false,
+      "textLength": 146
+    }
+  },
+  {
+    "code": "VC2M9P03",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Probability",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "design and conduct repeated chance experiments and simulations using digital tools to estimate probabilities that cannot be determined exactly",
+    "elaborations": [
+      {
+        "id": "ad1374e8-c50d-47ce-8121-6eb479184e5c",
+        "text": "using digital tools to conduct probability simulations that demonstrate the relationship between the probability of compound events and the individual probabilities",
+        "html": "<p>using digital tools to conduct probability simulations that demonstrate the relationship between the probability of compound events and the individual probabilities</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "add31cf6-be58-4eea-8bfd-f9cf7f5c2952",
+        "text": "comparing experiments that differ only by being undertaken with replacement or without replacement",
+        "html": "<p>comparing experiments that differ only by being undertaken with replacement or without replacement</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "726b3f93-24d5-43f7-be63-2f36e30097fd",
+        "text": "conducting two-step chance experiments using systematic methods to list outcomes of experiments and to list outcomes favourable to an event",
+        "html": "<p>conducting two-step chance experiments using systematic methods to list outcomes of experiments and to list outcomes favourable to an event</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "4cb2a0c7-3671-4d39-a7c7-0774330cdce2",
+        "text": "using repeated trials of Aboriginal and/or Torres Strait Islander children’s instructive games, for example, Gorri from all parts of Australia, to calculate the probabilities of winning and not winning",
+        "html": "<p>using repeated trials of Aboriginal and/or Torres Strait Islander children’s instructive games, for example, Gorri from all parts of Australia, to calculate the probabilities of winning and not winning</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "5e3f11ad-883f-4c6a-89ea-6c195bd1ed97",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander societies are diverse and have distinct cultural expressions, such as language, customs and beliefs. Aboriginal and Torres Strait Islander Peoples have the right to maintain, control, protect and develop their cultural expressions, while also maintaining the right to control, protect and develop culture as Indigenous Cultural and Intellectual Property.</span></p>",
+                    "code": "VC2CCPAC1"
+                  },
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165026,
+        "extract": "<p>They design and conduct experiments or simulations for combined events using digital tools.</p>",
+        "contentDescriptions": [
+          "e8f0e5c5-5c48-4cd4-b480-fcad7ef403c4"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 142
+    }
+  },
+  {
+    "code": "VC2M9SP01",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Space",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "recognise the constancy of the sine, cosine and tangent ratios for a given angle in right-angled triangles using properties of similarity",
+    "elaborations": [
+      {
+        "id": "b8a49fab-280a-4b25-92ff-ec4235ff811e",
+        "text": "understanding the terms ‘base’, ‘altitude’, ‘hypotenuse’, and ‘adjacent’ and ‘opposite’ sides to an angle, in a right-angled triangle, and identifying these for a given right-angled triangle",
+        "html": "<p>understanding the terms ‘base’, ‘altitude’, ‘hypotenuse’, and ‘adjacent’ and ‘opposite’ sides to an angle, in a right-angled triangle, and identifying these for a given right-angled triangle</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "df89034c-162b-4170-a363-b16c50b8e188",
+        "text": "investigating patterns to reason about nested similar triangles that are aligned on a coordinate plane, connecting ideas of parallel sides and identifying the constancy of ratios of corresponding sides for a given angle",
+        "html": "<p>investigating patterns to reason about nested similar triangles that are aligned on a coordinate plane, connecting ideas of parallel sides and identifying the constancy of ratios of corresponding sides for a given angle</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "118ca1e3-e1f2-4c96-88f3-62d8d8e13bbb",
+        "text": "establishing an understanding that the sine of an angle can be considered as the length of the altitude of a right-angled triangle with a hypotenuse of length one unit and similarly the cosine as the length of the base of the same triangle, and relating this to enlargement and similar triangles",
+        "html": "<p>establishing an understanding that the sine of an angle can be considered as the length of the altitude of a right-angled triangle with a hypotenuse of length one unit and similarly the cosine as the length of the base of the same triangle, and relating this to enlargement and similar triangles</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "4662b606-d897-40e0-a758-4ac5e4e4ece1",
+        "text": "relating the tangent of an angle to the altitude and base of nested similar right-angled triangles, and connecting the tangent of the angle at which the graph of a straight line meets the positive direction of the horizontal coordinate axis to the gradient of the straight line",
+        "html": "<p>relating the tangent of an angle to the altitude and base of nested similar right-angled triangles, and connecting the tangent of the angle at which the graph of a straight line meets the positive direction of the horizontal coordinate axis to the gradient of the straight line</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164976,
+        "extract": "<p>They solve problems involving ratio, similarity and scale in two-dimensional situations.</p>",
+        "contentDescriptions": [
+          "0e06c127-3fae-4244-b249-b26e3ded12fe",
+          "b04c5e7b-6d07-4853-83f1-e8850c6d8b2e"
+        ],
+        "mode": null
+      },
+      {
+        "id": 164981,
+        "extract": "<p>Students apply Pythagora<span>s’</span> theorem and use trigonometric ratios to solve problems involving right-angled triangles.</p>",
+        "contentDescriptions": [
+          "0e06c127-3fae-4244-b249-b26e3ded12fe",
+          "b04c5e7b-6d07-4853-83f1-e8850c6d8b2e"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 137
+    }
+  },
+  {
+    "code": "VC2M9SP02",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Space",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "apply the enlargement transformation to shapes and objects using dynamic geometry software as appropriate; identify and explain, using language of similarity, ratio and scale, aspects that remain the same and those that change",
+    "elaborations": [
+      {
+        "id": "2d784f3d-017a-4319-960c-b50c6b23f342",
+        "text": "comparing the ratio of lengths of corresponding sides of similar triangles and angles",
+        "html": "<p>comparing the ratio of lengths of corresponding sides of similar triangles and angles </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "118c685f-faad-4e1d-9326-9c0bfb8ffb1e",
+        "text": "using the properties of similarity to solve problems involving enlargement",
+        "html": "<p>using the properties of similarity to solve problems involving enlargement</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "407b87c7-1464-434b-ac92-e4553a0507d9",
+        "text": "investigating and generalising patterns in length, angle, area and volume when side lengths of shapes and objects are enlarged or dilated by whole and rational numbers; for example, comparing an enlargement of a square and a cube of side length 2 units by a factor of 3 increases the area of the square, $(3\\times 2)^2=9\\times 2^2=9$ times the original area and the volume of the cube, $2^3$, to $(3\\times 2)^3=27\\times 2^3=27$ times the volume",
+        "html": "<p>investigating and generalising patterns in length, angle, area and volume when side lengths of shapes and objects are enlarged or dilated by whole and rational numbers; for example, comparing an enlargement of a square and a cube of side length 2 units by a factor of 3 increases the area of the square, $(3\\times 2)^2=9\\times 2^2=9$ times the original area and the volume of the cube, $2^3$, to $(3\\times 2)^3=27\\times 2^3=27$ times the volume </p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164996,
+        "extract": "<p>Students apply the enlargement transformation to images of shapes and objects, and interpret results.</p>",
+        "contentDescriptions": [
+          "abb4dcf0-3a0a-4a29-9391-f2e471676758"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 226
+    }
+  },
+  {
+    "code": "VC2M9SP03",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Space",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "design, test and refine algorithms involving a sequence of steps and decisions based on geometric constructions and theorems; discuss and evaluate refinements ",
+    "elaborations": [
+      {
+        "id": "597b7cae-e838-4d4b-acdc-f3693f629c64",
+        "text": "creating an algorithm using pseudocode or flow charts to apply the triangle inequality, or an algorithm to generate Pythagorean triples",
+        "html": "<p>creating an algorithm using pseudocode or flow charts to apply the triangle inequality, or an algorithm to generate Pythagorean triples</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "53526f7a-fea6-4980-a311-fa7434a39640",
+        "text": "creating and testing algorithms designed to construct or bisect angles, using pseudocode or flow charts",
+        "html": "<p>creating and testing algorithms designed to construct or bisect angles, using pseudocode or flow charts</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "8d727234-fad4-4976-a3f2-aafcdd1753a5",
+        "text": "developing an algorithm for an animation of a geometric construction, or a visual proof, evaluating the algorithm using test cases",
+        "html": "<p>developing an algorithm for an animation of a geometric construction, or a visual proof, evaluating the algorithm using test cases</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165001,
+        "extract": "<p>They design, use and test algorithms based on geometric constructions or theorems.</p>",
+        "contentDescriptions": [
+          "43daff67-5cf6-4c7a-b62b-450ede91a087"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 159
+    }
+  },
+  {
+    "code": "VC2M9ST01",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "analyse reports of surveys in digital media and elsewhere for information on how data was obtained around everyday questions and issues involving at least one numerical and at least one categorical variable, to estimate population means and medians",
+    "elaborations": [
+      {
+        "id": "9f934405-1095-4bf7-8c82-71bd8d896171",
+        "text": "investigating and evaluating statistical reports in the media and other places by linking claims to displays, statistics and representative data",
+        "html": "<p>investigating and evaluating statistical reports in the media and other places by linking claims to displays, statistics and representative data</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "1b725f3a-c202-463f-a3fe-075845d95a7a",
+        "text": "investigating the use of statistics in reports regarding the growth of Australia’s trade with other countries of the Asia region",
+        "html": "<p>investigating the use of statistics in reports regarding the growth of Australia’s trade with other countries of the Asia region</p>",
+        "organisingIdeas": [
+          {
+            "id": "eae78af5-78d6-4fb1-b9ea-0a8434de49f8",
+            "ccpTitle": "Asia and Australia’s Engagement with Asia",
+            "organisingSetsData": [
+              {
+                "id": "10590a70-b34f-485d-9a6d-500ca400e3ef",
+                "organisingSet": "Knowing Asia and its diversity",
+                "organisingIdeas": [
+                  {
+                    "id": "8cd8f315-4564-4920-ae60-9208e9e7e155",
+                    "idea": "<p>The interrelationships between people and the diverse environments and systems across the Asia region have global implications.</p>",
+                    "code": "VC2CCPASK2"
+                  }
+                ]
+              },
+              {
+                "id": "03c8441a-ea80-472f-85e8-7d32ef03f2b6",
+                "organisingSet": "Understanding Asia’s global significance",
+                "organisingIdeas": [
+                  {
+                    "id": "fa59ab7c-a2b7-46a9-af8a-406145c4b5ce",
+                    "idea": "<p>The nations of Asia influence historical and contemporary global relationships, including international responses to global developments and events.</p>",
+                    "code": "VC2CCPASU1"
+                  },
+                  {
+                    "id": "d991e3e1-b770-41fb-9ab2-9bc6aec6a481",
+                    "idea": "<p>The peoples of Asia shape human endeavour through the arts and political, sporting, economic, technological and scientific domains.</p>",
+                    "code": "VC2CCPASU2"
+                  }
+                ]
+              },
+              {
+                "id": "d0823329-9a67-4379-95be-501847b9e65b",
+                "organisingSet": "Growing Asia–Australia engagement",
+                "organisingIdeas": [
+                  {
+                    "id": "dda41df8-b84a-44de-90a6-4c078675a356",
+                    "idea": "<p>Australia’s deep and continuing relationships with the peoples of Asia develop and influence mutual understandings and expressions of citizenship and culture nationally, regionally and globally.</p>",
+                    "code": "VC2CCPASG1"
+                  },
+                  {
+                    "id": "d1531fd0-35b5-4f03-b692-407a997c59b2",
+                    "idea": "<p>Australia and Asia are interdependent through a range of historical and contemporary connections.</p>",
+                    "code": "VC2CCPASG2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "3270ab85-f6db-45dc-9f4b-ff3ba6ef5a56",
+        "text": "investigating a range of data and its sources, for example, the age of residents in Australia, Cambodia and Tonga, or the number of subjects studied at school in a year by 14-year-old students in Australia, Singapore, Japan, South Korea and Timor-Leste",
+        "html": "<p>investigating a range of data and its sources, for example, the age of residents in Australia, Cambodia and Tonga, or the number of subjects studied at school in a year by 14-year-old students in Australia, Singapore, Japan, South Korea and Timor-Leste</p>",
+        "organisingIdeas": [
+          {
+            "id": "eae78af5-78d6-4fb1-b9ea-0a8434de49f8",
+            "ccpTitle": "Asia and Australia’s Engagement with Asia",
+            "organisingSetsData": [
+              {
+                "id": "10590a70-b34f-485d-9a6d-500ca400e3ef",
+                "organisingSet": "Knowing Asia and its diversity",
+                "organisingIdeas": [
+                  {
+                    "id": "78b7e497-26d3-4cf5-b170-5498cd1ff217",
+                    "idea": "<p><span>Peoples of the Asia region are diverse in their backgrounds, experiences, traditions, cultures, histories, stories, religions, beliefs, perspectives and languages.</span></p>",
+                    "code": "VC2CCPASK1"
+                  },
+                  {
+                    "id": "8cd8f315-4564-4920-ae60-9208e9e7e155",
+                    "idea": "<p>The interrelationships between people and the diverse environments and systems across the Asia region have global implications.</p>",
+                    "code": "VC2CCPASK2"
+                  }
+                ]
+              },
+              {
+                "id": "03c8441a-ea80-472f-85e8-7d32ef03f2b6",
+                "organisingSet": "Understanding Asia’s global significance",
+                "organisingIdeas": [
+                  {
+                    "id": "fa59ab7c-a2b7-46a9-af8a-406145c4b5ce",
+                    "idea": "<p>The nations of Asia influence historical and contemporary global relationships, including international responses to global developments and events.</p>",
+                    "code": "VC2CCPASU1"
+                  }
+                ]
+              },
+              {
+                "id": "d0823329-9a67-4379-95be-501847b9e65b",
+                "organisingSet": "Growing Asia–Australia engagement",
+                "organisingIdeas": [
+                  {
+                    "id": "dda41df8-b84a-44de-90a6-4c078675a356",
+                    "idea": "<p>Australia’s deep and continuing relationships with the peoples of Asia develop and influence mutual understandings and expressions of citizenship and culture nationally, regionally and globally.</p>",
+                    "code": "VC2CCPASG1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "e81a84c7-8fa1-41da-b79b-df8c53b95ec7",
+        "text": "analysing reports of public opinion surveys on environmental issues, such as land clearing, wind farms or single-use plastics, discussing methods of data collection and the reasonableness of any inferences made",
+        "html": "<p>analysing reports of public opinion surveys on environmental issues, such as land clearing, wind farms or single-use plastics, discussing methods of data collection and the reasonableness of any inferences made</p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "94c50ef5-ea35-4164-9499-46763b179b5e",
+                "organisingSet": "Responsible design",
+                "organisingIdeas": [
+                  {
+                    "id": "7935ae02-e49d-4b3a-a7c4-9e640910b29d",
+                    "idea": "<p>Responsibly designed products and services aim to minimise the human impact on the environment and restore the quality, ecological integrity and diversity of economic, social, environmental and cultural systems.</p>",
+                    "code": "VC2CCPSRD1"
+                  },
+                  {
+                    "id": "76959486-a50f-4c05-8af6-78d915232dc3",
+                    "idea": "<p>Responsible design requires a recognition and appreciation of land custodianship, past practices, contemporary research and technological advancements, and balanced and informed decisions based on understanding possible interconnected economic, social, environmental and cultural impacts.</p>",
+                    "code": "VC2CCPSRD3"
+                  }
+                ]
+              },
+              {
+                "id": "a09716d1-9e17-455c-90af-2e25f24ebbf5",
+                "organisingSet": "Futures thinking",
+                "organisingIdeas": [
+                  {
+                    "id": "05f00feb-c46a-4e1e-929b-82719f70a7f0",
+                    "idea": "<p>Sustainable futures thinking creates desirable futures that value local, community, national and global equity and fairness across generations and into the future.</p>",
+                    "code": "VC2CCPSFT2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "8c822134-4fc2-4375-a270-0da2a3365170",
+        "text": "comparing the annual rainfall in various parts of Australia, Pakistan, New Guinea and Malaysia",
+        "html": "<p>comparing the annual rainfall in various parts of Australia, Pakistan, New Guinea and Malaysia</p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "e978bba0-98ea-4e7c-9a28-538efa4689e8",
+                "organisingSet": "Interrelationship of systems",
+                "organisingIdeas": [
+                  {
+                    "id": "b9bb5764-d9cc-4d39-aa92-8498efb9a262",
+                    "idea": "<p>All lifeforms are connected through Earth’s systems (the lithosphere, biosphere, hydrosphere and atmosphere), on which they depend for their wellbeing and survival.</p>",
+                    "code": "VC2CCPSIS1"
+                  }
+                ]
+              },
+              {
+                "id": "f66f98c9-b080-4c73-a0e1-188ce756fd14",
+                "organisingSet": "Worldviews",
+                "organisingIdeas": [
+                  {
+                    "id": "a727d08b-06d0-430f-91fc-ee8b14a9bf09",
+                    "idea": "<p>Worldviews influence local and global action and, therefore, impact the interdependence of Earth’s systems. Worldviews can play a crucial role in achieving sustainability.</p>",
+                    "code": "VC2CCPSWV1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165006,
+        "extract": "<p>They explain how sampling techniques and representation can be used to support or question conclusions or to promote a point of view.</p>",
+        "contentDescriptions": [
+          "819c7171-8707-457b-9550-407bfa407649",
+          "646c3ad9-598f-4a9b-8d07-56932ebca273",
+          "3771dfb8-74d7-4f6c-8c7a-e9265988d557"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 5,
+      "hasSubStrand": false,
+      "textLength": 248
+    }
+  },
+  {
+    "code": "VC2M9ST02",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "analyse how different sampling methods, and different samples using the same method, can affect the results of surveys and how choice of representation can be used to support a particular point of view",
+    "elaborations": [
+      {
+        "id": "6efd2ee8-f586-4258-97a8-22be1abf3db1",
+        "text": "investigating and analysing different visualisations of data such as infographics found in the media and commenting on the strengths, weaknesses and possible biases of particular examples",
+        "html": "<p>investigating and analysing different visualisations of data such as infographics found in the media and commenting on the strengths, weaknesses and possible biases of particular examples</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "40335e17-0ae7-477b-9d40-97d6dc04351e",
+        "text": "discussing the impact of decreased landline usage or an increased aversion to answering calls from unknown numbers on survey data",
+        "html": "<p>discussing the impact of decreased landline usage or an increased aversion to answering calls from unknown numbers on survey data </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "bf8f7539-1622-40b4-96c3-f63bf777bb52",
+        "text": "exploring potential cultural bias relating to Aboriginal and Torres Strait Islander Peoples by critically analysing sampling techniques in statistical reports",
+        "html": "<p>exploring potential cultural bias relating to Aboriginal and Torres Strait Islander Peoples by critically analysing sampling techniques in statistical reports </p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165006,
+        "extract": "<p>They explain how sampling techniques and representation can be used to support or question conclusions or to promote a point of view.</p>",
+        "contentDescriptions": [
+          "819c7171-8707-457b-9550-407bfa407649",
+          "646c3ad9-598f-4a9b-8d07-56932ebca273",
+          "3771dfb8-74d7-4f6c-8c7a-e9265988d557"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 201
+    }
+  },
+  {
+    "code": "VC2M9ST03",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "represent the distribution of multiple data sets for numerical variables using comparative representations such as back-to-back stem-and-leaf plots and histograms; describe data, using terms including ‘skewed’, ‘symmetric’ and ‘bi-modal’; compare data distributions using mean, median and range to describe and interpret numerical data sets with consideration of centre, spread and shape, and the effect of outliers on these measures",
+    "elaborations": [
+      {
+        "id": "3cc94655-1a8d-40e4-83f4-9677fddbf909",
+        "text": "describing the shape of the distribution of data using terms such as ‘positive skew’, ‘negative skew’, ‘symmetric’ and ‘bi-modal’",
+        "html": "<p>describing the shape of the distribution of data using terms such as ‘positive skew’, ‘negative skew’, ‘symmetric’ and ‘bi-modal’</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "8ded459c-ca4a-4adb-875b-70dedcaa4465",
+        "text": "using stem-and-leaf plots to compare 2 like sets of data such as the heights of girls and the heights of boys in a class",
+        "html": "<p>using stem-and-leaf plots to compare 2 like sets of data such as the heights of girls and the heights of boys in a class</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "e315cb58-d78f-4e78-8724-cd2bf47aa686",
+        "text": "constructing grouped histograms that show trends in health issues such as lung cancer, leukaemia, stroke and diabetes, and using the graph to justify, verify or invalidate claims",
+        "html": "<p>constructing grouped histograms that show trends in health issues such as lung cancer, leukaemia, stroke and diabetes, and using the graph to justify, verify or invalidate claims</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "bd562805-f7a7-4b41-ae6a-15c314a81a69",
+        "text": "exploring comparative data presented in reports by the National Indigenous Australians Agency in regard to ‘Closing the Gap’, discussing the comparative distributions within the context of the data, for example, comparative data presented in the ‘Closing the Gap – Prime Minister’s Report’",
+        "html": "<p>exploring comparative data presented in reports by the National Indigenous Australians Agency in regard to ‘Closing the Gap’, discussing the comparative distributions within the context of the data, for example, comparative data presented in the ‘Closing the Gap – Prime Minister’s Report’ </p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  },
+                  {
+                    "id": "df950d68-899a-454c-87d2-9a6b88926115",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander Peoples are the Traditional Owners of Country and Place, protected in Australian law by the</span><em><span class=\"italic\"> Native Title Act 1993</span></em><span>, which recognises pre-existing sovereignty, continuing systems of law and customs, and connection to Country and Place.</span></p>",
+                    "code": "VC2CCPACP3"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cb9c45c0-dd5c-4f4f-a8d2-0a982d0e96df",
+        "text": "comparing means, medians and ranges of 2 sets of numerical data that have been displayed using histograms, dot plots or stem-and-leaf plots",
+        "html": "<p>comparing means, medians and ranges of 2 sets of numerical data that have been displayed using histograms, dot plots or stem-and-leaf plots</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165011,
+        "extract": "<p>Students compare and analyse the distributions of multiple numerical data sets, choose representations, describe features of these data sets using summary statistics and the shape of distributions, and consider the effect of outliers.</p>",
+        "contentDescriptions": [
+          "59ed57e4-ce73-4111-aef0-0e937c1b00ce",
+          "1739b40c-c970-4af9-b253-7adc60078e90"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 5,
+      "hasSubStrand": false,
+      "textLength": 433
+    }
+  },
+  {
+    "code": "VC2M9ST04",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "choose appropriate forms of display or visualisation for a given type of data; justify selections and interpret displays for a given context",
+    "elaborations": [
+      {
+        "id": "776e7360-d62f-4086-92f0-f164598aff17",
+        "text": "comparing data displays using mean, median and range to describe and interpret numerical data sets in terms of centre and spread using histograms, dot plots or stem-and-leaf plots",
+        "html": "<p>comparing data displays using mean, median and range to describe and interpret numerical data sets in terms of centre and spread using histograms, dot plots or stem-and-leaf plots</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d92fac2f-2bd3-44b5-a442-1a01449c6936",
+        "text": "choosing the type of representations based on the data type: categorical (nominal or ordinal) or numerical (discrete or continuous)",
+        "html": "<p>choosing the type of representations based on the data type: categorical (nominal or ordinal) or numerical (discrete or continuous)</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5df9357b-afb4-469a-8147-c4a8b09be4cb",
+        "text": "using different visualisations of data, including non-standard representations such as infographics, and discussing their purpose and intended audience, and evaluating how well they communicate responses to statistical questions of interest",
+        "html": "<p>using different visualisations of data, including non-standard representations such as infographics, and discussing their purpose and intended audience, and evaluating how well they communicate responses to statistical questions of interest</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "6da62a3b-7dde-4a7b-a827-8ec0bd2326f4",
+        "text": "comparing and interpreting stacked bar charts, area charts and line graphs, discussing how they represent larger categories that can be subdivided into smaller categories and how information that can be obtained from these displays can be used for comparison",
+        "html": "<p>comparing and interpreting stacked bar charts, area charts and line graphs, discussing how they represent larger categories that can be subdivided into smaller categories and how information that can be obtained from these displays can be used for comparison</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165011,
+        "extract": "<p>Students compare and analyse the distributions of multiple numerical data sets, choose representations, describe features of these data sets using summary statistics and the shape of distributions, and consider the effect of outliers.</p>",
+        "contentDescriptions": [
+          "59ed57e4-ce73-4111-aef0-0e937c1b00ce",
+          "1739b40c-c970-4af9-b253-7adc60078e90"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 140
+    }
+  },
+  {
+    "code": "VC2M9ST05",
+    "subject": "mathematics",
+    "levelId": "9",
+    "levelName": "Level 9",
+    "levelOrder": 13,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "plan and conduct statistical investigations involving the collection and analysis of different kinds of data; report findings and discuss the strength of evidence to support any conclusions ",
+    "elaborations": [
+      {
+        "id": "92d3c5e8-8282-4935-898d-3970a115dc11",
+        "text": "planning and conducting an investigation using questions together with analysis of a secondary data set collected from online databases such as the Australian Bureau of Statistics",
+        "html": "<p>planning and conducting an investigation using questions together with analysis of a secondary data set collected from online databases such as the Australian Bureau of Statistics</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d6ffc0f1-f85f-41cb-845d-e11fb0fc3d82",
+        "text": "planning and conducting an investigation relating to consumer spending habits; and modelling market research on what teenagers are prepared to spend on technology compared to clothing, with consideration of sample techniques and potential sources of bias",
+        "html": "<p>planning and conducting an investigation relating to consumer spending habits; and modelling market research on what teenagers are prepared to spend on technology compared to clothing, with consideration of sample techniques and potential sources of bias</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "8b157f68-21e7-4538-8106-f57b3d322c9e",
+        "text": "investigating where would be the best location for a tropical fruit plantation, by conducting a statistical investigation comparing different variables such as the annual rainfall in various parts of Australia, Indonesia, New Guinea and Malaysia, land prices and associated farming costs",
+        "html": "<p>investigating where would be the best location for a tropical fruit plantation, by conducting a statistical investigation comparing different variables such as the annual rainfall in various parts of Australia, Indonesia, New Guinea and Malaysia, land prices and associated farming costs</p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "e978bba0-98ea-4e7c-9a28-538efa4689e8",
+                "organisingSet": "Interrelationship of systems",
+                "organisingIdeas": [
+                  {
+                    "id": "b9bb5764-d9cc-4d39-aa92-8498efb9a262",
+                    "idea": "<p>All lifeforms are connected through Earth’s systems (the lithosphere, biosphere, hydrosphere and atmosphere), on which they depend for their wellbeing and survival.</p>",
+                    "code": "VC2CCPSIS1"
+                  },
+                  {
+                    "id": "605efe00-6676-4efa-a351-81b546e055c9",
+                    "idea": "<p>Sustainable patterns of living require the responsible use of resources; circular economies; maintenance of clean air, water and soils; and the restoration of healthy environments and habitats with ecological integrity.</p>",
+                    "code": "VC2CCPSIS2"
+                  },
+                  {
+                    "id": "c677416f-2c61-4f31-99b0-57bf93815adc",
+                    "idea": "<p>Economic, social, environmental and cultural systems influence the sustainability of Earth’s systems.</p>",
+                    "code": "VC2CCPSIS3"
+                  }
+                ]
+              },
+              {
+                "id": "f66f98c9-b080-4c73-a0e1-188ce756fd14",
+                "organisingSet": "Worldviews",
+                "organisingIdeas": [
+                  {
+                    "id": "a727d08b-06d0-430f-91fc-ee8b14a9bf09",
+                    "idea": "<p>Worldviews influence local and global action and, therefore, impact the interdependence of Earth’s systems. Worldviews can play a crucial role in achieving sustainability.</p>",
+                    "code": "VC2CCPSWV1"
+                  },
+                  {
+                    "id": "1d416700-68bc-4a15-b942-de132397c315",
+                    "idea": "<p>Worldviews are formed by different experiences at a personal, local, national and global level, and are linked to individual, community and political mandates and actions for sustainability.</p>",
+                    "code": "VC2CCPSWV2"
+                  }
+                ]
+              },
+              {
+                "id": "94c50ef5-ea35-4164-9499-46763b179b5e",
+                "organisingSet": "Responsible design",
+                "organisingIdeas": [
+                  {
+                    "id": "76959486-a50f-4c05-8af6-78d915232dc3",
+                    "idea": "<p>Responsible design requires a recognition and appreciation of land custodianship, past practices, contemporary research and technological advancements, and balanced and informed decisions based on understanding possible interconnected economic, social, environmental and cultural impacts.</p>",
+                    "code": "VC2CCPSRD3"
+                  }
+                ]
+              },
+              {
+                "id": "a09716d1-9e17-455c-90af-2e25f24ebbf5",
+                "organisingSet": "Futures thinking",
+                "organisingIdeas": [
+                  {
+                    "id": "e01559c7-00d4-4367-9478-0a01b47e27db",
+                    "idea": "<p>Sustainable futures thinking is based on informed views that consider possible and desirable futures. It leads to individual, community, organisational and political action that reduces risk.</p>",
+                    "code": "VC2CCPSFT1"
+                  },
+                  {
+                    "id": "05f00feb-c46a-4e1e-929b-82719f70a7f0",
+                    "idea": "<p>Sustainable futures thinking creates desirable futures that value local, community, national and global equity and fairness across generations and into the future.</p>",
+                    "code": "VC2CCPSFT2"
+                  },
+                  {
+                    "id": "f49edeb5-45cb-434b-b793-700ee3e4e907",
+                    "idea": "<p>Sustainable futures thinking requires individuals to think creatively, seek information, identify a variety of possibilities, reflect and evaluate actions, and collaborate with and influence others as they work towards desired futures.</p>",
+                    "code": "VC2CCPSFT3"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dfec8aaf-4df4-4ad1-884b-2320dd585513",
+        "text": "posing statistical questions; collecting, representing and interpreting data from different sources in relation to reconciliation between Aboriginal and Torres Strait Islander Peoples and non-Indigenous Australians; and considering the relationships between variables",
+        "html": "<p>posing statistical questions; collecting, representing and interpreting data from different sources in relation to reconciliation between Aboriginal and Torres Strait Islander Peoples and non-Indigenous Australians; and considering the relationships between variables</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 165006,
+        "extract": "<p>They explain how sampling techniques and representation can be used to support or question conclusions or to promote a point of view.</p>",
+        "contentDescriptions": [
+          "819c7171-8707-457b-9550-407bfa407649",
+          "646c3ad9-598f-4a9b-8d07-56932ebca273",
+          "3771dfb8-74d7-4f6c-8c7a-e9265988d557"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 190
+    }
+  }
+]

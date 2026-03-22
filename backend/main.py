@@ -19,6 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from routers import session as session_router
 from routers import questions as questions_router
+from routers import progress as progress_router
 from cache import session_cache, question_cache
 
 app = FastAPI(
@@ -37,6 +38,7 @@ app.add_middleware(
 
 app.include_router(session_router.router)
 app.include_router(questions_router.router)
+app.include_router(progress_router.router)
 
 
 @app.get("/api/health")

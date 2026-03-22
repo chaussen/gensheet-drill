@@ -13,15 +13,6 @@ const BAND_LABELS = {
   exceeding:     'Exceeding',
 }
 
-function Spinner() {
-  return (
-    <div className="flex items-center gap-3 text-slate-500 text-sm py-4">
-      <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin flex-shrink-0" />
-      Generating personalised analysis…
-    </div>
-  )
-}
-
 function renderSelected(r) {
   if (r.question_type === 'multi_select')
     return (r.selected_indices || []).map(i => r.options[i]).join(', ') || '(none)'
@@ -34,9 +25,23 @@ function renderCorrect(r) {
   return r.options[r.correct_index]
 }
 
-export default function ResultsScreen({ result, analysisPolling, onNewSession, onViewHistory }) {
+function formatMs(ms) {
+  const totalSec = Math.floor(ms / 1000)
+  const m = Math.floor(totalSec / 60)
+  const s = totalSec % 60
+  return m > 0 ? `${m}m ${s}s` : `${s}s`
+}
+
+function formatMsShort(ms) {
+  const totalSec = Math.floor(ms / 1000)
+  const m = Math.floor(totalSec / 60)
+  const s = totalSec % 60
+  return `${m}:${String(s).padStart(2, '0')}`
+}
+
+export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
   const [expanded, setExpanded] = useState(null)
-  const analysis = result.analysis
+  const summary = result.summary
 
   return (
     <div className="min-h-screen bg-slate-50 py-8 px-4">
@@ -49,111 +54,138 @@ export default function ResultsScreen({ result, analysisPolling, onNewSession, o
             {result.score}<span className="text-2xl text-slate-400 font-normal"> / {result.total}</span>
           </p>
           <p className="text-xl text-slate-600 mb-3">{result.score_pct}%</p>
-          {analysis && (
-            <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${BAND_STYLES[analysis.performance_band] ?? 'bg-slate-100 text-slate-700'}`}>
-              {BAND_LABELS[analysis.performance_band] ?? analysis.performance_band}
+          {summary && (
+            <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${BAND_STYLES[summary.performance_band] ?? 'bg-slate-100 text-slate-700'}`}>
+              {BAND_LABELS[summary.performance_band] ?? summary.performance_band}
             </span>
           )}
-        </div>
-
-        {/* Analysis */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-base font-semibold text-slate-800 mb-3">Personalised Analysis</h2>
-
-          {analysisPolling && !analysis && <Spinner />}
-          {!analysisPolling && !analysis && (
-            <p className="text-sm text-slate-500">Analysis unavailable — try again later.</p>
-          )}
-
-          {analysis && (
-            <div className="space-y-5">
-              {analysis.motivational_note && (
-                <p className="text-sm text-indigo-700 bg-indigo-50 rounded-lg px-4 py-3 border border-indigo-100">
-                  {analysis.motivational_note}
-                </p>
-              )}
-
-              {analysis.weak_areas?.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold text-slate-700 mb-2">Areas to Improve</h3>
-                  <div className="space-y-3">
-                    {analysis.weak_areas.map(area => (
-                      <div key={area.vc_code} className="border border-slate-200 rounded-xl p-4">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-mono text-slate-500">{area.vc_code}</span>
-                          <span className="text-xs font-medium text-red-600">{area.score_pct}%</span>
-                        </div>
-                        <p className="text-sm font-medium text-slate-800 mb-1">{area.description}</p>
-                        {area.error_pattern && (
-                          <p className="text-xs text-amber-700 bg-amber-50 rounded px-2 py-1 mb-2">
-                            Common mistake: {area.error_pattern}
-                          </p>
-                        )}
-                        {area.tip && (
-                          <p className="text-xs text-slate-600">{area.tip}</p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {analysis.next_session_recommendation && (
-                <div className="border border-slate-200 rounded-xl p-4">
-                  <h3 className="text-sm font-semibold text-slate-700 mb-1">Next Session</h3>
-                  <p className="text-xs text-slate-500 mb-2">
-                    Difficulty: <span className="font-medium text-slate-700 capitalize">{analysis.next_session_recommendation.difficulty}</span>
-                  </p>
-                  <p className="text-sm text-slate-700">{analysis.next_session_recommendation.rationale}</p>
-                </div>
+          {summary?.total_time_ms > 0 && (
+            <div className="mt-4 text-sm text-slate-600">
+              <p>
+                <span className="font-medium">Time:</span>{' '}
+                {formatMs(summary.total_time_ms)} total · {formatMs(summary.avg_time_per_question_ms)} avg per question
+              </p>
+              {summary.time_accuracy_summary && (
+                <p className="mt-1 text-slate-500 italic">{summary.time_accuracy_summary}</p>
               )}
             </div>
           )}
         </div>
 
+        {/* Session summary */}
+        {summary && (
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h2 className="text-base font-semibold text-slate-800 mb-3">Session Summary</h2>
+
+            {/* Strand breakdown */}
+            {Object.keys(summary.by_strand).length > 0 && (
+              <div className="mb-4">
+                <h3 className="text-sm font-semibold text-slate-700 mb-2">By Strand</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="text-xs text-slate-500 border-b border-slate-100">
+                        <th className="text-left py-1.5 pr-4 font-medium">Strand</th>
+                        <th className="text-right py-1.5 pr-4 font-medium">Questions</th>
+                        <th className="text-right py-1.5 pr-4 font-medium">Correct</th>
+                        <th className="text-right py-1.5 font-medium">Score</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(summary.by_strand).map(([strand, stat]) => (
+                        <tr key={strand} className="border-b border-slate-50">
+                          <td className="py-2 pr-4 text-slate-700 font-medium">
+                            {strand}
+                            {strand === summary.weakest_strand && (
+                              <span className="ml-2 text-xs text-red-500">weakest</span>
+                            )}
+                            {strand === summary.strongest_strand && strand !== summary.weakest_strand && (
+                              <span className="ml-2 text-xs text-green-600">strongest</span>
+                            )}
+                          </td>
+                          <td className="py-2 pr-4 text-right text-slate-500">{stat.attempted}</td>
+                          <td className="py-2 pr-4 text-right text-slate-500">{stat.correct}</td>
+                          <td className={`py-2 text-right font-semibold ${
+                            stat.score_pct >= 80 ? 'text-green-600' :
+                            stat.score_pct >= 60 ? 'text-amber-600' : 'text-red-600'
+                          }`}>
+                            {stat.score_pct}%
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Next session suggestion */}
+            {summary.next_session_suggestion && (
+              <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                <h3 className="text-sm font-semibold text-slate-700 mb-1">Next Session</h3>
+                <p className="text-xs text-slate-500 mb-1">
+                  <span className="font-medium text-slate-700">{summary.next_session_suggestion.strand}</span>
+                  {' · '}
+                  <span className="capitalize font-medium text-slate-700">{summary.next_session_suggestion.difficulty}</span>
+                  {' difficulty'}
+                </p>
+                <p className="text-sm text-slate-700">{summary.next_session_suggestion.reason}</p>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Question breakdown */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
           <h2 className="text-base font-semibold text-slate-800 mb-3">Question Breakdown</h2>
           <div className="space-y-2">
-            {result.responses.map((r, i) => (
-              <div
-                key={r.question_id}
-                className={`border-l-4 rounded-r-lg px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors ${
-                  r.correct ? 'border-green-500' : 'border-red-500'
-                }`}
-                onClick={() => setExpanded(expanded === r.question_id ? null : r.question_id)}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className={`flex-shrink-0 text-base ${r.correct ? 'text-green-500' : 'text-red-500'}`}>
-                      {r.correct ? '✓' : '✗'}
-                    </span>
-                    <p className="text-sm text-slate-700 truncate">{r.question_text}</p>
-                  </div>
-                  <span className="text-xs text-slate-400 flex-shrink-0">{expanded === r.question_id ? '▲' : '▼'}</span>
-                </div>
-
-                {expanded === r.question_id && (
-                  <div className="mt-3 pt-3 border-t border-slate-100 space-y-2">
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div>
-                        <span className="text-slate-500">Your answer: </span>
-                        <span className={r.correct ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
-                          {renderSelected(r)}
-                        </span>
-                      </div>
-                      {!r.correct && (
-                        <div>
-                          <span className="text-slate-500">Correct: </span>
-                          <span className="text-green-700 font-medium">{renderCorrect(r)}</span>
-                        </div>
-                      )}
+            {result.responses.map((r) => {
+              const isSlow = r.time_taken_ms != null && r.time_taken_ms > 90000
+              return (
+                <div
+                  key={r.question_id}
+                  className={`border-l-4 rounded-r-lg px-4 py-3 cursor-pointer transition-colors ${
+                    r.correct ? 'border-green-500' : 'border-red-500'
+                  } ${isSlow ? 'bg-amber-50 hover:bg-amber-100' : 'hover:bg-slate-50'}`}
+                  onClick={() => setExpanded(expanded === r.question_id ? null : r.question_id)}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className={`flex-shrink-0 text-base ${r.correct ? 'text-green-500' : 'text-red-500'}`}>
+                        {r.correct ? '✓' : '✗'}
+                      </span>
+                      <p className="text-sm text-slate-700 truncate">{r.question_text}</p>
                     </div>
-                    <p className="text-xs text-slate-500 italic">{r.explanation}</p>
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      {r.time_taken_ms != null && (
+                        <span className="text-xs text-slate-400 tabular-nums">{formatMsShort(r.time_taken_ms)}</span>
+                      )}
+                      <span className="text-xs text-slate-400">{expanded === r.question_id ? '▲' : '▼'}</span>
+                    </div>
                   </div>
-                )}
-              </div>
-            ))}
+
+                  {expanded === r.question_id && (
+                    <div className="mt-3 pt-3 border-t border-slate-100 space-y-2">
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <span className="text-slate-500">Your answer: </span>
+                          <span className={r.correct ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
+                            {renderSelected(r)}
+                          </span>
+                        </div>
+                        {!r.correct && (
+                          <div>
+                            <span className="text-slate-500">Correct: </span>
+                            <span className="text-green-700 font-medium">{renderCorrect(r)}</span>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-500 italic">{r.explanation}</p>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
 

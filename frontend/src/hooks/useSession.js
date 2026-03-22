@@ -1,65 +1,58 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import * as api from '../api/client.js'
 import { useProgress } from './useProgress.js'
 
-const POLL_INTERVAL_MS = 3000
-const POLL_TIMEOUT_MS  = 30000
-
 const initialState = {
-  sessionId:        null,
-  questions:        [],
-  config:           null,
-  answers:          new Map(),
-  questionIndex:    0,
-  questionStartedAt: null,
-  result:           null,
-  loading:          false,
-  error:            null,
-  analysisPolling:  false,
+  sessionId:     null,
+  questions:     [],
+  config:        null,
+  answers:       new Map(),
+  questionIndex: 0,
+  result:        null,
+  loading:       false,
+  error:         null,
 }
 
 export function useSession() {
   const [state, setState] = useState(initialState)
-  const { saveSession, updateAnalysis } = useProgress()
-  const pollRef = useRef(null)
+  const [sessionStartTime, setSessionStartTime] = useState(null)
+  const { saveSession } = useProgress()
+
+  // Timing refs — mutations don't trigger re-renders
+  const sessionStartRef  = useRef(null)
+  const questionStartRef = useRef(null)
+  const questionTimesRef = useRef({})
 
   // Derived
   const currentQuestion = state.questions[state.questionIndex] ?? null
   const totalQuestions  = state.questions.length
 
-  // ── Polling: start when result arrives without analysis ──────────────────────
-  useEffect(() => {
-    if (!state.result || state.result.analysis !== null) return
+  // ── Timer helpers ─────────────────────────────────────────────────────────────
 
-    // Capture stable values so the interval callback has no stale closure issues
-    const sessionId = state.sessionId
-    const onAnalysis = updateAnalysis
+  const startSessionTimer = useCallback(() => {
+    const now = Date.now()
+    sessionStartRef.current  = now
+    questionStartRef.current = now
+    questionTimesRef.current = {}
+    setSessionStartTime(now)
+  }, [])
 
-    setState(s => ({ ...s, analysisPolling: true }))
-    const deadline = Date.now() + POLL_TIMEOUT_MS
+  function recordQuestionTime(question_id) {
+    if (!questionStartRef.current) return
+    const elapsed = Date.now() - questionStartRef.current
+    questionTimesRef.current[question_id] =
+      (questionTimesRef.current[question_id] || 0) + elapsed
+    questionStartRef.current = Date.now()
+  }
 
-    pollRef.current = setInterval(async () => {
-      if (Date.now() > deadline) {
-        clearInterval(pollRef.current)
-        setState(s => ({ ...s, analysisPolling: false }))
-        return
-      }
-      try {
-        const fresh = await api.getResult(sessionId)
-        if (fresh.analysis !== null) {
-          clearInterval(pollRef.current)
-          setState(s => ({ ...s, result: fresh, analysisPolling: false }))
-          onAnalysis(sessionId, fresh.analysis)
-        }
-      } catch {
-        // keep polling until deadline
-      }
-    }, POLL_INTERVAL_MS)
+  function finaliseTimings() {
+    return {
+      total_time_ms:  sessionStartRef.current ? Date.now() - sessionStartRef.current : 0,
+      question_times: { ...questionTimesRef.current },
+    }
+  }
 
-    return () => clearInterval(pollRef.current)
-  }, [state.result?.session_id, state.result?.analysis])  // re-run only when result identity changes
-
-  // ── Actions ──────────────────────────────────────────────────────────────────
+  // ── Actions ───────────────────────────────────────────────────────────────────
 
   async function startSession(config) {
     setState(s => ({ ...s, loading: true, error: null }))
@@ -67,16 +60,14 @@ export function useSession() {
       const data = await api.startSession(config)
       setState(s => ({
         ...s,
-        sessionId:         data.session_id,
-        questions:         data.questions,
+        sessionId:     data.session_id,
+        questions:     data.questions,
         config,
-        answers:           new Map(),
-        questionIndex:     0,
-        questionStartedAt: Date.now(),
-        result:            null,
-        loading:           false,
-        error:             null,
-        analysisPolling:   false,
+        answers:       new Map(),
+        questionIndex: 0,
+        result:        null,
+        loading:       false,
+        error:         null,
       }))
     } catch (e) {
       setState(s => ({ ...s, loading: false, error: e.message }))
@@ -86,21 +77,21 @@ export function useSession() {
   function answerQuestion(selectionOrArray) {
     const q = state.questions[state.questionIndex]
     if (!q) return
-    const timeTakenMs = state.questionStartedAt ? Date.now() - state.questionStartedAt : null
-    const isMulti = Array.isArray(selectionOrArray)
 
+    // Record time spent on this question before advancing
+    recordQuestionTime(q.question_id)
+
+    const isMulti = Array.isArray(selectionOrArray)
     setState(s => {
       const answers = new Map(s.answers)
       answers.set(q.question_id, {
         selectedIndex:   isMulti ? null : selectionOrArray,
         selectedIndices: isMulti ? selectionOrArray : null,
-        timeTakenMs,
       })
       return {
         ...s,
         answers,
-        questionIndex:     s.questionIndex + 1,
-        questionStartedAt: Date.now(),
+        questionIndex: s.questionIndex + 1,
       }
     })
   }
@@ -108,15 +99,19 @@ export function useSession() {
   async function submitSession() {
     setState(s => ({ ...s, loading: true }))
     try {
+      const timings = finaliseTimings()
       const responses = state.questions.map(q => {
         const ans = state.answers.get(q.question_id)
-        const base = { question_id: q.question_id, time_taken_ms: ans?.timeTakenMs ?? null }
+        const base = {
+          question_id:   q.question_id,
+          time_taken_ms: timings.question_times[q.question_id] ?? 0,
+        }
         if (q.question_type === 'multi_select') {
           return { ...base, selected_indices: ans?.selectedIndices ?? [] }
         }
         return { ...base, selected_index: ans?.selectedIndex ?? 0 }
       })
-      const result = await api.submitSession(state.sessionId, responses)
+      const result = await api.submitSession(state.sessionId, responses, timings.total_time_ms)
       saveSession(result, state.config)
       setState(s => ({ ...s, result, loading: false }))
     } catch (e) {
@@ -125,7 +120,10 @@ export function useSession() {
   }
 
   function resetSession() {
-    clearInterval(pollRef.current)
+    sessionStartRef.current  = null
+    questionStartRef.current = null
+    questionTimesRef.current = {}
+    setSessionStartTime(null)
     setState({ ...initialState, answers: new Map() })
   }
 
@@ -141,9 +139,10 @@ export function useSession() {
     result:          state.result,
     loading:         state.loading,
     error:           state.error,
-    analysisPolling: state.analysisPolling,
+    sessionStartTime,
     // actions
     startSession,
+    startSessionTimer,
     answerQuestion,
     submitSession,
     resetSession,

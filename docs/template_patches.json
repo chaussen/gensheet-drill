@@ -1,0 +1,310 @@
+{
+  "_instructions": {
+    "how_to_apply": [
+      "1. REPLACE: Find the template with matching 'id' in question_templates.json and replace the entire object with the one provided in 'replace[]'.",
+      "2. ADD_AFTER: Find the template with 'after_id' and insert the new template object immediately after it in the 'templates' array.",
+      "3. ADD_TO_CURATED_BANKS: Add the new bank key and metadata to the 'curated_banks' object.",
+      "4. After applying, verify: count should be 60 + 8 = 68 templates total.",
+      "5. Also apply the corresponding updates in verification_additions.py."
+    ],
+    "summary_of_changes": {
+      "T-7M-04": "REPLACED — content changed from supplementary/complementary angles (wrong level) to actual VC2M7M04 transversal angle relationships",
+      "T-7M-04b": "NEW — supplementary, complementary, vertically opposite angles (valid Y7 content, kept as separate template)",
+      "T-7M-05": "NEW — interior angle sum of triangle; find unknown angle (VC2M7M05)",
+      "T-8N-01b": "NEW — irrational number recognition in context (VC2M8N01, curated_bank)",
+      "T-8P-01": "REPLACED — content changed from experimental probability (wrong code) to complementary events P(A)+P(A')=1 (actual VC2M8P01)",
+      "T-9A-04b": "NEW — midpoint formula (part of VC2M9A04)",
+      "T-9A-04c": "NEW — distance between two points (part of VC2M9A04)",
+      "T-9M-04b": "NEW — percentage error calculation (VC2M9M04)"
+    }
+  },
+
+  "replace": [
+
+    {
+      "id": "T-7M-04",
+      "replacement": {
+        "id": "T-7M-04",
+        "vc_code": "VC2M7M04",
+        "year": 7, "strand": "Measurement",
+        "topic": "Angle relationships when parallel lines are cut by a transversal",
+        "generation_mode": "parametric",
+        "question_template": "Two parallel lines are cut by a transversal. One angle is {a}°. The marked angle is {relationship} to this angle. What is the size of the marked angle?",
+        "context_variants": [
+          "Parallel lines are cut by a transversal. An angle of {a}° is formed. What is the size of the {relationship} angle?",
+          "Lines AB and CD are parallel. A transversal crosses both. One angle measures {a}°. What is the {relationship} angle?"
+        ],
+        "params": {
+          "a": {
+            "type": "choice",
+            "all": [35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 110, 115, 120, 125, 130, 135, 140, 145]
+          },
+          "relationship": {
+            "type": "choice",
+            "foundation": ["corresponding"],
+            "standard": ["corresponding", "alternate"],
+            "advanced": ["corresponding", "alternate", "co-interior (same-side interior)"]
+          }
+        },
+        "answer_rules": {
+          "corresponding": "equal to a",
+          "alternate": "equal to a",
+          "co-interior": "180 - a"
+        },
+        "answer_type": "integer",
+        "verifier_fn": "transversal_angle",
+        "distractor_strategy": "COMPLEMENT",
+        "options_count": 4,
+        "generation_constraint": "a ∈ [35..85] for foundation/standard; any value for advanced. Result always positive integer."
+      }
+    },
+
+    {
+      "id": "T-8P-01",
+      "replacement": {
+        "id": "T-8P-01",
+        "vc_code": "VC2M8P01",
+        "year": 8, "strand": "Probability",
+        "topic": "Complementary events: P(A) + P(not A) = 1",
+        "generation_mode": "parametric",
+        "question_template": "The probability of event A occurring is {p}. What is the probability of event A NOT occurring?",
+        "context_variants": [
+          "The probability that it rains tomorrow is {p}. What is the probability that it does NOT rain tomorrow?",
+          "A student has a {p} probability of winning a game. What is the probability of NOT winning?",
+          "The probability of drawing a red card from a deck is {p}. What is the probability of NOT drawing a red card?"
+        ],
+        "params": {
+          "p_numerator": { "type": "randint", "min": 1, "max": 9 },
+          "p_denominator": {
+            "type": "choice",
+            "foundation": [2, 4, 5, 10],
+            "standard": [2, 4, 5, 8, 10, 20],
+            "advanced": [2, 3, 4, 5, 6, 8, 10, 12, 20]
+          },
+          "p_constraint": "p_numerator < p_denominator"
+        },
+        "answer_type": "fraction_string",
+        "verifier_fn": "complementary_events_prob",
+        "distractor_strategy": "CURATED_WRONG",
+        "distractor_notes": "wrong answers: p itself (forgot to subtract), 1+p (added instead), p/2 (halved), 1-(p+1/denom) (off by one on numerator)",
+        "options_count": 4
+      }
+    }
+
+  ],
+
+  "add_after": [
+
+    {
+      "after_id": "T-7M-04",
+      "template": {
+        "id": "T-7M-04b",
+        "vc_code": "VC2M7M05",
+        "_note": "Supplementary/complementary/vertically opposite — originally misassigned to T-7M-04. Now correctly associated with VC2M7M05 elaboration content. Kept because it is high-frequency drill content.",
+        "year": 7, "strand": "Measurement",
+        "topic": "Supplementary, complementary, and vertically opposite angles",
+        "generation_mode": "parametric",
+        "question_template": "Two angles are {relationship}. One angle is {a}°. What is the other angle?",
+        "context_variants": [
+          "Angle ABC = {a}°. Angle ABC and angle DEF are {relationship}. What is angle DEF?",
+          "An angle measures {a}°. What is its {relationship_noun}?"
+        ],
+        "params": {
+          "relationship": {
+            "type": "choice",
+            "foundation": ["supplementary"],
+            "standard": ["supplementary", "complementary"],
+            "advanced": ["supplementary", "complementary", "vertically opposite"]
+          },
+          "a": {
+            "type": "randint",
+            "supplementary_range": [15, 165],
+            "complementary_range": [5, 85],
+            "vertically_opposite_range": [20, 160],
+            "step": 5
+          }
+        },
+        "answer_type": "integer",
+        "verifier_fn": "angle_relationship",
+        "distractor_strategy": "COMPLEMENT",
+        "options_count": 4
+      }
+    },
+
+    {
+      "after_id": "T-7M-04b",
+      "template": {
+        "id": "T-7M-05",
+        "vc_code": "VC2M7M05",
+        "year": 7, "strand": "Measurement",
+        "topic": "Interior angle sum of triangle; find unknown angle",
+        "generation_mode": "parametric",
+        "question_template": "A triangle has angles of {a}° and {b}°. What is the size of the third angle?",
+        "context_variants": [
+          "In triangle ABC, angle A = {a}° and angle B = {b}°. What is angle C?",
+          "Two angles of a triangle measure {a}° and {b}°. Find the third angle.",
+          "A triangle has one angle of {a}° and another of {b}°. What is the remaining angle?"
+        ],
+        "params": {
+          "a": { "type": "randint", "min": 20, "max": 90 },
+          "b": {
+            "type": "derived",
+            "rule": "b chosen so a + b < 180 and third angle c = 180 - a - b ∈ [15, 145]",
+            "foundation_range": "a + b ∈ [60, 120] so c is always reasonable",
+            "standard_range": "a + b ∈ [40, 160]",
+            "advanced_range": "a + b ∈ [30, 165], includes very obtuse triangles"
+          }
+        },
+        "answer_type": "integer",
+        "verifier_fn": "interior_angle_sum_triangle",
+        "distractor_strategy": "OFF_BY_ONE",
+        "distractor_notes": "distractors: 180-(a+b)+5, 360-(a+b), a+b (student adds instead of subtracts from 180)",
+        "options_count": 4,
+        "generation_constraint": "a + b < 180; third angle = 180 - a - b must be ≥ 15 and ≤ 150; all three angles must sum to exactly 180"
+      }
+    },
+
+    {
+      "after_id": "T-8N-01",
+      "template": {
+        "id": "T-8N-01b",
+        "vc_code": "VC2M8N01",
+        "year": 8, "strand": "Number",
+        "topic": "Recognise irrational numbers including π and square roots of non-perfect-squares",
+        "generation_mode": "curated_bank",
+        "question_template": "Which of the following is an irrational number?",
+        "answer_lookup": "irrational_recognition_bank",
+        "distractor_strategy": "CURATED_WRONG",
+        "options_count": 4,
+        "bank_note": "3 options are rational (including traps: √4, 22/7, 0.333..., terminating decimals), 1 is irrational (√2, √3, √5, π, √50 etc). Exploit common misconceptions at Year 8 level."
+      }
+    },
+
+    {
+      "after_id": "T-9A-04",
+      "template": {
+        "id": "T-9A-04b",
+        "vc_code": "VC2M9A04",
+        "year": 9, "strand": "Algebra",
+        "topic": "Midpoint of a line segment between two points on the Cartesian plane",
+        "generation_mode": "parametric",
+        "question_template": "What is the midpoint of the line segment joining ({x1},{y1}) and ({x2},{y2})?",
+        "context_variants": [
+          "Find the midpoint of the interval from A({x1},{y1}) to B({x2},{y2}).",
+          "Points P({x1},{y1}) and Q({x2},{y2}) are the endpoints of a line segment. What are the coordinates of the midpoint?"
+        ],
+        "params": {
+          "x1": { "type": "randint", "min": -6, "max": 6 },
+          "y1": { "type": "randint", "min": -6, "max": 6 },
+          "x2": {
+            "type": "derived",
+            "rule": "x2 = x1 + 2k where k ∈ [-4, 4]\\{0}, ensuring midpoint x = x1+k is integer"
+          },
+          "y2": {
+            "type": "derived",
+            "rule": "y2 = y1 + 2j where j ∈ [-4, 4]\\{0}, ensuring midpoint y = y1+j is integer"
+          }
+        },
+        "answer_type": "coordinate_pair_string",
+        "verifier_fn": "midpoint_formula",
+        "distractor_strategy": "OFF_BY_ONE",
+        "distractor_notes": "distractors: (x2-x1, y2-y1) distance not midpoint; (x1+x2, y1+y2) forgot to divide by 2; midpoint shifted by ±1 on one coordinate",
+        "options_count": 4,
+        "generation_constraint": "midpoint coordinates must both be integers — use only even differences between x1,x2 and y1,y2"
+      }
+    },
+
+    {
+      "after_id": "T-9A-04b",
+      "template": {
+        "id": "T-9A-04c",
+        "vc_code": "VC2M9A04",
+        "year": 9, "strand": "Algebra",
+        "topic": "Distance between two points on the Cartesian plane",
+        "generation_mode": "parametric",
+        "question_template": "What is the distance between the points ({x1},{y1}) and ({x2},{y2})?",
+        "context_variants": [
+          "Find the length of the line segment from A({x1},{y1}) to B({x2},{y2}).",
+          "Calculate the distance between P({x1},{y1}) and Q({x2},{y2}). Give your answer as an exact value or to 2 decimal places."
+        ],
+        "params": {
+          "pythagorean_triple": {
+            "type": "choice",
+            "all": [
+              [3,4,5],[5,12,13],[8,15,17],[7,24,25],
+              [6,8,10],[9,12,15],[5,5,7],[3,3,4]
+            ],
+            "note": "use Pythagorean triples to guarantee integer distances; scale by 1 or 2"
+          },
+          "scale": {
+            "type": "choice",
+            "foundation": [1],
+            "standard": [1],
+            "advanced": [1, 2]
+          },
+          "x1": { "type": "randint", "min": -4, "max": 4 },
+          "y1": { "type": "randint", "min": -4, "max": 4 },
+          "x2": { "type": "derived", "rule": "x2 = x1 + horizontal_leg×scale" },
+          "y2": { "type": "derived", "rule": "y2 = y1 + vertical_leg×scale" }
+        },
+        "answer_type": "integer",
+        "verifier_fn": "distance_formula",
+        "distractor_strategy": "PARTIAL",
+        "distractor_notes": "distractors: Δx + Δy (Manhattan distance), (Δx)²+(Δy)² (forgot square root), (Δx)+(Δy) just adding, distance±1",
+        "options_count": 4,
+        "generation_constraint": "always use Pythagorean triples scaled so distance is a clean integer; avoids surd answers that make MCQ ambiguous"
+      }
+    },
+
+    {
+      "after_id": "T-9M-03",
+      "template": {
+        "id": "T-9M-04b",
+        "vc_code": "VC2M9M04",
+        "year": 9, "strand": "Measurement",
+        "topic": "Calculate percentage error between measured and actual values",
+        "generation_mode": "parametric",
+        "question_template": "A measurement is recorded as {measured}. The actual value is {actual}. What is the percentage error?",
+        "context_variants": [
+          "A student measures a length as {measured} cm. The exact length is {actual} cm. Calculate the percentage error.",
+          "An estimate of {measured} is made for a quantity whose true value is {actual}. What is the percentage error (to 1 decimal place)?"
+        ],
+        "params": {
+          "actual": {
+            "type": "choice",
+            "all": [50, 80, 100, 120, 150, 200, 250, 300, 400, 500]
+          },
+          "error_pct": {
+            "type": "choice",
+            "foundation": [2, 4, 5, 10],
+            "standard": [1, 2, 3, 4, 5, 8, 10, 20],
+            "advanced": [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20]
+          },
+          "direction": {
+            "type": "choice",
+            "all": ["over", "under"]
+          },
+          "measured": {
+            "type": "derived",
+            "rule": "measured = actual × (1 + error_pct/100) if over, or actual × (1 - error_pct/100) if under"
+          }
+        },
+        "answer_type": "decimal_1dp",
+        "verifier_fn": "percentage_error",
+        "distractor_strategy": "OP_SWAP",
+        "distractor_notes": "distractors: absolute error not percentage, (measured-actual)/measured × 100 (wrong denominator), error×2, error/2",
+        "options_count": 4,
+        "generation_constraint": "measured must be a clean integer (use only error_pct values that make actual × pct/100 an integer); answer is always a clean percentage like 5.0% or 10.0%"
+      }
+    }
+
+  ],
+
+  "add_to_curated_banks": {
+    "irrational_recognition_bank": {
+      "status": "MUST_POPULATE",
+      "min_items": 20,
+      "covers": "Year 8 recognition of irrational numbers; traps include √4, 22/7, 0.333..., 3.14; correct answers include √2, √3, √5, √7, π, √50"
+    }
+  }
+}

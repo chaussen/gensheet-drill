@@ -33,4 +33,4 @@ backend/static/
 .DS_Store
 
 # Scratch / notes
-next.md
+*.md

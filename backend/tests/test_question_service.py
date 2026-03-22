@@ -162,10 +162,22 @@ def test_build_question_correct_index_valid():
     assert q.options[q.correct_index] == "3"
 
 
-def test_build_question_curated_bank_returns_none():
-    """Curated-bank templates are not yet supported — should return None."""
+def test_build_question_curated_bank_populated_returns_question():
+    """T-7N-03 uses rational_ordering_bank which is populated — must return a valid question."""
     template = load_template_meta("T-7N-03")
     q = build_question(template, {}, "standard")
+    assert q is not None
+    assert len(q.options) == 4
+    assert 0 <= q.correct_index <= 3
+    assert q.strand == "Number"
+
+
+def test_build_question_curated_bank_empty_returns_none():
+    """A curated-bank template whose bank has no items must return None gracefully."""
+    from unittest.mock import patch
+    template = load_template_meta("T-7N-03")
+    with patch("services.question_service.load_curated_bank", return_value=[]):
+        q = build_question(template, {}, "standard")
     assert q is None
 
 
@@ -436,3 +448,140 @@ def test_response_item_validation_neither_raises():
     from models.schemas import ResponseItem
     with pytest.raises(ValidationError):
         ResponseItem(question_id="abc")
+
+
+# ── New patch templates — build_question ──────────────────────────────────────
+
+def test_build_question_t8n01b_curated_bank():
+    """T-8N-01b irrational_recognition_bank is populated — must return a valid question."""
+    template = load_template_meta("T-8N-01b")
+    q = build_question(template, {}, "standard")
+    assert q is not None
+    assert q.template_id == "T-8N-01b"
+    assert q.strand == "Number"
+    assert q.year_level == 8
+    # Single-select items have 4 options; multi-select items have 5
+    assert len(q.options) in (4, 5)
+
+
+def test_build_question_t7m05_interior_angle():
+    """T-7M-05 interior angle sum of triangle — parametric, verifier must compute 180-a-b."""
+    template = load_template_meta("T-7M-05")
+    q = build_question(template, {"a": 55, "b": 70}, "standard")
+    assert q is not None
+    assert q.options[q.correct_index] == "55"
+
+
+def test_build_question_t9a04b_midpoint():
+    """T-9A-04b midpoint formula — correct answer must be formatted as '(x, y)'."""
+    template = load_template_meta("T-9A-04b")
+    q = build_question(template, {"x1": 2, "y1": 1, "x2": 8, "y2": 7}, "standard")
+    assert q is not None
+    assert q.options[q.correct_index] == "(5, 4)"
+
+
+def test_build_question_t9a04c_distance():
+    """T-9A-04c distance formula — answer must be a clean integer from Pythagorean triple."""
+    template = load_template_meta("T-9A-04c")
+    params = {"x1": 0, "y1": 0, "x2": 3, "y2": 4, "scale": 1, "pythagorean_triple": [3, 4, 5]}
+    q = build_question(template, params, "standard")
+    assert q is not None
+    assert q.options[q.correct_index] == "5"
+
+
+def test_build_question_t9m04b_percentage_error():
+    """T-9M-04b percentage error — verifier returns 5.0, _format_answer renders as '5'."""
+    template = load_template_meta("T-9M-04b")
+    params = {"actual": 200, "error_pct": 5, "direction": "over", "measured": 210}
+    q = build_question(template, params, "standard")
+    assert q is not None
+    # _format_answer converts whole-number floats (5.0) to "5"
+    assert q.options[q.correct_index] == "5"
+
+
+def test_build_question_t7m04_transversal():
+    """T-7M-04 now verifies transversal angles — co-interior must give 180-a."""
+    template = load_template_meta("T-7M-04")
+    q = build_question(template, {"a": 65, "relationship": "co-interior (same-side interior)"}, "standard")
+    assert q is not None
+    assert q.options[q.correct_index] == "115"
+
+    q2 = build_question(template, {"a": 65, "relationship": "corresponding"}, "standard")
+    assert q2 is not None
+    assert q2.options[q2.correct_index] == "65"
+
+
+# ── No-repeat bank item selection ─────────────────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_curated_bank_no_repeats_within_session():
+    """
+    When a curated_bank template is selected multiple times in a session,
+    different bank items should be used (no item repeated until the pool is exhausted).
+    """
+    template_t7n03 = load_template_meta("T-7N-03")
+
+    # Pin the template pool to only T-7N-03 so we can count item usage.
+    with patch("services.question_service.ai_service.generate_questions",
+               new=AsyncMock(return_value=[])), \
+         patch("services.question_service.get_templates_for",
+               return_value=[template_t7n03]):
+        questions = await generate_session_questions(7, "Number", "standard", 5)
+
+    # If we got ≥2 questions from this bank, verify they differ in question_text or options
+    if len(questions) >= 2:
+        texts = [q.question_text + str(q.options) for q in questions]
+        # At least some pairs should differ (bank has >5 items, so all should be unique)
+        assert len(set(texts)) == len(texts), \
+            "Curated bank produced duplicate questions within the same session"
+
+
+@pytest.mark.asyncio
+async def test_curated_bank_cycles_when_pool_smaller_than_count():
+    """
+    When the session requests more questions than a bank has items, the service
+    cycles through the pool rather than crashing or silently repeating.
+    """
+    template_t7n03 = load_template_meta("T-7N-03")
+    small_bank = [
+        {"question_text": "Q1", "correct_answer": "A", "wrong_answers": ["B", "C", "D"]},
+        {"question_text": "Q2", "correct_answer": "A", "wrong_answers": ["B", "C", "D"]},
+    ]
+
+    with patch("services.question_service.ai_service.generate_questions",
+               new=AsyncMock(return_value=[])), \
+         patch("services.question_service.get_templates_for",
+               return_value=[template_t7n03]), \
+         patch("services.question_service.load_curated_bank", return_value=small_bank):
+        # Request 5 questions from a 2-item bank
+        questions = await generate_session_questions(7, "Number", "standard", 5)
+
+    assert isinstance(questions, list)
+    # Should not crash; may produce up to 5 questions (some repeated due to cycling)
+    assert len(questions) <= 5
+
+
+def test_build_question_bank_item_passed_directly():
+    """When a specific bank_item is provided, _build_curated_bank_question uses it."""
+    template = load_template_meta("T-7N-03")
+    specific_item = {
+        "question_text": "Which is ascending?",
+        "correct_answer": "1/5, 1/4, 1/3",
+        "wrong_answers": ["1/3, 1/4, 1/5", "1/4, 1/5, 1/3", "1/3, 1/5, 1/4"],
+    }
+    q = build_question(template, {}, "standard", bank_item=specific_item)
+    assert q is not None
+    assert q.question_text == "Which is ascending?"
+    assert q.options[q.correct_index] == "1/5, 1/4, 1/3"
+
+
+def test_build_multi_select_bank_item_passed_directly():
+    """When bank_item is provided for a MULTI_SELECT_BANKS template, it uses that item."""
+    from services.question_service import _build_multi_select_question
+    specific_item = MULTI_SELECT_BANKS["T-8SP-02"]["items"][0]
+    q = _build_multi_select_question("T-8SP-02", {}, "advanced", bank_item=specific_item)
+    assert q is not None
+    assert q.question_type == "multi_select"
+    # The question text should match the pinned item
+    # (options are shuffled so we can't check order, but the text is fixed)
+    assert q.question_text == specific_item["question_text"]

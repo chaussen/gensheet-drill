@@ -49,8 +49,12 @@ export function useProgress() {
       score:         result.score,
       total:         result.total,
       score_pct:     result.score_pct,
-      weak_vc_codes: [],
-      analysis_band: null,
+      summary:       result.summary ?? null,
+      weak_vc_codes:            [],
+      analysis_band:            result.summary?.performance_band ?? null,
+      total_time_ms:            result.summary?.total_time_ms ?? 0,
+      avg_time_per_question_ms: result.summary?.avg_time_per_question_ms ?? 0,
+      time_band:                result.summary?.time_band ?? '',
     }
     record.sessions.push(entry)
 

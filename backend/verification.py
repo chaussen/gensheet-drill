@@ -284,7 +284,7 @@ class VerificationEngine:
         lhs = a * xv + (b_val if op1 == "+" else -b_val)
         rhs = c_val * xv + (d_val if op2 == "+" else -d_val)
         sol = solve(SymEq(lhs, rhs), xv)
-        return sol[0]
+        return int(sol[0])
 
     def _gradient_two_points(self, p):
         x1, y1 = int(p["x1"]), int(p["y1"])
@@ -415,7 +415,7 @@ class VerificationEngine:
         a, b_val, c_val, d_val = int(p["a"]), int(p["b"]), int(p["c"]), int(p["d"])
         xv, yv = symbols("x y")
         sol = solve([SymEq(yv, a * xv + b_val), SymEq(yv, c_val * xv + d_val)], [xv, yv])
-        return sol[xv]
+        return int(sol[xv])
 
     def _surface_area(self, p):
         shape = p["shape"]
@@ -529,7 +529,12 @@ class VerificationEngine:
         return sol  # The solution is pre-defined; verifier confirms it
 
     def _transversal_angle(self, p):
-        """corresponding/alternate → equal; co-interior → supplementary (180 - a)."""
+        """
+        Angle relationships when parallel lines are cut by a transversal.
+        corresponding → equal
+        alternate      → equal
+        co-interior    → supplementary (180 - a)
+        """
         a = int(p["a"])
         rel = p["relationship"].lower()
         if "corresponding" in rel:
@@ -541,7 +546,11 @@ class VerificationEngine:
         raise ValueError(f"Unknown transversal relationship: {rel}")
 
     def _interior_angle_sum_triangle(self, p):
-        """Third angle = 180 - a - b. Raises on degenerate triangle."""
+        """
+        Given two angles of a triangle, return the third.
+        Third angle = 180 - a - b.
+        Raises if result ≤ 0 (degenerate triangle).
+        """
         a, b = int(p["a"]), int(p["b"])
         third = 180 - a - b
         if third <= 0:
@@ -549,7 +558,11 @@ class VerificationEngine:
         return third
 
     def _complementary_events_prob(self, p):
-        """P(not A) = 1 - P(A). Returns simplified fraction string."""
+        """
+        P(not A) = 1 - P(A).
+        Input: p_numerator and p_denominator of P(A) as a fraction.
+        Returns simplified fraction string.
+        """
         pn = int(p["p_numerator"])
         pd = int(p["p_denominator"])
         if pn >= pd:
@@ -558,29 +571,43 @@ class VerificationEngine:
         return str(result)
 
     def _midpoint_formula(self, p):
-        """Midpoint of segment from (x1,y1) to (x2,y2). Returns '(mx, my)'."""
+        """
+        Midpoint of segment from (x1,y1) to (x2,y2).
+        Returns string "(mx, my)".
+        Guarantees integer coordinates when (x2-x1) and (y2-y1) are both even.
+        """
         x1, y1 = int(p["x1"]), int(p["y1"])
         x2, y2 = int(p["x2"]), int(p["y2"])
         mx = (x1 + x2) / 2
         my = (y1 + y2) / 2
+        # Return as integer if clean, else 1dp decimal
         mx_str = str(int(mx)) if mx == int(mx) else f"{mx:.1f}"
         my_str = str(int(my)) if my == int(my) else f"{my:.1f}"
         return f"({mx_str}, {my_str})"
 
     def _distance_formula(self, p):
-        """Distance using Pythagorean triple — result always a clean integer."""
+        """
+        Distance between (x1,y1) and (x2,y2) using Pythagorean theorem.
+        Uses pre-validated Pythagorean triples so result is always a clean integer.
+        """
         x1, y1 = int(p["x1"]), int(p["y1"])
         x2, y2 = int(p["x2"]), int(p["y2"])
         scale = int(p.get("scale", 1))
         triple = p["pythagorean_triple"]
+        # The hypotenuse of the triple, scaled
         hypotenuse = triple[2] * scale
+        # Verify computation matches (sanity check)
         computed = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
         if abs(computed - hypotenuse) > 0.01:
+            # Fall back to direct computation, rounded
             return round(computed, 2)
         return hypotenuse
 
     def _percentage_error(self, p):
-        """Percentage error = |measured - actual| / actual × 100, rounded to 1dp."""
+        """
+        Percentage error = |measured - actual| / actual × 100.
+        Returns float rounded to 1dp.
+        """
         measured = float(p["measured"])
         actual = float(p["actual"])
         if actual == 0:
@@ -622,15 +649,7 @@ class VerificationEngine:
             opts = [correct - 2, correct - 1, correct + 1, correct + 2]
             opts = [o for o in opts if o != correct][:3]
             return [str(o) for o in opts]
-        # Try to parse string as a number and recurse
-        try:
-            num = float(str(correct))
-            v = int(num) if num == int(num) else num
-            return self._distractors_off_by_one(v)
-        except (ValueError, TypeError):
-            pass
-        # Fall back to formula_mix (which handles strings without looping back here)
-        return self._distractors_formula_mix(correct, {}, "")
+        return [str(correct) + "_wrong_1", str(correct) + "_wrong_2", str(correct) + "_wrong_3"]
 
     def _distractors_sign_flip(self, correct) -> list:
         if isinstance(correct, (int, float)):
@@ -659,133 +678,16 @@ class VerificationEngine:
         return self._distractors_off_by_one(correct)
 
     def _distractors_factor_skip(self, correct, params) -> list:
-        if isinstance(correct, (int, float)):
-            return self._distractors_off_by_one(correct)
-        # Parse factored form like "2^2 × 5" and generate 3 meaningful alternatives
-        try:
-            return self._factor_string_distractors(str(correct))
-        except Exception:
-            return self._distractors_off_by_one(correct)
-
-    def _factor_string_distractors(self, correct_str: str) -> list:
-        """
-        Generate 3 plausible wrong factorizations from a string like "2^2 × 5".
-        Strategies:
-          1. Increment one exponent by 1         (e.g. "2^3 × 5")
-          2. Decrement one exponent by 1, or swap a prime  (e.g. "2 × 5" or "2^2 × 7")
-          3. Replace a prime^exp with its composite value  (e.g. "4 × 5")
-        """
-        import re as _re
-        parts = [p.strip() for p in correct_str.split("×")]
-        factors: dict[int, int] = {}
-        for part in parts:
-            m = _re.match(r'^(\d+)\^(\d+)$', part.strip())
-            if m:
-                factors[int(m.group(1))] = int(m.group(2))
-            else:
-                factors[int(part.strip())] = 1
-        if not factors:
-            raise ValueError("No factors parsed")
-
-        bases = sorted(factors.keys())
-        alts: list[str] = []
-        used: set[str] = {correct_str}
-
-        def fmt(f: dict) -> str:
-            return " × ".join(
-                f"{b}^{e}" if e > 1 else str(b)
-                for b, e in sorted(f.items())
-            )
-
-        # Alt 1: increment the exponent of the first base
-        for b in bases:
-            nf = dict(factors)
-            nf[b] = factors[b] + 1
-            s = fmt(nf)
-            if s not in used:
-                alts.append(s)
-                used.add(s)
-                break
-
-        # Alt 2: decrement an exponent (if > 1) or swap smallest prime
-        for b in bases:
-            if factors[b] > 1:
-                nf = dict(factors)
-                nf[b] = factors[b] - 1
-                s = fmt(nf)
-                if s not in used:
-                    alts.append(s)
-                    used.add(s)
-                    break
-        if len(alts) < 2:
-            _primes = [2, 3, 5, 7, 11, 13, 17, 19]
-            for p in _primes:
-                if p not in factors:
-                    nf = dict(factors)
-                    old_b = bases[0]
-                    del nf[old_b]
-                    nf[p] = factors[old_b]
-                    s = fmt(nf)
-                    if s not in used:
-                        alts.append(s)
-                        used.add(s)
-                        break
-
-        # Alt 3: replace a prime^exp with its composite value (e.g. 2^2 → 4)
-        added_alt3 = False
-        for b in bases:
-            exp = factors[b]
-            composite = b ** exp
-            if composite != b:  # only if genuinely composite (exp > 1)
-                nf = dict(factors)
-                del nf[b]
-                nf[composite] = 1
-                s = fmt(nf)
-                if s not in used:
-                    alts.append(s)
-                    used.add(s)
-                    added_alt3 = True
-                    break
-        if not added_alt3:
-            # Fallback: include an extra prime factor
-            _primes = [2, 3, 5, 7, 11, 13, 17, 19]
-            for p in _primes:
-                if p not in factors:
-                    nf = dict(factors)
-                    nf[p] = 1
-                    s = fmt(nf)
-                    if s not in used:
-                        alts.append(s)
-                        used.add(s)
-                        break
-
-        if len(alts) < 3:
-            raise ValueError(f"Could not generate 3 distractors for {correct_str!r}")
-        return alts[:3]
+        # For factorisation: missing an exponent, wrong base
+        # Fallback to off-by-one for numeric answers
+        return self._distractors_off_by_one(correct) if isinstance(correct, (int, float)) else [
+            correct + "_wrong1", correct + "_wrong2", correct + "_wrong3"
+        ]
 
     def _distractors_formula_mix(self, correct, params, template_id) -> list:
         if isinstance(correct, (int, float)):
             return [str(correct * 2), str(correct / 2 if correct % 2 == 0 else correct - 1), str(correct + 10)]
-        # String answer: find the last integer in the string and vary it.
-        # Using r'(\d+)([^0-9]*)$' handles formats like "(5, 4)" and "y = 3x + 2".
-        import re as _re
-        s = str(correct)
-        m = _re.search(r'(\d+)([^0-9]*)$', s)
-        if m:
-            base = int(m.group(1))
-            suffix = m.group(2)          # e.g. ")" in "(5, 4)" or "" in "3x + 2"
-            prefix = s[:m.start()]
-            alts: list[str] = []
-            for delta in [1, -1, 2, -2, 3]:
-                alt = f"{prefix}{base + delta}{suffix}"
-                if alt != s and alt not in alts:
-                    alts.append(alt)
-                if len(alts) == 3:
-                    break
-            if len(alts) >= 3:
-                return alts[:3]
-        # No number found — return _0/_1/_2 tagged strings (caught by validation gate → retry)
-        return [s + "_0", s + "_1", s + "_2"]
+        return self._distractors_off_by_one(correct)
 
     def _distractors_unit_error(self, correct) -> list:
         if isinstance(correct, (int, float)):
@@ -794,18 +696,7 @@ class VerificationEngine:
 
     def _distractors_complement(self, correct, params) -> list:
         a = params.get("a", 0)
-        correct_s = str(correct)
-        candidates = [str(180 - a), str(90 - a), str(360 - a)]
-        alts = [c for c in candidates if c != correct_s]
-        # Fill to 3 if duplicates removed (e.g. co-interior: correct == 180 - a)
-        if len(alts) < 3 and isinstance(correct, (int, float)):
-            for delta in [1, -1, 2, -2, 5, -5, 10]:
-                cand = str(int(correct) + delta)
-                if cand not in alts and cand != correct_s:
-                    alts.append(cand)
-                if len(alts) == 3:
-                    break
-        return alts[:3]
+        return [str(180 - a), str(90 - a), str(360 - a)]
 
     # ─── REGISTRY MAP ────────────────────────────────────────────────────────
 
@@ -893,12 +784,22 @@ if __name__ == "__main__":
         ("T-7N-08", {"a": -5, "b": 3, "op": "+"}, -2),
         ("T-7N-09", {"a": 2, "b": 3, "total": 50}, 30),
         ("T-7M-01", {"shape": "triangle", "b": 10, "h": 6}, 30),
-        ("T-7M-04", {"a": 65, "relationship": "supplementary"}, 115),
+        ("T-7M-04",  {"a": 65, "relationship": "corresponding"},                      65),
+        ("T-7M-04",  {"a": 65, "relationship": "alternate"},                          65),
+        ("T-7M-04",  {"a": 65, "relationship": "co-interior (same-side interior)"},   115),
+        ("T-7M-04b", {"a": 65, "relationship": "supplementary"},                      115),
+        ("T-7M-04b", {"a": 40, "relationship": "complementary"},                      50),
+        ("T-7M-04b", {"a": 73, "relationship": "vertically opposite"},                73),
+        ("T-7M-05",  {"a": 55, "b": 70},                                              55),
         ("T-8N-03", {"a": 12, "b": 18, "measure": "HCF"}, 6),
         ("T-8M-06", {"triple_family": [3,4,5], "scale": 2, "unknown_side": "hypotenuse"}, 10),
         ("T-8A-03", {"x1": 1, "y1": 2, "x2": 3, "y2": 8}, "3"),
+        ("T-8P-01",  {"p_numerator": 3, "p_denominator": 5},                         "2/5"),
         ("T-9A-04", {"a": 2, "b": 1, "c": -1, "d": 7}, 2),
+        ("T-9A-04b", {"x1": 2, "y1": 1, "x2": 8, "y2": 7},                          "(5, 4)"),
+        ("T-9A-04c", {"x1": 0, "y1": 0, "x2": 3, "y2": 4, "scale": 1, "pythagorean_triple": [3,4,5]}, 5),
         ("T-9M-03", {"theta": 30, "value": 10, "known_side": "hypotenuse", "unknown_side": "opposite side"}, 5.0),
+        ("T-9M-04b", {"actual": 200, "error_pct": 5, "direction": "over", "measured": 210}, 5.0),
     ]
 
     passed, failed = 0, 0

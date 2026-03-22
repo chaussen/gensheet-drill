@@ -85,6 +85,7 @@ class ResponseItem(BaseModel):
 
 class SessionSubmitRequest(BaseModel):
     responses: list[ResponseItem]
+    total_time_ms: int = 0
 
 
 class ResponseResultItem(BaseModel):
@@ -99,6 +100,7 @@ class ResponseResultItem(BaseModel):
     correct: bool
     explanation: str
     vc_code: str
+    time_taken_ms: int | None = None
 
 
 class StrongArea(BaseModel):
@@ -130,12 +132,40 @@ class AnalysisObject(BaseModel):
     motivational_note: str | None = None
 
 
+class StrandStat(BaseModel):
+    attempted: int
+    correct: int
+    score_pct: int
+
+
+class NextSessionSuggestion(BaseModel):
+    strand: str
+    difficulty: str
+    reason: str
+
+
+class SessionSummaryObject(BaseModel):
+    score: int
+    total: int
+    score_pct: int
+    performance_band: str  # needs_support / developing / strong / exceeding
+    by_strand: dict[str, StrandStat]
+    weakest_strand: str | None
+    strongest_strand: str | None
+    next_session_suggestion: NextSessionSuggestion
+    total_time_ms: int = 0
+    avg_time_per_question_ms: int = 0
+    time_band: str = ""              # "fast" | "moderate" | "slow"
+    time_accuracy_summary: str = ""  # plain English one-liner
+
+
 class SessionResultResponse(BaseModel):
     session_id: str
     score: int
     total: int
     score_pct: int
     responses: list[ResponseResultItem]
+    summary: SessionSummaryObject | None = None
     analysis: AnalysisObject | None = None
     completed_at: str
 

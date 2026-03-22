@@ -117,8 +117,7 @@ def test_submit_session_marks_correctly(client):
     session_id, q_ids = _start_and_get_session(client)
     responses = [{"question_id": qid, "selected_index": 2} for qid in q_ids]  # all correct
 
-    with patch("routers.session._run_analysis", new=AsyncMock()):
-        resp = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
+    resp = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
 
     assert resp.status_code == 200
     data = resp.json()
@@ -126,6 +125,9 @@ def test_submit_session_marks_correctly(client):
     assert data["total"] == 5
     assert data["score_pct"] == 100
     assert all(r["correct"] for r in data["responses"])
+    assert data["summary"] is not None
+    assert data["summary"]["score"] == 5
+    assert data["summary"]["performance_band"] == "exceeding"
 
 
 def test_submit_session_marks_wrong(client):
@@ -133,13 +135,13 @@ def test_submit_session_marks_wrong(client):
     # Answer index 0 = wrong for all (correct is index 2)
     responses = [{"question_id": qid, "selected_index": 0} for qid in q_ids]
 
-    with patch("routers.session._run_analysis", new=AsyncMock()):
-        resp = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
+    resp = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
 
     assert resp.status_code == 200
     data = resp.json()
     assert data["score"] == 0
     assert not any(r["correct"] for r in data["responses"])
+    assert data["summary"]["performance_band"] == "needs_support"
 
 
 def test_submit_reveals_correct_index(client):
@@ -147,8 +149,7 @@ def test_submit_reveals_correct_index(client):
     session_id, q_ids = _start_and_get_session(client)
     responses = [{"question_id": qid, "selected_index": 1} for qid in q_ids]
 
-    with patch("routers.session._run_analysis", new=AsyncMock()):
-        resp = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
+    resp = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
 
     for r in resp.json()["responses"]:
         assert "correct_index" in r
@@ -159,9 +160,8 @@ def test_submit_double_submit_rejected(client):
     session_id, q_ids = _start_and_get_session(client)
     responses = [{"question_id": qid, "selected_index": 0} for qid in q_ids]
 
-    with patch("routers.session._run_analysis", new=AsyncMock()):
-        client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
-        resp2 = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
+    client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
+    resp2 = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
 
     assert resp2.status_code == 400
 
@@ -183,14 +183,13 @@ def test_get_result_after_submit(client):
     session_id, q_ids = _start_and_get_session(client)
     responses = [{"question_id": qid, "selected_index": 2} for qid in q_ids]
 
-    with patch("routers.session._run_analysis", new=AsyncMock()):
-        client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
-        resp = client.get(f"/api/session/{session_id}/result")
+    client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
+    resp = client.get(f"/api/session/{session_id}/result")
 
     assert resp.status_code == 200
     data = resp.json()
     assert data["score"] == 5
-    # Analysis will be null (background task mocked to no-op)
+    assert data["summary"] is not None
     assert data["analysis"] is None
 
 

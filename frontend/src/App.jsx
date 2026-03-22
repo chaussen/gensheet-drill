@@ -63,7 +63,6 @@ export default function App() {
     return (
       <ResultsScreen
         result={session.result}
-        analysisPolling={session.analysisPolling}
         onNewSession={handleReset}
         onViewHistory={() => setView('progress')}
       />

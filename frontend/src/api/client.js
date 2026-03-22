@@ -11,6 +11,7 @@ async function request(method, path, body) {
   return data
 }
 
-export const startSession  = (cfg)           => request('POST', '/session/start', cfg)
-export const submitSession = (id, responses) => request('POST', `/session/${id}/submit`, { responses })
-export const getResult     = (id)            => request('GET',  `/session/${id}/result`)
+export const startSession    = (cfg)                       => request('POST', '/session/start', cfg)
+export const submitSession   = (id, responses, total_time_ms = 0) => request('POST', `/session/${id}/submit`, { responses, total_time_ms })
+export const getResult       = (id)                        => request('GET',  `/session/${id}/result`)
+export const analyseProgress = (sessionIds, studentId)     => request('POST', '/progress/analyse', { session_ids: sessionIds, student_id: studentId })

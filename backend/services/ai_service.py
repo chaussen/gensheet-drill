@@ -248,3 +248,45 @@ async def analyse_session(session_data: dict) -> dict | None:
 
     logger.error("analyse_session failed after 2 attempts — storing null")
     return None
+
+
+async def analyse_progress(sessions_data: dict) -> dict | None:
+    """
+    Analyse multiple completed sessions and return an AnalysisObject dict.
+    Returns None if analysis fails after retry.
+
+    sessions_data keys:
+      - aggregated_table: str   multi-session results table
+      - session_count: int      number of sessions
+      - year_level: int
+      - difficulty: str         difficulty of the most recent session
+    """
+    aggregated_table = sessions_data["aggregated_table"]
+    session_count    = sessions_data["session_count"]
+    year_level       = sessions_data.get("year_level", "unknown")
+    difficulty       = sessions_data.get("difficulty", "standard")
+
+    user_prompt = (
+        f"Student year level: Year {year_level}\n"
+        f"Number of sessions analysed: {session_count}\n"
+        f"Most recent session difficulty: {difficulty}\n\n"
+        f"Question-by-question results across all sessions:\n{aggregated_table}\n\n"
+        f"The results table format is:\n"
+        f"  Session N (date, Year N, Strand, Difficulty, score/total):\n"
+        f"  Q# | VC Code | Topic | Student answer | Correct answer | Result\n\n"
+        f"Identify patterns across multiple sessions. Prioritise vc_codes that appear "
+        f"in more than one session with consistent errors."
+    )
+
+    for attempt in range(2):
+        try:
+            raw = await _call(_ANALYSIS_SYSTEM, user_prompt, ANALYSIS_MODEL, max_tokens=1500)
+            return json.loads(_strip_markdown(raw))
+        except Exception as e:
+            logger.warning(
+                "analyse_progress attempt %d failed (provider=%s): %s",
+                attempt + 1, AI_PROVIDER, e,
+            )
+
+    logger.error("analyse_progress failed after 2 attempts — returning None")
+    return None

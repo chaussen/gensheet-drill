@@ -1,13 +1,44 @@
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import DrillQuestion from './DrillQuestion.jsx'
 
+function SessionTimer({ startTime }) {
+  const [elapsed, setElapsed] = useState(0)
+  useEffect(() => {
+    if (!startTime) return
+    const interval = setInterval(() => setElapsed(Date.now() - startTime), 1000)
+    return () => clearInterval(interval)
+  }, [startTime])
+
+  const minutes = Math.floor(elapsed / 60000)
+  const seconds = Math.floor((elapsed % 60000) / 1000)
+  return (
+    <span className="text-sm text-slate-500 tabular-nums">
+      ⏱ {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+    </span>
+  )
+}
+
 export default function DrillSession({ session }) {
-  const { currentQuestion, questionIndex, totalQuestions, config, loading, answerQuestion, submitSession } = session
+  const {
+    currentQuestion, questionIndex, totalQuestions, questions,
+    config, loading, sessionStartTime,
+    startSessionTimer, answerQuestion, submitSession,
+  } = session
 
   // Keep a ref to the latest submitSession so the effect never has a stale closure
   const submitRef = useRef(submitSession)
-  submitRef.current = submitSession
 
+
+  // Start timer when first question renders (once only)
+  const timerStartedRef = useRef(false)
+  useEffect(() => {
+    if (questions.length > 0 && !timerStartedRef.current) {
+      timerStartedRef.current = true
+      startSessionTimer()
+    }
+  }, [questions.length, startSessionTimer])
+
+  // Auto-submit when all questions answered
   useEffect(() => {
     if (totalQuestions > 0 && questionIndex >= totalQuestions) {
       submitRef.current()
@@ -37,9 +68,12 @@ export default function DrillSession({ session }) {
           <span className="text-sm font-medium text-slate-600">
             {config?.strand} · {config?.difficulty}
           </span>
-          <span className="text-sm text-slate-500">
-            {questionIndex + 1} / {totalQuestions}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-500">
+              {questionIndex + 1} / {totalQuestions}
+            </span>
+            <SessionTimer startTime={sessionStartTime} />
+          </div>
         </div>
         {/* Progress bar */}
         <div className="max-w-2xl mx-auto bg-slate-200 rounded-full h-2">

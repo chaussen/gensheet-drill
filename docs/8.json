@@ -1,0 +1,2129 @@
+[
+  {
+    "code": "VC2M8A01",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "create, expand, factorise, rearrange and simplify linear expressions, applying the associative, commutative, identity, distributive and inverse properties",
+    "elaborations": [
+      {
+        "id": "4b3c721c-c79e-48f4-b849-3db07d512881",
+        "text": "rearranging and simplifying linear expressions involving variables with integer coefficients and constants; and using manipulatives such as algebra tiles to support calculations, for example, using manipulatives to demonstrate that $2x+4=2(x+2)$, $3(a-b)=3a-3b$, or $5(m+2n)+3m-4n=5m+10n+3m-4n=8m+6n$",
+        "html": "<p>rearranging and simplifying linear expressions involving variables with integer coefficients and constants; and using manipulatives such as algebra tiles to support calculations, for example, using manipulatives to demonstrate that $2x+4=2(x+2)$, $3(a-b)=3a-3b$, or $5(m+2n)+3m-4n=5m+10n+3m-4n=8m+6n$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "41528bbf-8a96-4c8b-9edb-57888faa5624",
+        "text": "demonstrating the relationship between factorising and expanding linear expressions using manipulatives, such as algebra tiles or area models, and describing with mathematical language",
+        "html": "<p>demonstrating the relationship between factorising and expanding linear expressions using manipulatives, such as algebra tiles or area models, and describing with mathematical language</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "feb12fb9-3a4d-42e0-8322-539784b9bd1b",
+        "text": "using the distributive, associative, commutative, identity and inverse properties to expand and factorise algebraic expressions using strategies such as the area model",
+        "html": "<p>using the distributive, associative, commutative, identity and inverse properties to expand and factorise algebraic expressions using strategies such as the area model</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164846,
+        "extract": "<p>Students apply algebraic properties to simplify, rearrange, expand and factorise linear expressions.</p>",
+        "contentDescriptions": [
+          "dcf448fa-0d13-471f-a7a0-17d7404f82df"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 154
+    }
+  },
+  {
+    "code": "VC2M8A02",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "graph linear relations on the Cartesian plane using digital tools where appropriate; solve linear equations and one-variable inequalities using graphical and algebraic techniques; verify solutions by substitution",
+    "elaborations": [
+      {
+        "id": "1d6ad32e-3095-4922-87b8-9b4862e3e24b",
+        "text": "recognising that in a table of values, if the first difference between consecutive values of the dependent variable is constant, then it is a linear relation",
+        "html": "<p>recognising that in a table of values, if the first difference between consecutive values of the dependent variable is constant, then it is a linear relation</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "8973d3eb-bb1c-4fe7-bf16-658e9d4ac4f9",
+        "text": "graphing linear functions and relations of the form $x=a$ , $y=a$ , $x\\le a$ , $x \\gt a$ , $y \\le a$ , $y \\gt a$ on the Cartesian plane for known values of $a$",
+        "html": "<p>graphing linear functions and relations of the form $x=a$ , $y=a$ , $x\\le a$ , $x \\gt a$ , $y \\le a$ , $y \\gt a$ on the Cartesian plane for known values of $a$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "32b07a09-698b-43ab-9ee6-17ec9bb3dc79",
+        "text": "completing a table of values, plotting the resulting points on the Cartesian plane and determining whether the relationship is linear",
+        "html": "<p>completing a table of values, plotting the resulting points on the Cartesian plane and determining whether the relationship is linear</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "9954466e-440a-41e1-b5b1-a21ccc0c3bc9",
+        "text": "graphing the linear relationship $ax+b=c$ for given values of $a$, $b$ and $c$ and identifying from the graph where $ax+b \\lt c$ or where $ax+b \\gt c$",
+        "html": "<p>graphing the linear relationship $ax+b=c$ for given values of $a$, $b$ and $c$ and identifying from the graph where $ax+b \\lt c$ or where $ax+b \\gt c$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "a8922065-a3de-4484-93b9-f4a9be583a30",
+        "text": "solving linear equations of the form $ax+b=c$ and one-variable inequalities of the form $ax+b \\lt c$ or $ax+b \\gt c$ where $a \\gt 0$ using inverse operations and digital tools, and checking solutions by substitution",
+        "html": "<p>solving linear equations of the form $ax+b=c$ and one-variable inequalities of the form $ax+b \\lt c$ or $ax+b \\gt c$ where $a \\gt 0$ using inverse operations and digital tools, and checking solutions by substitution</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "7c3dd761-6e8a-4641-859c-f68e2346c0d6",
+        "text": "solving linear equations such as $3x+7=6x−9$ , representing these graphically, and verifying solutions by substitution",
+        "html": "<p>solving linear equations such as $3x+7=6x−9$ , representing these graphically, and verifying solutions by substitution</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164851,
+        "extract": "<p>They graph linear relations and solve linear equations with rational solutions and one-variable inequalities, graphically and algebraically.</p>",
+        "contentDescriptions": [
+          "4196db55-afdf-4651-90cc-d0ed380ac735"
+        ],
+        "mode": null
+      },
+      {
+        "id": 176866,
+        "extract": "<p>Students plot linear and non-linear relations on the Cartesian plane, with and without the use of digital tools.</p>",
+        "contentDescriptions": [
+          "4196db55-afdf-4651-90cc-d0ed380ac735"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 6,
+      "hasSubStrand": false,
+      "textLength": 212
+    }
+  },
+  {
+    "code": "VC2M8A03",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use mathematical modelling to solve applied problems involving linear relations, including financial contexts involving profit and loss; formulate problems with linear functions, and choose a representation; interpret and communicate solutions in terms of the context, and review the appropriateness of the model",
+    "elaborations": [
+      {
+        "id": "b7475344-243d-4ee4-a9eb-5c807eb13e09",
+        "text": "modelling situations involving linear functions, including practical contexts such as taxi fares involving flag fall fees, motion in a straight line at a constant speed, trade quotes involving call-out fees, cooking that includes resting or cooling times, or water leakage from water tanks, interpreting the constant rate of change and initial value in context, and identifying when values of a model lie within a given range",
+        "html": "<p>modelling situations involving linear functions, including practical contexts such as taxi fares involving flag fall fees, motion in a straight line at a constant speed, trade quotes involving call-out fees, cooking that includes resting or cooling times, or water leakage from water tanks, interpreting the constant rate of change and initial value in context, and identifying when values of a model lie within a given range</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "43a71dee-1618-4632-8c9d-8f686a220c35",
+        "text": "modelling problems in practical situations and interpreting solutions within the context of the problem, including giving attention to all units of measure and whether results are suitable; for example, once a water tank is empty no more water can flow from it",
+        "html": "<p>modelling problems in practical situations and interpreting solutions within the context of the problem, including giving attention to all units of measure and whether results are suitable; for example, once a water tank is empty no more water can flow from it </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "165be477-1f5d-4508-b426-058740e31b03",
+        "text": "modelling financial problems involving pay rates, using a table of values to represent the pay amounts and hours worked using an hourly rate of pay, and graphing the relationship to make inferences",
+        "html": "<p>modelling financial problems involving pay rates, using a table of values to represent the pay amounts and hours worked using an hourly rate of pay, and graphing the relationship to make inferences</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ac6c0c45-9c22-402a-b71b-b297d121060d",
+        "text": "modelling patterns on Country/Place and exploring their connections and meaning to linear equations, using the model as a predictive tool and critiquing results by connecting back to Country/Place",
+        "html": "<p>modelling patterns on Country/Place and exploring their connections and meaning to linear equations, using the model as a predictive tool and critiquing results by connecting back to Country/Place</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164856,
+        "extract": "<p>Students use mathematical modelling to solve problems using linear relations, interpreting and reviewing the model in context.</p>",
+        "contentDescriptions": [
+          "cc3742db-2bba-4cd9-8270-6a7a0d997e49"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 312
+    }
+  },
+  {
+    "code": "VC2M8A04",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use algorithms and related testing procedures to identify and correct errors",
+    "elaborations": [
+      {
+        "id": "422f9a73-e96a-41c8-ad0a-0192d171724f",
+        "text": "debugging search-and-sort programs",
+        "html": "<p>debugging search-and-sort programs</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "2f43b1a9-baa9-4226-bd86-7181b64ac24e",
+        "text": "testing a number for divisibility",
+        "html": "<p>testing a number for divisibility</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164861,
+        "extract": "<p>They make and test conjectures involving linear relations by developing algorithms and using digital tools.</p>",
+        "contentDescriptions": [
+          "2a989f36-62f9-4b05-8fc9-6f3e8cf95164",
+          "edc86d71-b530-4302-afdc-f9857d2f2f35"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 2,
+      "hasSubStrand": false,
+      "textLength": 76
+    }
+  },
+  {
+    "code": "VC2M8A05",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Algebra",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "experiment with linear functions and relations using digital tools, making and testing conjectures and generalising emerging patterns",
+    "elaborations": [
+      {
+        "id": "7a444abc-7d71-4692-9c21-46c92149f525",
+        "text": "using graphing software to investigate the effect of systematically varying parameters of linear functions on the corresponding graphs, making and testing conjectures; for example, making a conjecture that if the coefficient of 𝑥 is negative, then the line will slope down from left to right",
+        "html": "<p>using graphing software to investigate the effect of systematically varying parameters of linear functions on the corresponding graphs, making and testing conjectures; for example, making a conjecture that if the coefficient of 𝑥 is negative, then the line will slope down from left to right</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d310a07f-0ebd-4fae-96bb-afaa5f1f121f",
+        "text": "using graphing software to systematically contrast the graphs of $y=2x, −y=2x, y=−2x$ and $-y=−2x$ with those of $y 2x, -y>2x, y>-2x$ and $-y>-2x$, making and testing conjectures about sign and direction of the inequality",
+        "html": "<p>using graphing software to systematically contrast the graphs of $y=2x, −y=2x, y=−2x$ and $-y=−2x$ with those of  $y<2x, -y<2x, y<-2x$ and $-y<-2x$ and those of $y>2x, -y>2x,  y>-2x$ and $-y>-2x$, making and testing conjectures about sign and direction of the inequality</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "3e4c1e1f-bb76-4ef4-b21c-0c31e60f8060",
+        "text": "using digital tools to investigate integer solutions to equations such as $2x+3y=48$",
+        "html": "<p>using digital tools to investigate integer solutions to equations such as $2x+3y=48$</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164861,
+        "extract": "<p>They make and test conjectures involving linear relations by developing algorithms and using digital tools.</p>",
+        "contentDescriptions": [
+          "2a989f36-62f9-4b05-8fc9-6f3e8cf95164",
+          "edc86d71-b530-4302-afdc-f9857d2f2f35"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 133
+    }
+  },
+  {
+    "code": "VC2M8M01",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve problems involving the area and perimeter of irregular and composite shapes using appropriate units",
+    "elaborations": [
+      {
+        "id": "250f4bc0-b129-44a8-9492-73733d5d8fef",
+        "text": "determining the area of composite shapes by composing or decomposing shapes",
+        "html": "<p>determining the area of composite shapes by composing or decomposing shapes</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "f33cb66c-9157-4df1-aa35-f2587f4ad936",
+        "text": "using arrays and rectangles to approximate the area of irregular shapes in situations such as a council needing to work out how much mosquito spray to use for a swamp area or a farmer needing to work out how much seed, fertiliser and herbicide are required to cover a paddock",
+        "html": "<p>using arrays and rectangles to approximate the area of irregular shapes in situations such as a council needing to work out how much mosquito spray to use for a swamp area or a farmer needing to work out how much seed, fertiliser and herbicide are required to cover a paddock</p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "e978bba0-98ea-4e7c-9a28-538efa4689e8",
+                "organisingSet": "Interrelationship of systems",
+                "organisingIdeas": [
+                  {
+                    "id": "b9bb5764-d9cc-4d39-aa92-8498efb9a262",
+                    "idea": "<p>All lifeforms are connected through Earth’s systems (the lithosphere, biosphere, hydrosphere and atmosphere), on which they depend for their wellbeing and survival.</p>",
+                    "code": "VC2CCPSIS1"
+                  },
+                  {
+                    "id": "605efe00-6676-4efa-a351-81b546e055c9",
+                    "idea": "<p>Sustainable patterns of living require the responsible use of resources; circular economies; maintenance of clean air, water and soils; and the restoration of healthy environments and habitats with ecological integrity.</p>",
+                    "code": "VC2CCPSIS2"
+                  },
+                  {
+                    "id": "c677416f-2c61-4f31-99b0-57bf93815adc",
+                    "idea": "<p>Economic, social, environmental and cultural systems influence the sustainability of Earth’s systems.</p>",
+                    "code": "VC2CCPSIS3"
+                  }
+                ]
+              },
+              {
+                "id": "94c50ef5-ea35-4164-9499-46763b179b5e",
+                "organisingSet": "Responsible design",
+                "organisingIdeas": [
+                  {
+                    "id": "7935ae02-e49d-4b3a-a7c4-9e640910b29d",
+                    "idea": "<p>Responsibly designed products and services aim to minimise the human impact on the environment and restore the quality, ecological integrity and diversity of economic, social, environmental and cultural systems.</p>",
+                    "code": "VC2CCPSRD1"
+                  },
+                  {
+                    "id": "fb87ea32-2a55-472f-be1d-55bf9acd43e9",
+                    "idea": "<p>Responsible design considers unexpected consequences that might impact individuals, communities and ecological integrity in the future. Creative, empathetic and innovative design is integral to the achievement of sustainable living.</p>",
+                    "code": "VC2CCPSRD2"
+                  },
+                  {
+                    "id": "76959486-a50f-4c05-8af6-78d915232dc3",
+                    "idea": "<p>Responsible design requires a recognition and appreciation of land custodianship, past practices, contemporary research and technological advancements, and balanced and informed decisions based on understanding possible interconnected economic, social, environmental and cultural impacts.</p>",
+                    "code": "VC2CCPSRD3"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "0733e288-1c65-40df-9c08-ff15d2d01427",
+        "text": "determining the perimeter and area of irregular shapes by sums of increasingly accurate covering measurements, such as line segments and grids; for example, using millimetres or square millimetres as opposed to centimetres or square centimetres",
+        "html": "<p>determining the perimeter and area of irregular shapes by sums of increasingly accurate covering measurements, such as line segments and grids; for example, using millimetres or square millimetres as opposed to centimetres or square centimetres</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164866,
+        "extract": "<p>Students use appropriate metric units when solving measurement problems involving the perimeter and area of composite shapes, and volume of right prisms.</p>",
+        "contentDescriptions": [
+          "2e070f40-a2fa-45bd-a0bc-35abbf0d200b",
+          "401eae6a-06b6-40b6-bee2-73605d398dda"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 105
+    }
+  },
+  {
+    "code": "VC2M8M02",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve problems involving the volume and capacity of right prisms using appropriate units",
+    "elaborations": [
+      {
+        "id": "b4b77a9f-8976-4e4d-b125-1919fe92ef7c",
+        "text": "using models to demonstrate the number of cubic centimetres in a cubic metre and relating this to capacities of millilitres and litres, recognising that one millilitre is equivalent to one cm 3",
+        "html": "<p>using models to demonstrate the number of cubic centimetres in a cubic metre and relating this to capacities of millilitres and litres, recognising that one millilitre is equivalent to one cm<sup>3</sup></p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5089818c-39e3-4a44-b573-aeefe35d7c37",
+        "text": "solving practical problems involving volume and capacity, for example, optimal packaging and production",
+        "html": "<p>solving practical problems involving volume and capacity, for example, optimal packaging and production </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "eff906e6-916f-4f8a-8c1e-3827d6a4b96e",
+        "text": "choosing which measurements are useful to consider when solving practical problems in context; for example, when purchasing a new washing machine, the dimensions are useful when determining whether it will fit in the available space in the laundry and its capacity is useful when considering the maximum washing load it can carry",
+        "html": "<p>choosing which measurements are useful to consider when solving practical problems in context; for example, when purchasing a new washing machine, the dimensions are useful when determining whether it will fit in the available space in the laundry and its capacity is useful when considering the maximum washing load it can carry </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "368b4d33-4399-4d1e-b204-7a630ca32333",
+        "text": "investigating, reasoning and finding solutions to measurement problems involving dimensions, rates, volume and capacity of objects; for example, given the dimensions of a pool and the rate of flow from a tap, determining how long it will take to fill the pool to its normal capacity",
+        "html": "<p>investigating, reasoning and finding solutions to measurement problems involving dimensions, rates, volume and capacity of objects; for example, given the dimensions of a pool and the rate of flow from a tap, determining how long it will take to fill the pool to its normal capacity</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164866,
+        "extract": "<p>Students use appropriate metric units when solving measurement problems involving the perimeter and area of composite shapes, and volume of right prisms.</p>",
+        "contentDescriptions": [
+          "2e070f40-a2fa-45bd-a0bc-35abbf0d200b",
+          "401eae6a-06b6-40b6-bee2-73605d398dda"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 88
+    }
+  },
+  {
+    "code": "VC2M8M03",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve problems involving the circumference and area of a circle using formulas and appropriate units",
+    "elaborations": [
+      {
+        "id": "0d71c279-5f24-43ee-8639-24a4c32ed7f4",
+        "text": "deducing that the area of a circle is between 2 radius squares and 4 radius squares, and using 3 × radius 2 as a rough estimate for the area of a circle",
+        "html": "<p>deducing that the area of a circle is between 2 radius squares and 4 radius squares, and using 3 × radius<sup>2</sup> as a rough estimate for the area of a circle</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "b1f7ef41-f861-49ec-a3f2-caa5322b1e24",
+        "text": "investigating the area of circles using a square grid or by rearranging a circle divided into smaller and smaller sectors or slices to resemble a close approximation of a rectangle",
+        "html": "<p>investigating the area of circles using a square grid or by rearranging a circle divided into smaller and smaller sectors or slices to resemble a close approximation of a rectangle </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "c9cc54eb-ce2f-47e9-80be-18e4b2c24620",
+        "text": "applying the formulas for the area and circumference of a circle to solve practical problems, and using one of the measures of radius, diameter, circumference or area to deduce the value of the other measures; for example, determining the length of material needed to edge a round table, given its dimensions as the area of the tabletop",
+        "html": "<p>applying the formulas for the area and circumference of a circle to solve practical problems, and using one of the measures of radius, diameter, circumference or area to deduce the value of the other measures; for example, determining the length of material needed to edge a round table, given its dimensions as the area of the tabletop</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "f0ff6390-af7b-4baa-a542-8ca31ea2c96e",
+        "text": "exploring traditional weaving designs by Aboriginal and Torres Strait Islander Peoples and investigating the significance and use of circles",
+        "html": "<p>exploring traditional weaving designs by Aboriginal and Torres Strait Islander Peoples and investigating the significance and use of circles</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "5e3f11ad-883f-4c6a-89ea-6c195bd1ed97",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander societies are diverse and have distinct cultural expressions, such as language, customs and beliefs. Aboriginal and Torres Strait Islander Peoples have the right to maintain, control, protect and develop their cultural expressions, while also maintaining the right to control, protect and develop culture as Indigenous Cultural and Intellectual Property.</span></p>",
+                    "code": "VC2CCPAC1"
+                  },
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164871,
+        "extract": "<p>Students use formulas to solve problems involving the area and circumference of circles.</p>",
+        "contentDescriptions": [
+          "f11ef412-d5c5-4a7e-aca9-0bc2909915ea"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 100
+    }
+  },
+  {
+    "code": "VC2M8M04",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve problems involving time and duration, including using 12- and 24-hour time across multiple time zones",
+    "elaborations": [
+      {
+        "id": "a9520d0b-30b8-4996-8dbb-60b46ad43406",
+        "text": "using digital tools to investigate time zones around the world and convert from one zone to another, such as time in Perth, Western Australia, compared to Suva in Fiji or Toronto in Canada",
+        "html": "<p>using digital tools to investigate time zones around the world and convert from one zone to another, such as time in Perth, Western Australia, compared to Suva in Fiji or Toronto in Canada</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "62cd18a0-a361-49a5-9f32-87370b45b24b",
+        "text": "recognising the challenges of planning regular virtual meeting times for a company that has both international staff and staff within different states and territories, and the impact daylight savings has due to multiple time zones, explaining the mathematical language used to communicate current time such as Coordinated Universal Time (UTC)+8, Australian Eastern Standard Time (AEST), Australian Central Standard Time (ACST) and Australian Western Standard Time (AWST)",
+        "html": "<p>recognising the challenges of planning regular virtual meeting times for a company that has both international staff and staff within different states and territories, and the impact daylight savings has due to multiple time zones, explaining the mathematical language used to communicate current time such as Coordinated Universal Time (UTC)+8, Australian Eastern Standard Time (AEST), Australian Central Standard Time (ACST) and Australian Western Standard Time (AWST) </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "71e0f8b5-98cf-455d-8b96-355087605ee0",
+        "text": "planning an international travel itinerary that covers destinations in different time zones across Asia",
+        "html": "<p>planning an international travel itinerary that covers destinations in different time zones across Asia</p>",
+        "organisingIdeas": [
+          {
+            "id": "eae78af5-78d6-4fb1-b9ea-0a8434de49f8",
+            "ccpTitle": "Asia and Australia’s Engagement with Asia",
+            "organisingSetsData": [
+              {
+                "id": "d0823329-9a67-4379-95be-501847b9e65b",
+                "organisingSet": "Growing Asia–Australia engagement",
+                "organisingIdeas": [
+                  {
+                    "id": "dda41df8-b84a-44de-90a6-4c078675a356",
+                    "idea": "<p>Australia’s deep and continuing relationships with the peoples of Asia develop and influence mutual understandings and expressions of citizenship and culture nationally, regionally and globally.</p>",
+                    "code": "VC2CCPASG1"
+                  },
+                  {
+                    "id": "d1531fd0-35b5-4f03-b692-407a997c59b2",
+                    "idea": "<p>Australia and Asia are interdependent through a range of historical and contemporary connections.</p>",
+                    "code": "VC2CCPASG2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164876,
+        "extract": "<p>They solve problems of duration involving 12- and 24-hour cycles across multiple time zones.</p>",
+        "contentDescriptions": [
+          "62691cec-0fb5-4c31-8aaa-0a8983cb66d9"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 107
+    }
+  },
+  {
+    "code": "VC2M8M05",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "recognise and use rates to solve problems involving the comparison of 2 related quantities of different units of measure",
+    "elaborations": [
+      {
+        "id": "ac33c0e6-ce16-442d-8a02-9a05d15ec39d",
+        "text": "identifying examples of rates in the real world, including constant rates, rate of pay, cost per kilogram, recipes, simple interest and average rates",
+        "html": "<p>identifying examples of rates in the real world, including constant rates, rate of pay, cost per kilogram, recipes, simple interest and average rates</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ed299c9c-0851-457c-b7cb-8fe5abd2738e",
+        "text": "applying rates to solve problems involving the conversion between different units of measure; for example, using a conversion rate to convert distances from miles to kilometres, or using currency exchange rates to determine the price of items",
+        "html": "<p>applying rates to solve problems involving the conversion between different units of measure; for example, using a conversion rate to convert distances from miles to kilometres, or using currency exchange rates to determine the price of items </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "984ca7e9-1485-421a-b513-afcd816d48e4",
+        "text": "applying rates to calculate solutions to problems in different contexts, for example, required run rates in cricket, dilution of concentrated chemicals and comparing the petrol consumption rates of different vehicles",
+        "html": "<p>applying rates to calculate solutions to problems in different contexts, for example, required run rates in cricket, dilution of concentrated chemicals and comparing the petrol consumption rates of different vehicles </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "63847e7b-ce7c-4971-9d55-2ee4cc148db9",
+        "text": "using taxation tables to calculate an individual's annual income tax",
+        "html": "<p>using taxation tables to calculate an individual's annual income tax </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "427a1923-ff80-4589-9e70-b4a7ba3c8230",
+        "text": "investigating the application of rates in Aboriginal and Torres Strait Islander Peoples’ land management practices, including the rate of fire spread under different environmental conditions such as fuel types, wind speed, temperature and relative humidity; the conservation of water by Aboriginal and Torres Strait Islander Peoples by estimating rates of water evaporation based on surface area and climatic conditions",
+        "html": "<p>investigating the application of rates in Aboriginal and Torres Strait Islander Peoples’ land management practices, including the rate of fire spread under different environmental conditions such as fuel types, wind speed, temperature and relative humidity; the conservation of water by Aboriginal and Torres Strait Islander Peoples by estimating rates of water evaporation based on surface area and climatic conditions</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "e978bba0-98ea-4e7c-9a28-538efa4689e8",
+                "organisingSet": "Interrelationship of systems",
+                "organisingIdeas": [
+                  {
+                    "id": "605efe00-6676-4efa-a351-81b546e055c9",
+                    "idea": "<p>Sustainable patterns of living require the responsible use of resources; circular economies; maintenance of clean air, water and soils; and the restoration of healthy environments and habitats with ecological integrity.</p>",
+                    "code": "VC2CCPSIS2"
+                  }
+                ]
+              },
+              {
+                "id": "94c50ef5-ea35-4164-9499-46763b179b5e",
+                "organisingSet": "Responsible design",
+                "organisingIdeas": [
+                  {
+                    "id": "76959486-a50f-4c05-8af6-78d915232dc3",
+                    "idea": "<p>Responsible design requires a recognition and appreciation of land custodianship, past practices, contemporary research and technological advancements, and balanced and informed decisions based on understanding possible interconnected economic, social, environmental and cultural impacts.</p>",
+                    "code": "VC2CCPSRD3"
+                  }
+                ]
+              },
+              {
+                "id": "a09716d1-9e17-455c-90af-2e25f24ebbf5",
+                "organisingSet": "Futures thinking",
+                "organisingIdeas": [
+                  {
+                    "id": "e01559c7-00d4-4367-9478-0a01b47e27db",
+                    "idea": "<p>Sustainable futures thinking is based on informed views that consider possible and desirable futures. It leads to individual, community, organisational and political action that reduces risk.</p>",
+                    "code": "VC2CCPSFT1"
+                  },
+                  {
+                    "id": "f49edeb5-45cb-434b-b793-700ee3e4e907",
+                    "idea": "<p>Sustainable futures thinking requires individuals to think creatively, seek information, identify a variety of possibilities, reflect and evaluate actions, and collaborate with and influence others as they work towards desired futures.</p>",
+                    "code": "VC2CCPSFT3"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164841,
+        "extract": "<p>They use mathematical modelling to solve practical problems involving ratios, percentages and rates in measurement and financial contexts.</p>",
+        "contentDescriptions": [
+          "3d311d2f-7b47-4359-8c32-5fc2e4958b6d",
+          "4f27610a-1697-4369-b72d-1115cb90751d",
+          "6ae780bd-01f1-4d72-a113-014a1ce6a030",
+          "f667b77d-5bae-410f-805e-02e93e43ea93"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 5,
+      "hasSubStrand": false,
+      "textLength": 120
+    }
+  },
+  {
+    "code": "VC2M8M06",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use Pythagoras’ theorem to solve problems involving the side lengths of right-angled triangles",
+    "elaborations": [
+      {
+        "id": "c0e57fa9-ae38-4acb-b236-f4c85a846bd6",
+        "text": "discussing and comparing different applications, demonstrations and proofs of Pythagoras’ theorem, from Egypt and Mesopotamia, Greece, India and China, with other historical and contemporary applications and proofs",
+        "html": "<p>discussing and comparing different applications, demonstrations and proofs of Pythagoras’ theorem, from Egypt and Mesopotamia, Greece, India and China, with other historical and contemporary applications and proofs</p>",
+        "organisingIdeas": [
+          {
+            "id": "eae78af5-78d6-4fb1-b9ea-0a8434de49f8",
+            "ccpTitle": "Asia and Australia’s Engagement with Asia",
+            "organisingSetsData": [
+              {
+                "id": "10590a70-b34f-485d-9a6d-500ca400e3ef",
+                "organisingSet": "Knowing Asia and its diversity",
+                "organisingIdeas": [
+                  {
+                    "id": "78b7e497-26d3-4cf5-b170-5498cd1ff217",
+                    "idea": "<p><span>Peoples of the Asia region are diverse in their backgrounds, experiences, traditions, cultures, histories, stories, religions, beliefs, perspectives and languages.</span></p>",
+                    "code": "VC2CCPASK1"
+                  }
+                ]
+              },
+              {
+                "id": "03c8441a-ea80-472f-85e8-7d32ef03f2b6",
+                "organisingSet": "Understanding Asia’s global significance",
+                "organisingIdeas": [
+                  {
+                    "id": "d991e3e1-b770-41fb-9ab2-9bc6aec6a481",
+                    "idea": "<p>The peoples of Asia shape human endeavour through the arts and political, sporting, economic, technological and scientific domains.</p>",
+                    "code": "VC2CCPASU2"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "4edcef12-f679-41ac-8a89-0ea2af9927b3",
+        "text": "using Pythagoras’ theorem to determine unknown lengths of sides in right-angled triangles and finding lengths of sides of right-angled triangles in practical applications",
+        "html": "<p>using Pythagoras’ theorem to determine unknown lengths of sides in right-angled triangles and finding lengths of sides of right-angled triangles in practical applications </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "71b49447-aa21-487b-a5e7-b773a599897d",
+        "text": "recognising the relationship between the squares of lengths of sides for different types of triangles: right-angled, acute or obtuse",
+        "html": "<p>recognising the relationship between the squares of lengths of sides for different types of triangles: right-angled, acute or obtuse </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "e38154e9-00f1-4149-9f08-1a9802489613",
+        "text": "identifying Pythagorean triples, such as (3, 4, 5), (5, 12, 13), (7, 24, 25) and (8, 15, 17)",
+        "html": "<p>identifying Pythagorean triples, such as (3, 4, 5), (5, 12, 13), (7, 24, 25) and (8, 15, 17)</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164881,
+        "extract": "<p>They use Pythagora<span>s’</span> theorem to solve measurement problems involving unknown lengths of right-angled triangles.</p>",
+        "contentDescriptions": [
+          "32edcac4-2bc4-4f86-abd6-32ef3ecc29bd"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 94
+    }
+  },
+  {
+    "code": "VC2M8M07",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Measurement",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use mathematical modelling to solve practical problems involving ratios and rates, including distance-time problems for travel at a constant speed and financial contexts; formulate problems; interpret and communicate solutions in terms of the situation, reviewing the appropriateness of the model",
+    "elaborations": [
+      {
+        "id": "faf3a69e-e1ab-4348-b47c-dcf0e032ca2f",
+        "text": "modelling simple motion problems, finding one of distance travelled, time taken or average speed, given the other 2 quantities",
+        "html": "<p>modelling simple motion problems, finding one of distance travelled, time taken or average speed, given the other 2 quantities</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "a4511521-94d8-4da3-9a68-41d5ccfd8a12",
+        "text": "modelling and solving problems related to situations such as scales on maps and plans, the mixing of chemicals or ingredients, or calculating magnification factors applying relevant ratios and proportions",
+        "html": "<p>modelling and solving problems related to situations such as scales on maps and plans, the mixing of chemicals or ingredients, or calculating magnification factors applying relevant ratios and proportions</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5b627393-3d6b-40a3-abb3-97f392ad2b3a",
+        "text": "modelling problems involving converting money amounts using different exchange rates and applying them when planning and budgeting for overseas travel",
+        "html": "<p>modelling problems involving converting money amounts using different exchange rates and applying them when planning and budgeting for overseas travel</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "e56e7cba-2250-4f93-a5b3-c2d4218e4a88",
+        "text": "modelling situations involving financial contexts (for example, income tax, using taxation rates on annual income, comparing different taxation brackets and rates of pay) or comparing the benefits of different phone plans using different call rates and associated fees to determine the best plan",
+        "html": "<p>modelling situations involving financial contexts (for example, income tax, using taxation rates on annual income, comparing different taxation brackets and rates of pay) or comparing the benefits of different phone plans using different call rates and associated fees to determine the best plan </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ebab9a6d-7d8e-43ad-a3de-146174ef635b",
+        "text": "modelling situations involving the use of ratios in radiocarbon dating methods, including the ratio of carbon-14 to carbon-12 isotopes in organisms, to measure dates of Aboriginal and Torres Strait Islander Peoples’ habitation on the Australian continent",
+        "html": "<p>modelling situations involving the use of ratios in radiocarbon dating methods, including the ratio of carbon-14 to carbon-12 isotopes in organisms, to measure dates of Aboriginal and Torres Strait Islander Peoples’ habitation on the Australian continent </p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "82bdeffe-4054-4ffc-8253-e9493b2e80c7",
+        "text": "modelling situations involving ratio and its application in the making of string and cordage by Aboriginal and/or Torres Strait Islander Peoples, including the ratio of length to the mass of a rope, the strength of the ply in proportion to a rope’s pulling force, and the proportion of fibre for the length of string required",
+        "html": "<p>modelling situations involving ratio and its application in the making of string and cordage by Aboriginal and/or Torres Strait Islander Peoples, including the ratio of length to the mass of a rope, the strength of the ply in proportion to a rope’s pulling force, and the proportion of fibre for the length of string required</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164841,
+        "extract": "<p>They use mathematical modelling to solve practical problems involving ratios, percentages and rates in measurement and financial contexts.</p>",
+        "contentDescriptions": [
+          "3d311d2f-7b47-4359-8c32-5fc2e4958b6d",
+          "4f27610a-1697-4369-b72d-1115cb90751d",
+          "6ae780bd-01f1-4d72-a113-014a1ce6a030",
+          "f667b77d-5bae-410f-805e-02e93e43ea93"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 6,
+      "hasSubStrand": false,
+      "textLength": 296
+    }
+  },
+  {
+    "code": "VC2M8N01",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Number",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "recognise irrational numbers in applied contexts, including 𝜋 and numbers that develop from the square root of positive real numbers that are not perfect squares, and recognise that irrational numbers cannot develop from the division of integer values by natural numbers",
+    "elaborations": [
+      {
+        "id": "62560457-d674-47f7-a2f2-b1744435ce3d",
+        "text": "recognising that the real number system includes irrational numbers that can be approximately located on the real number line; for example, the value of 𝜋 lies somewhere between 3.141 and 3.142, that is, 3.141",
+        "html": "<p>recognising that the real number system includes irrational numbers that can be approximately located on the real number line; for example, the value of 𝜋 lies somewhere between 3.141 and 3.142, that is, 3.141 < $\\pi$ < 3.142</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "4861f04a-1e06-4d61-940c-1a82a2611519",
+        "text": "using digital tools to systematically explore contexts or situations that use irrational numbers, such as finding the length of the hypotenuse in a right-angled triangle with the other 2 sides having lengths of one metre or 2 metres and one metre; or given the area of a square, finding the length of the side where the result is irrational; or finding ratios involved with the side lengths of the paper sizes A0, A1, A2, A3 and A4",
+        "html": "<p>using digital tools to systematically explore contexts or situations that use irrational numbers, such as finding the length of the hypotenuse in a right-angled triangle with the other 2 sides having lengths of one metre or 2 metres and one metre; or given the area of a square, finding the length of the side where the result is irrational; or finding ratios involved with the side lengths of the paper sizes A0, A1, A2, A3 and A4</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "85772690-4047-4049-a843-77e86f0745c3",
+        "text": "investigating the golden ratio in art and design, and historical approximations to $\\pi$ in different societies",
+        "html": "<p>investigating the golden ratio in art and design, and historical approximations to $\\pi$ in different societies </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "60353b01-b7e1-4c44-8b0c-6acccc440d58",
+        "text": "connecting the ratio between the circumference and diameter of any circle to the irrational value of $\\pi$ using circular objects and string or dynamic geometry software",
+        "html": "<p>connecting the ratio between the circumference and diameter of any circle to the irrational value of $\\pi$ using circular objects and string or dynamic geometry software</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164826,
+        "extract": "<p>students recognise irrational numbers as numbers that cannot develop from the division of integer values by natural numbers and terminating or recurring decimals.</p>",
+        "contentDescriptions": [
+          "fddd8fe0-0384-422b-85d3-e6440ef005dc",
+          "0e09e0ba-3702-42cb-81a1-200f8d1e5bc9"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 271
+    }
+  },
+  {
+    "code": "VC2M8N02",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Number",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "establish and apply the exponent laws with positive integer exponents and the zero exponent, using exponent notation with numbers",
+    "elaborations": [
+      {
+        "id": "75b1869a-b4bc-4436-8cea-4c8dfb28c625",
+        "text": "recognising the connection between exponent form and expanded form with the exponent laws of product of powers rule, quotient of powers rule, and power of a power rule, for example, $2^{3}\\times 2^{2}$ can be represented as $(2\\times 2\\times 2)\\times (2\\times 2)=2^{5}$, and connecting the result to the addition of exponents",
+        "html": "<p>recognising the connection between exponent form and expanded form with the exponent laws of product of powers rule, quotient of powers rule, and power of a power rule, for example, $2^{3}\\times 2^{2}$ can be represented as $(2\\times 2\\times 2)\\times (2\\times 2)=2^{5}$, and connecting the result to the addition of exponents</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "96751f93-7f2d-4319-94fb-1811ea7ae1e2",
+        "text": "applying the exponent laws of the product of powers rule, quotient of powers rule, power of a power rule and zero exponent individually and in combination; for example, using exponents to determine the effect on the volume of a 2 centimetre cube when the cube is enlarged to a 6 centimetre cube, $\\frac{6^{3}}{2^{3}}=\\frac{2^{3}\\times 3^{3}}{2^{3}}=3^{3}$, so the volume is increased by a factor of 27",
+        "html": "<p>applying the exponent laws of the product of powers rule, quotient of powers rule, power of a power rule and zero exponent individually and in combination; for example, using exponents to determine the effect on the volume of a 2 centimetre cube when the cube is enlarged to a 6 centimetre cube, $\\frac{6^{3}}{2^{3}}=\\frac{2^{3}\\times 3^{3}}{2^{3}}=3^{3}$, so the volume is increased by a factor of 27</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "8cc65335-5b4a-4625-864c-ec1f9fb3722f",
+        "text": "using digital tools to systematically explore the application of the exponent laws; observing that the bases need to be the same",
+        "html": "<p>using digital tools to systematically explore the application of the exponent laws; observing that the bases need to be the same</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "3e703488-53db-4ed8-aa5c-29cae3bfe2cf",
+        "text": "using examples such as $\\frac{3^{4}}{3^{4}}=1$, and $3^{4-4}=3^{0}$ to illustrate the necessity that for any non-zero natural number $n, n^{0}=1$",
+        "html": "<p>using examples such as $\\frac{3^{4}}{3^{4}}=1$, and $3^{4-4}=3^{0}$ to illustrate the necessity that for any non-zero natural number $n, n^{0}=1$ </p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164831,
+        "extract": "<p>They apply the exponent laws to calculations with numbers involving positive integer exponents.</p>",
+        "contentDescriptions": [
+          "b71a8513-dea9-48ce-8285-1f6fd5e8889d"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 129
+    }
+  },
+  {
+    "code": "VC2M8N03",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Number",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "convert between fractions and terminating or recurring decimals, using digital tools as appropriate",
+    "elaborations": [
+      {
+        "id": "348493dc-b0ea-4e08-b134-0cd36bf9cfa6",
+        "text": "identifying when a fraction has a terminating decimal expansion from the prime factorisation of its denominator; for example, $\\frac{7}{24}=0.291\\bar{6}$ does not have a terminating decimal expansion, while $\\frac{7}{25}=0.28$ does",
+        "html": "<p>identifying when a fraction has a terminating decimal expansion from the prime factorisation of its denominator; for example, $\\frac{7}{24}=0.291\\bar{6}$ does not have a terminating decimal expansion, while $\\frac{7}{25}=0.28$ does</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "f7f937ae-619c-45ef-bf12-67e64c4ca374",
+        "text": "identifying terminating, recurring and non-terminating decimals and choosing their appropriate representations such as $\\frac{1}{3}$ is represented as $0.\\bar{3}$",
+        "html": "<p>identifying terminating, recurring and non-terminating decimals and choosing their appropriate representations such as $\\frac{1}{3}$ is represented as $0.\\bar{3}$</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164826,
+        "extract": "<p>students recognise irrational numbers as numbers that cannot develop from the division of integer values by natural numbers and terminating or recurring decimals.</p>",
+        "contentDescriptions": [
+          "fddd8fe0-0384-422b-85d3-e6440ef005dc",
+          "0e09e0ba-3702-42cb-81a1-200f8d1e5bc9"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 2,
+      "hasSubStrand": false,
+      "textLength": 99
+    }
+  },
+  {
+    "code": "VC2M8N04",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Number",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use the 4 operations with integers and with rational numbers, choosing and using efficient mental and written strategies, and digital tools where appropriate, and making estimates for these computations",
+    "elaborations": [
+      {
+        "id": "456e4239-6976-4b4f-b029-51a35c86d1be",
+        "text": "using patterns to assist in establishing the rules for the multiplication and division of integers",
+        "html": "<p>using patterns to assist in establishing the rules for the multiplication and division of integers</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "88ba2b4c-edc9-4349-a43b-24ef45598ea8",
+        "text": "applying and explaining efficient strategies such as using the commutative or associative property for regrouping, partitioning, place value, patterning, multiplication or division facts to solve problems involving positive and negative integers, fractions and decimals",
+        "html": "<p>applying and explaining efficient strategies such as using the commutative or associative property for regrouping, partitioning, place value, patterning, multiplication or division facts to solve problems involving positive and negative integers, fractions and decimals</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "31d0f0d0-cd0e-4f93-a463-62019de84bd0",
+        "text": "recognising the effect of sign in the multiplication of integers, for example, $(-1)^{4}=1$ and $(-1)^{5}=-1$",
+        "html": "<p>recognising the effect of sign in the multiplication of integers, for example, $(-1)^{4}=1$ and $(-1)^{5}=-1$</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164836,
+        "extract": "<p>Students solve problems involving the 4 operations with integers and positive rational numbers.</p>",
+        "contentDescriptions": [
+          "41c91d36-7768-49f0-a338-41c658af32c1"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 202
+    }
+  },
+  {
+    "code": "VC2M8N05",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Number",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "solve problems involving the use of percentages, including percentage increases and decreases and percentage error, with and without digital tools",
+    "elaborations": [
+      {
+        "id": "943d42de-1fa0-4987-94d4-1fceb6ef5079",
+        "text": "using percentages to solve problems, including those involving mark-ups, discounts and Goods and Services Tax (GST)",
+        "html": "<p>using percentages to solve problems, including those involving mark-ups, discounts and Goods and Services Tax (GST)</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "85a7f716-aac6-44e7-a8a3-e7265714d3be",
+        "text": "using percentages to calculate population increases and decreases",
+        "html": "<p>using percentages to calculate population increases and decreases</p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "a09716d1-9e17-455c-90af-2e25f24ebbf5",
+                "organisingSet": "Futures thinking",
+                "organisingIdeas": [
+                  {
+                    "id": "e01559c7-00d4-4367-9478-0a01b47e27db",
+                    "idea": "<p>Sustainable futures thinking is based on informed views that consider possible and desirable futures. It leads to individual, community, organisational and political action that reduces risk.</p>",
+                    "code": "VC2CCPSFT1"
+                  },
+                  {
+                    "id": "f49edeb5-45cb-434b-b793-700ee3e4e907",
+                    "idea": "<p>Sustainable futures thinking requires individuals to think creatively, seek information, identify a variety of possibilities, reflect and evaluate actions, and collaborate with and influence others as they work towards desired futures.</p>",
+                    "code": "VC2CCPSFT3"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "36ebb678-0147-46ba-9871-2545dac7709e",
+        "text": "using percentage error to compare the relative size of error in calculations involving a given or actual value, and an estimated or measured value",
+        "html": "<p>using percentage error to compare the relative size of error in calculations involving a given or actual value, and an estimated or measured value</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164841,
+        "extract": "<p>They use mathematical modelling to solve practical problems involving ratios, percentages and rates in measurement and financial contexts.</p>",
+        "contentDescriptions": [
+          "3d311d2f-7b47-4359-8c32-5fc2e4958b6d",
+          "4f27610a-1697-4369-b72d-1115cb90751d",
+          "6ae780bd-01f1-4d72-a113-014a1ce6a030",
+          "f667b77d-5bae-410f-805e-02e93e43ea93"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 146
+    }
+  },
+  {
+    "code": "VC2M8N06",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Number",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "use mathematical modelling to solve practical problems involving rational numbers and percentages, including financial contexts involving profit and loss; formulate problems, choosing efficient mental and written calculation strategies and using digital tools where appropriate; interpret and communicate solutions in terms of the context, reviewing the appropriateness of the model",
+    "elaborations": [
+      {
+        "id": "cf3b9b1c-edef-4013-9491-93c30e671965",
+        "text": "modelling situations involving weather and environmental contexts, including temperature or sea depths, by applying operations to positive and negative rational numbers, for example, contexts involving average temperature increases and decreases",
+        "html": "<p>modelling situations involving weather and environmental contexts, including temperature or sea depths, by applying operations to positive and negative rational numbers, for example, contexts involving average temperature increases and decreases</p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "a09716d1-9e17-455c-90af-2e25f24ebbf5",
+                "organisingSet": "Futures thinking",
+                "organisingIdeas": [
+                  {
+                    "id": "e01559c7-00d4-4367-9478-0a01b47e27db",
+                    "idea": "<p>Sustainable futures thinking is based on informed views that consider possible and desirable futures. It leads to individual, community, organisational and political action that reduces risk.</p>",
+                    "code": "VC2CCPSFT1"
+                  },
+                  {
+                    "id": "f49edeb5-45cb-434b-b793-700ee3e4e907",
+                    "idea": "<p>Sustainable futures thinking requires individuals to think creatively, seek information, identify a variety of possibilities, reflect and evaluate actions, and collaborate with and influence others as they work towards desired futures.</p>",
+                    "code": "VC2CCPSFT3"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fca1258a-87ce-4a3c-8f97-2a140f91bd88",
+        "text": "modelling situations that involve percentage increases or decreases and explaining why it is an increase or decrease, such as mark-ups, discounts, Goods and Services Tax (GST), changes in populations or recycling rates",
+        "html": "<p>modelling situations that involve percentage increases or decreases and explaining why it is an increase or decrease, such as mark-ups, discounts, Goods and Services Tax (GST), changes in populations or recycling rates </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d554766d-0396-4011-b312-baa2fa480f4a",
+        "text": "modelling situations involving personal income tax, and interpreting tax tables to determine income tax at various levels of income, including overall percentage of income allocated to tax",
+        "html": "<p>modelling situations involving personal income tax, and interpreting tax tables to determine income tax at various levels of income, including overall percentage of income allocated to tax </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "78a1f071-be77-465b-954e-85639e09358e",
+        "text": "modelling situations involving percentage increase or decrease such as market trends, effects on population, or effects on the environment over extended time periods",
+        "html": "<p>modelling situations involving percentage increase or decrease such as market trends, effects on population, or effects on the environment over extended time periods</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164841,
+        "extract": "<p>They use mathematical modelling to solve practical problems involving ratios, percentages and rates in measurement and financial contexts.</p>",
+        "contentDescriptions": [
+          "3d311d2f-7b47-4359-8c32-5fc2e4958b6d",
+          "4f27610a-1697-4369-b72d-1115cb90751d",
+          "6ae780bd-01f1-4d72-a113-014a1ce6a030",
+          "f667b77d-5bae-410f-805e-02e93e43ea93"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 382
+    }
+  },
+  {
+    "code": "VC2M8P01",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Probability",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "recognise that complementary events have a combined probability of one; use this relationship to calculate probabilities in applied contexts",
+    "elaborations": [
+      {
+        "id": "b401f13a-6589-4c11-9386-4b54abf8d45a",
+        "text": "understanding that knowing the probability of an event allows the probability of its complement to be found, including for those events that are not equally likely, such as getting a specific novelty toy in a supermarket promotion",
+        "html": "<p>understanding that knowing the probability of an event allows the probability of its complement to be found, including for those events that are not equally likely, such as getting a specific novelty toy in a supermarket promotion</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "6f5707a9-37b8-42f8-b483-9d57c5708c06",
+        "text": "using the relationship that for a single event A , Pr( A ) + Pr(not A ) = 1; for example, if the probability that it rains on a particular day is 80%, the probability that it does not rain on that day is 20%, or the probability of not getting a 6 on a single roll of a fair dice is $1-\\frac{1}{6}=\\frac{5}{6}$",
+        "html": "<p>using the relationship that for a single event <i>A</i>, Pr(<i>A</i>) + Pr(not <i>A</i>) = 1; for example, if the probability that it rains on a particular day is 80%, the probability that it does not rain on that day is 20%, or the probability of not getting a 6 on a single roll of a fair dice is $1-\\frac{1}{6}=\\frac{5}{6}$</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "025618f8-73f3-4430-aa4d-5526cb713d42",
+        "text": "using the sum of probabilities to solve problems, such as the probability of starting a game by throwing a 5 or 6 on a dice is $\\frac{1}{3}$ and probability of not throwing a 5 or 6 is $\\frac{2}{3}$",
+        "html": "<p>using the sum of probabilities to solve problems, such as the probability of starting a game by throwing a 5 or 6 on a dice is $\\frac{1}{3}$ and probability of not throwing a 5 or 6 is $\\frac{2}{3}$</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164921,
+        "extract": "<p>Students represent the possible combinations of 2 events with tables and diagrams, and determine related probabilities to solve practical problems.</p>",
+        "contentDescriptions": [
+          "c0258f9a-b5b2-4e2d-b6ce-aef5ceae9ca8",
+          "b562e886-8e33-494b-8ed1-693f8677c884"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 140
+    }
+  },
+  {
+    "code": "VC2M8P02",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Probability",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "determine all possible outcome combinations for 2 events, using two-way tables, tree diagrams and Venn diagrams, and use these to determine probabilities of specific events in practical situations",
+    "elaborations": [
+      {
+        "id": "d8d02cba-4048-47de-8349-b91cf339ea14",
+        "text": "describing events using language of ‘at least’, exclusive ‘or’ (A or B but not both), inclusive ‘or’ (A or B or both) and ‘and’",
+        "html": "<p>describing events using language of ‘at least’, exclusive ‘or’ (A or B but not both), inclusive ‘or’ (A or B or both) and ‘and’</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "8a3da3c0-ca4c-4e85-8a1b-9a1e5530088c",
+        "text": "using the relation Pr( A and B ) + Pr( A and not B ) + Pr(not A and B ) + Pr(not A and not B ) = 1 to calculate probabilities, including the special case of mutually exclusive events where Pr( A and B ) = 0",
+        "html": "<p>using the relation Pr(<i>A</i> and <i>B</i>) + Pr(<i>A</i> and not <i>B</i>) + Pr(not <i>A</i> and <i>B</i>) + Pr(not <i>A</i> and not <i>B</i>) = 1 to calculate probabilities, including the special case of mutually exclusive events where Pr(<i>A</i> and <i>B</i>) = 0</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "98ed2a28-6034-47f5-8669-2050a92c562b",
+        "text": "using Venn diagrams or two-way tables to demonstrate the difference between events that are mutually exclusive, such as whether a coin toss will land on a head or a tail, and those that are not mutually exclusive, such as people who have blonde hair and people who have blue eyes",
+        "html": "<p>using Venn diagrams or two-way tables to demonstrate the difference between events that are mutually exclusive, such as whether a coin toss will land on a head or a tail, and those that are not mutually exclusive, such as people who have blonde hair and people who have blue eyes </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ba705a8d-3e47-4c79-939a-941d7e9ee5a4",
+        "text": "exploring Aboriginal and/or Torres Strait Islander children’s instructive games, for example, Battendi from the Ngarrindjeri Peoples of Lake Murray and Lake Albert in southern Australia, applying possible combinations and relationships and calculating probabilities using two-way tables and Venn diagrams",
+        "html": "<p>exploring Aboriginal and/or Torres Strait Islander children’s instructive games, for example, Battendi from the Ngarrindjeri Peoples of Lake Murray and Lake Albert in southern Australia, applying possible combinations and relationships and calculating probabilities using two-way tables and Venn diagrams</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "5e3f11ad-883f-4c6a-89ea-6c195bd1ed97",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander societies are diverse and have distinct cultural expressions, such as language, customs and beliefs. Aboriginal and Torres Strait Islander Peoples have the right to maintain, control, protect and develop their cultural expressions, while also maintaining the right to control, protect and develop culture as Indigenous Cultural and Intellectual Property.</span></p>",
+                    "code": "VC2CCPAC1"
+                  },
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164921,
+        "extract": "<p>Students represent the possible combinations of 2 events with tables and diagrams, and determine related probabilities to solve practical problems.</p>",
+        "contentDescriptions": [
+          "c0258f9a-b5b2-4e2d-b6ce-aef5ceae9ca8",
+          "b562e886-8e33-494b-8ed1-693f8677c884"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 196
+    }
+  },
+  {
+    "code": "VC2M8P03",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Probability",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "conduct repeated chance experiments and simulations, using digital tools to determine probabilities for compound events, and describe results",
+    "elaborations": [
+      {
+        "id": "d9f42141-2c79-44b9-b5f5-25712c70286b",
+        "text": "using digital tools to conduct probability simulations involving compound events",
+        "html": "<p>using digital tools to conduct probability simulations involving compound events</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "b6ce6652-d10a-4bde-b948-3fac270ef8b1",
+        "text": "using a random number generator and digital tools to simulate rolling 2 dice and calculating the difference between them, investigating what difference is likely to occur more often",
+        "html": "<p>using a random number generator and digital tools to simulate rolling 2 dice and calculating the difference between them, investigating what difference is likely to occur more often </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "f3818b97-5acd-4660-bfb4-8e2423413ba8",
+        "text": "using online simulation software to conduct probability simulations to determine in the long run if events are complementary",
+        "html": "<p>using online simulation software to conduct probability simulations to determine in the long run if events are complementary</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164926,
+        "extract": "<p>They conduct experiments or simulations using digital tools to determine related probabilities of compound events.</p>",
+        "contentDescriptions": [
+          "a2e981d4-566b-486d-ad2c-4cad17d36452"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 141
+    }
+  },
+  {
+    "code": "VC2M8SP01",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Space",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "identify the conditions for congruence and similarity of triangles and explain the conditions for other sets of common shapes to be congruent or similar, including those formed by transformations",
+    "elaborations": [
+      {
+        "id": "6d440df4-0d8f-4a4b-b5d7-99d3d386d212",
+        "text": "developing an understanding of what it means for shapes to be congruent or similar",
+        "html": "<p>developing an understanding of what it means for shapes to be congruent or similar</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "0114eecf-84b1-4dc1-a55c-21bc37c5e79e",
+        "text": "using the enlargement transformation and digital tools to develop sets of similar shapes",
+        "html": "<p>using the enlargement transformation and digital tools to develop sets of similar shapes </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "c664f095-8f8f-4638-9408-5447b79f3394",
+        "text": "investigating sufficient conditions to establish that 2 triangles are congruent",
+        "html": "<p>investigating sufficient conditions to establish that 2 triangles are congruent </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "98dda1de-3ae3-4fb8-b8ba-0a2148471086",
+        "text": "applying logical reasoning and tests for congruence and similarity, to problems and proofs involving plane shapes",
+        "html": "<p>applying logical reasoning and tests for congruence and similarity, to problems and proofs involving plane shapes </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "2b437906-ab27-49c3-842e-8b821a0c3ea2",
+        "text": "comparing angle and side measurements of shapes under transformation to answer questions such as ‘What changes?’ and ‘What stays the same?’",
+        "html": "<p>comparing angle and side measurements of shapes under transformation to answer questions such as ‘What changes?’ and ‘What stays the same?’ </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "a615f039-9b0b-4ec0-9e37-5490a7e5e851",
+        "text": "establishing that 2 shapes are congruent if one lies exactly on top of the other after one or more transformations, including translations, reflections and rotations, and recognising that the matching sides and the matching angles are equal",
+        "html": "<p>establishing that 2 shapes are congruent if one lies exactly on top of the other after one or more transformations, including translations, reflections and rotations, and recognising that the matching sides and the matching angles are equal</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164886,
+        "extract": "<p><span>They identify conditions for congruency and similarity in triangles and other common shapes, and design and test algorithms to test for congruency and similarity.</span></p>",
+        "contentDescriptions": [
+          "f24dbcf9-ed73-4f58-ab12-6760bdeed5f9",
+          "a99f1000-7ed4-4383-81a7-894c14350ab5"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 6,
+      "hasSubStrand": false,
+      "textLength": 195
+    }
+  },
+  {
+    "code": "VC2M8SP02",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Space",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "establish properties of quadrilaterals using congruent triangles and angle properties, and solve related problems explaining reasoning",
+    "elaborations": [
+      {
+        "id": "8bd8718f-5add-4675-a887-0228cc7a7057",
+        "text": "establishing the properties of squares, rectangles, parallelograms, rhombuses, trapeziums and kites using geometric properties and proof, such as the sum of the exterior angles of a polygon is equal to a complete turn or 360°",
+        "html": "<p>establishing the properties of squares, rectangles, parallelograms, rhombuses, trapeziums and kites using geometric properties and proof, such as the sum of the exterior angles of a polygon is equal to a complete turn or 360°</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "c5300370-0618-4e81-9e71-5de8fd1ef248",
+        "text": "identifying properties of quadrilaterals related to side lengths, parallel sides, angles, diagonals and symmetry",
+        "html": "<p>identifying properties of quadrilaterals related to side lengths, parallel sides, angles, diagonals and symmetry </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "9196a7ff-6590-4dce-9483-223ab005156c",
+        "text": "applying the properties of triangles and quadrilaterals to construction designs such as car jacks, scissor lifts, folding umbrellas, toolboxes and cherry pickers",
+        "html": "<p>applying the properties of triangles and quadrilaterals to construction designs such as car jacks, scissor lifts, folding umbrellas, toolboxes and cherry pickers</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164896,
+        "extract": "<p>Students apply the properties of quadrilaterals to solve problems.</p>",
+        "contentDescriptions": [
+          "c635c9e6-1467-44a1-aa93-7868e3e4c70b"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 134
+    }
+  },
+  {
+    "code": "VC2M8SP03",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Space",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "describe in different ways the position and location of three-dimensional objects in 3 dimensions, including using a three-dimensional Cartesian coordinate system with the use of dynamic geometry software or other digital tools",
+    "elaborations": [
+      {
+        "id": "9f7cc396-e912-4c93-b695-eb58487b1232",
+        "text": "locating aircraft or drones using latitude, longitude and altitude as a three-dimensional coordinate system",
+        "html": "<p>locating aircraft or drones using latitude, longitude and altitude as a three-dimensional coordinate system </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "290be638-d17a-4ab0-9e60-ec22d255e56c",
+        "text": "constructing three-dimensional objects using 3D printers or designing software that uses a three-dimensional coordinate system",
+        "html": "<p>constructing three-dimensional objects using 3D printers or designing software that uses a three-dimensional coordinate system </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "1c973b72-03a8-4572-aea4-2aa598cd7779",
+        "text": "comparing and contrasting two-dimensional and three-dimensional coordinate systems by highlighting what is the same and what is different, including virtual maps versus street views",
+        "html": "<p>comparing and contrasting two-dimensional and three-dimensional coordinate systems by highlighting what is the same and what is different, including virtual maps versus street views </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "eb6d3f28-6c01-45f0-bd0f-76613144396b",
+        "text": "using dynamic geometry software to construct shapes and objects within the first quadrant of a three-dimensional coordinate system",
+        "html": "<p>using dynamic geometry software to construct shapes and objects within the first quadrant of a three-dimensional coordinate system </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ee3b0618-1d6d-4169-b071-3fe6f1b0fff9",
+        "text": "interpreting three-dimensional coordinate locations for objects in multistorey car parks, or playing games based on three-dimensional coordinate systems such as three-dimensional noughts-and-crosses",
+        "html": "<p>interpreting three-dimensional coordinate locations for objects in multistorey car parks, or playing games based on three-dimensional coordinate systems such as three-dimensional noughts-and-crosses </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d67e76cb-87a5-44a0-8704-d21beae1df45",
+        "text": "exploring position and transformation through geospatial technologies used by Aboriginal and/or Torres Strait Islander communities",
+        "html": "<p>exploring position and transformation through geospatial technologies used by Aboriginal and/or Torres Strait Islander communities</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164901,
+        "extract": "<p>Students use 3 dimensions to locate and describe position.</p>",
+        "contentDescriptions": [
+          "33afaaf9-1bc7-4cb5-b3fa-baa6b65f3ef5"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 6,
+      "hasSubStrand": false,
+      "textLength": 227
+    }
+  },
+  {
+    "code": "VC2M8SP04",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Space",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "design and test algorithms involving a sequence of steps and decisions that identify congruency or similarity of shapes, and describe how the algorithm works",
+    "elaborations": [
+      {
+        "id": "55cef045-c888-467d-ae17-8d5da70ddc8a",
+        "text": "listing the properties or criteria necessary to determine if shapes are similar or congruent",
+        "html": "<p>listing the properties or criteria necessary to determine if shapes are similar or congruent</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "e74a7e0d-98c0-4529-8330-3c4093b5579e",
+        "text": "using the conditions for congruence of triangles and similarity of triangles to develop a sorting algorithm; for example, creating a flow chart",
+        "html": "<p>using the conditions for congruence of triangles and similarity of triangles to develop a sorting algorithm; for example, creating a flow chart </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "2b0e01ab-94f3-48c2-8eb0-f79c698f2046",
+        "text": "evaluating algorithms for accuracy in classifying and distinguishing between similar and congruent triangles",
+        "html": "<p>evaluating algorithms for accuracy in classifying and distinguishing between similar and congruent triangles</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164886,
+        "extract": "<p><span>They identify conditions for congruency and similarity in triangles and other common shapes, and design and test algorithms to test for congruency and similarity.</span></p>",
+        "contentDescriptions": [
+          "f24dbcf9-ed73-4f58-ab12-6760bdeed5f9",
+          "a99f1000-7ed4-4383-81a7-894c14350ab5"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 157
+    }
+  },
+  {
+    "code": "VC2M8ST01",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "distinguish between a population and a sample, and investigate techniques for data collection including census, sampling, experiment and observation, and explain the practicalities and implications of obtaining data through these techniques",
+    "elaborations": [
+      {
+        "id": "3acf2b9b-d349-4eaa-9fda-448fbf1ad2b9",
+        "text": "identifying situations where data can be collected by census and those where a sample is appropriate",
+        "html": "<p>identifying situations where data can be collected by census and those where a sample is appropriate</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "79b43044-c734-4c8e-bd50-c83dc5cc3bd4",
+        "text": "investigating the practicalities and implications of obtaining data through sampling, using a variety of investigative processes; for example, investigating situations when random sampling or non-random sampling is used to collect data and the implication of each sampling method",
+        "html": "<p>investigating the practicalities and implications of obtaining data through sampling, using a variety of investigative processes; for example, investigating situations when random sampling or non-random sampling is used to collect data and the implication of each sampling method </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "57f597b6-10d9-4e31-9868-57bcf38b64a0",
+        "text": "discussing how observations, experiments and sampling methods can be impacted by bias; for example, recognising that a sampling bias occurs when certain members of a population are more likely to be selected in a sample than others, such as a survey conducted at a shopping centre, and recognising that environmental conditions may bias the results of scientific investigations if experiments are conducted at different times or under different conditions",
+        "html": "<p>discussing how observations, experiments and sampling methods can be impacted by bias; for example, recognising that a sampling bias occurs when certain members of a population are more likely to be selected in a sample than others, such as a survey conducted at a shopping centre, and recognising that environmental conditions may bias the results of scientific investigations if experiments are conducted at different times or under different conditions </p>",
+        "organisingIdeas": [
+          {
+            "id": "380b9b72-766a-4ff3-a4a8-24ac698214c4",
+            "ccpTitle": "Sustainability",
+            "organisingSetsData": [
+              {
+                "id": "e978bba0-98ea-4e7c-9a28-538efa4689e8",
+                "organisingSet": "Interrelationship of systems",
+                "organisingIdeas": [
+                  {
+                    "id": "b9bb5764-d9cc-4d39-aa92-8498efb9a262",
+                    "idea": "<p>All lifeforms are connected through Earth’s systems (the lithosphere, biosphere, hydrosphere and atmosphere), on which they depend for their wellbeing and survival.</p>",
+                    "code": "VC2CCPSIS1"
+                  }
+                ]
+              },
+              {
+                "id": "a09716d1-9e17-455c-90af-2e25f24ebbf5",
+                "organisingSet": "Futures thinking",
+                "organisingIdeas": [
+                  {
+                    "id": "e01559c7-00d4-4367-9478-0a01b47e27db",
+                    "idea": "<p>Sustainable futures thinking is based on informed views that consider possible and desirable futures. It leads to individual, community, organisational and political action that reduces risk.</p>",
+                    "code": "VC2CCPSFT1"
+                  },
+                  {
+                    "id": "f49edeb5-45cb-434b-b793-700ee3e4e907",
+                    "idea": "<p>Sustainable futures thinking requires individuals to think creatively, seek information, identify a variety of possibilities, reflect and evaluate actions, and collaborate with and influence others as they work towards desired futures.</p>",
+                    "code": "VC2CCPSFT3"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "8eabd86e-a796-4763-b7e2-9a59515b1caf",
+        "text": "using digital tools such as simulations and digital measuring devices to observe, measure and record qualitative and quantitative data, discussing precision and the implications of error",
+        "html": "<p>using digital tools such as simulations and digital measuring devices to observe, measure and record qualitative and quantitative data, discussing precision and the implications of error</p>",
+        "organisingIdeas": []
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164906,
+        "extract": "<p>Students conduct statistical investigations and explain the implications of obtaining data through sampling.</p>",
+        "contentDescriptions": [
+          "9e5176f5-dab2-4b25-b6a9-03befe79bf5c",
+          "0ccdd9ff-ef49-4697-a606-099609404ca5"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 240
+    }
+  },
+  {
+    "code": "VC2M8ST02",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "analyse and report on the distribution of data from primary and secondary sources using random and non-random sampling techniques",
+    "elaborations": [
+      {
+        "id": "453a1bb3-e156-4d2a-85c2-5e240203c83e",
+        "text": "investigating different methods of sampling used to collect data, considering the source and size of samples",
+        "html": "<p>investigating different methods of sampling used to collect data, considering the source and size of samples</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "d9ab2185-f587-4ba4-8cdd-de8337fc2e00",
+        "text": "comparing the sampling methods of simple random, systematic, stratified, quota, clustered or convenience, or judgement, and discussing the reliability of conclusions about the context that could be drawn",
+        "html": "<p>comparing the sampling methods of simple random, systematic, stratified, quota, clustered or convenience, or judgement, and discussing the reliability of conclusions about the context that could be drawn </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "5f4923e0-695b-4cfb-9806-07fc0d0fd10c",
+        "text": "defining and distinguishing between probabilistic terms such as ‘random’, ‘sample space’, ‘sample’ and ‘sample distribution’",
+        "html": "<p>defining and distinguishing between probabilistic terms such as ‘random’, ‘sample space’, ‘sample’ and ‘sample distribution’ </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "1bb993de-8c88-4a0a-a49b-309cbd718ba7",
+        "text": "investigating primary and secondary data sources relating to reconciliation between Aboriginal and Torres Strait Islander Peoples and non-Indigenous Australians, analysing and reporting on findings",
+        "html": "<p>investigating primary and secondary data sources relating to reconciliation between Aboriginal and Torres Strait Islander Peoples and non-Indigenous Australians, analysing and reporting on findings</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "16dd688e-3ff3-4ebf-9176-935e2016c7d4",
+                    "idea": "<p><span>The occupation and colonisation of the land now known as Australia by the British, under the now overturned doctrine of terra nullius, were experienced by Aboriginal and Torres Strait Islander Peoples as an invasion that denied their occupancy of, and connection to, Country and Place.</span></p>",
+                    "code": "VC2CCPACP2"
+                  },
+                  {
+                    "id": "df950d68-899a-454c-87d2-9a6b88926115",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander Peoples are the Traditional Owners of Country and Place, protected in Australian law by the</span><em><span class=\"italic\"> Native Title Act 1993</span></em><span>, which recognises pre-existing sovereignty, continuing systems of law and customs, and connection to Country and Place.</span></p>",
+                    "code": "VC2CCPACP3"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164911,
+        "extract": "<p>Students analyse and describe the distribution of data.</p>",
+        "contentDescriptions": [
+          "4c415c19-9876-4c9b-8b45-c73a0ae1758c"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 4,
+      "hasSubStrand": false,
+      "textLength": 129
+    }
+  },
+  {
+    "code": "VC2M8ST03",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "compare variations in distributions and proportions obtained from random samples of the same size drawn from a population and recognise the effect of sample size on this variation",
+    "elaborations": [
+      {
+        "id": "35e5a0de-0463-408b-9a4e-f2f3cf2249e1",
+        "text": "comparing the proportion of students in favour of a proposal for a change in school uniform between different random samples of 50 students from the school population",
+        "html": "<p>comparing the proportion of students in favour of a proposal for a change in school uniform between different random samples of 50 students from the school population</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "ffaff501-bddd-44b7-a6e2-eb90bc98dc54",
+        "text": "using digital tools to simulate repeated sampling of the same population, such as heights or arm spans of students, recording and comparing means, median and range of data between samples",
+        "html": "<p>using digital tools to simulate repeated sampling of the same population, such as heights or arm spans of students, recording and comparing means, median and range of data between samples</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "544fae7d-672a-47a2-9a1c-7e76d54c2d79",
+        "text": "using relative frequencies from historical data to predict proportions and the likely number of outcomes in situations such as weather forecasting or the countries of origin of visitors to tourist attractions",
+        "html": "<p>using relative frequencies from historical data to predict proportions and the likely number of outcomes in situations such as weather forecasting or the countries of origin of visitors to tourist attractions</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "65c6b6a2-905d-4515-adf3-a166d2bad665",
+        "text": "investigating the effect that adding or removing data from a data set has on measures of central tendency and spread",
+        "html": "<p>investigating the effect that adding or removing data from a data set has on measures of central tendency and spread </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "b111c0c2-3f88-4447-8231-0aab920c1e6c",
+        "text": "investigating Aboriginal and/or Torres Strait Islander ranger groups and other groups’ use of sampling techniques to track biodiversity of species",
+        "html": "<p>investigating Aboriginal and/or Torres Strait Islander ranger groups and other groups’ use of sampling techniques to track biodiversity of species </p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "5e3f11ad-883f-4c6a-89ea-6c195bd1ed97",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander societies are diverse and have distinct cultural expressions, such as language, customs and beliefs. Aboriginal and Torres Strait Islander Peoples have the right to maintain, control, protect and develop their cultural expressions, while also maintaining the right to control, protect and develop culture as Indigenous Cultural and Intellectual Property.</span></p>",
+                    "code": "VC2CCPAC1"
+                  },
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164916,
+        "extract": "<p>They compare the variation in distributions of random samples of the same and different size from a given population with respect to shape, measures of central tendency and range.</p>",
+        "contentDescriptions": [
+          "779de91e-4b05-4a9e-8ca3-ed04673d714d"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 5,
+      "hasSubStrand": false,
+      "textLength": 179
+    }
+  },
+  {
+    "code": "VC2M8ST04",
+    "subject": "mathematics",
+    "levelId": "8",
+    "levelName": "Level 8",
+    "levelOrder": 12,
+    "strand": "Statistics",
+    "subStrand": "",
+    "stem": "Students learn to:",
+    "contentDescription": "plan and conduct statistical investigations involving samples of a population; use ethical and fair methods to make inferences about the population and report findings, acknowledging uncertainty",
+    "elaborations": [
+      {
+        "id": "62305ce8-499f-4fba-9acd-c8e1978a92e8",
+        "text": "using data such as electricity consumption to draw conclusions about the impacts of events, such as pandemics, on households or business",
+        "html": "<p>using data such as electricity consumption to draw conclusions about the impacts of events, such as pandemics, on households or business</p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "9409e680-0b06-4440-8025-3a9d77b4431f",
+        "text": "identifying situations where the collection of data from a sample is necessary due to efficiency, cost or restricted time for collection of data, and is sufficiently reliable for making inferences about a population",
+        "html": "<p>identifying situations where the collection of data from a sample is necessary due to efficiency, cost or restricted time for collection of data, and is sufficiently reliable for making inferences about a population </p>",
+        "organisingIdeas": []
+      },
+      {
+        "id": "e22b4df3-1fdb-4b15-889a-716f4ae4f06d",
+        "text": "exploring progress in reconciliation between Aboriginal and Torres Strait Islander Peoples and non-Indigenous Australians, investigating and evaluating sampling techniques and methods to gather relevant data to measure progress",
+        "html": "<p>exploring progress in reconciliation between Aboriginal and Torres Strait Islander Peoples and non-Indigenous Australians, investigating and evaluating sampling techniques and methods to gather relevant data to measure progress</p>",
+        "organisingIdeas": [
+          {
+            "id": "9327a28a-ce00-4ba5-b6d1-b73b3bf27759",
+            "ccpTitle": "Aboriginal and Torres Strait Islander Histories and Cultures",
+            "organisingSetsData": [
+              {
+                "id": "727ba3e9-56a9-4590-a228-85554bc844d5",
+                "organisingSet": "Country and Place",
+                "organisingIdeas": [
+                  {
+                    "id": "2b30ed1b-5cce-420e-8ac3-3f4cb2e5b624",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander communities of Australia maintain a deep connection to, and responsibility for, Country and Place and have holistic values and belief systems that are connected to the land, sea, sky and waterways.</span></p>",
+                    "code": "VC2CCPACP1"
+                  }
+                ]
+              },
+              {
+                "id": "d1668610-7b34-4d27-80ba-311745d30aec",
+                "organisingSet": "Culture",
+                "organisingIdeas": [
+                  {
+                    "id": "5e3f11ad-883f-4c6a-89ea-6c195bd1ed97",
+                    "idea": "<p><span>Aboriginal and Torres Strait Islander societies are diverse and have distinct cultural expressions, such as language, customs and beliefs. Aboriginal and Torres Strait Islander Peoples have the right to maintain, control, protect and develop their cultural expressions, while also maintaining the right to control, protect and develop culture as Indigenous Cultural and Intellectual Property.</span></p>",
+                    "code": "VC2CCPAC1"
+                  },
+                  {
+                    "id": "6803f4ff-68b5-48f7-97f8-cf5a6652d198",
+                    "idea": "<p>Aboriginal and Torres Strait Islander Peoples’ ways of life reflect unique ways of being, knowing, thinking and doing.</p>",
+                    "code": "VC2CCPAC2"
+                  }
+                ]
+              },
+              {
+                "id": "9fee150e-1f67-41ad-a122-d80a856c55b2",
+                "organisingSet": "People",
+                "organisingIdeas": [
+                  {
+                    "id": "47abb6ff-1196-4b89-988e-95b6551d6d8d",
+                    "idea": "<p>Australia has 2 distinct First Nations Peoples; each encompasses a diversity of nations across Australia. Aboriginal and Torres Strait Islander Peoples have occupied the Australian continent and adjacent islands from time immemorial.</p>",
+                    "code": "VC2CCPAP1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "achievementExtracts": [
+      {
+        "id": 164906,
+        "extract": "<p>Students conduct statistical investigations and explain the implications of obtaining data through sampling.</p>",
+        "contentDescriptions": [
+          "9e5176f5-dab2-4b25-b6a9-03befe79bf5c",
+          "0ccdd9ff-ef49-4697-a606-099609404ca5"
+        ],
+        "mode": null
+      }
+    ],
+    "metadata": {
+      "elaborationCount": 3,
+      "hasSubStrand": false,
+      "textLength": 194
+    }
+  }
+]

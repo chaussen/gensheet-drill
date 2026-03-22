@@ -57,3 +57,15 @@ def get_templates_for(year_level: int, strand: str) -> list:
 
 def get_all_template_ids() -> list:
     return list(_template_index().keys())
+
+
+def load_curated_bank(bank_name: str) -> list:
+    """Return the items list for a curated bank, or [] if not yet populated."""
+    data = _load_raw()
+    bank = data.get("curated_banks", {}).get(bank_name)
+    if bank is None:
+        return []
+    # Banks may be stored as a bare list or as {"items": [...], ...}
+    if isinstance(bank, list):
+        return bank
+    return bank.get("items", [])

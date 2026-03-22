@@ -10,7 +10,7 @@ import uuid
 import logging
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException
 
 from models.schemas import (
     SessionStartRequest,
@@ -18,14 +18,14 @@ from models.schemas import (
     SessionConfig,
     SessionSubmitRequest,
     SessionResultResponse,
+    SessionSummaryObject,
     ResponseResultItem,
     QuestionObjectPublic,
     AnalysisObject,
 )
 from services.question_service import generate_session_questions
-from services import ai_service
+from services.session_service import generate_session_summary
 from cache import session_cache
-from docs_loader import load_template_meta
 
 router = APIRouter(prefix="/api/session")
 logger = logging.getLogger(__name__)
@@ -35,41 +35,6 @@ logger = logging.getLogger(__name__)
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
-
-
-def _build_results_table(session: dict) -> str:
-    """
-    Construct the results table string for the AI analysis prompt.
-    Format: Q# | VC Code | Topic | Student answer | Correct answer | Result
-    (per docs/ai_prompts.md)
-    """
-    rows = []
-    for i, resp in enumerate(session["responses"], 1):
-        q = session["questions"].get(resp["question_id"])
-        if not q:
-            continue
-        try:
-            meta = load_template_meta(q["template_id"])
-            topic = meta.get("topic", q["template_id"])
-        except Exception:
-            topic = q["template_id"]
-
-        if q.get("question_type") == "multi_select":
-            student_answer = ", ".join(
-                q["options"][i] for i in (resp.get("selected_indices") or [])
-            ) or "(none)"
-            correct_answer = ", ".join(
-                q["options"][i] for i in (q.get("correct_indices") or [])
-            )
-        else:
-            student_answer = q["options"][resp["selected_index"]]
-            correct_answer = q["options"][q["correct_index"]]
-        result = "✓" if resp["correct"] else "✗"
-        rows.append(
-            f"Q{i} | {q['vc_code']} | {topic} | "
-            f"{student_answer} | {correct_answer} | {result}"
-        )
-    return "\n".join(rows)
 
 
 def _make_response_result_item(r: dict, q: dict) -> ResponseResultItem:
@@ -86,6 +51,7 @@ def _make_response_result_item(r: dict, q: dict) -> ResponseResultItem:
         correct=r["correct"],
         explanation=q["explanation"],
         vc_code=q["vc_code"],
+        time_taken_ms=r.get("time_taken_ms"),
     )
 
 
@@ -112,6 +78,11 @@ async def start_session(req: SessionStartRequest):
             status_code=503,
             detail="Could not generate questions. The AI service may be unavailable.",
         )
+    if len(questions) < req.count:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Only generated {len(questions)} of {req.count} requested questions. Please try again.",
+        )
 
     session_id = str(uuid.uuid4())
     created_at = _now()
@@ -123,6 +94,11 @@ async def start_session(req: SessionStartRequest):
         "strand": req.strand,
         "difficulty": req.difficulty,
         "count": len(questions),
+        "config": {
+            "year_level": req.year_level,
+            "strand": req.strand,
+            "difficulty": req.difficulty,
+        },
         "questions": {q.question_id: q.model_dump() for q in questions},
         "question_order": [q.question_id for q in questions],
         "responses": [],
@@ -130,6 +106,7 @@ async def start_session(req: SessionStartRequest):
         "created_at": created_at,
         "score": None,
         "completed_at": None,
+        "summary": None,
         "analysis": None,
     }
     session_cache.put(session_id, session_data)
@@ -166,35 +143,14 @@ async def start_session(req: SessionStartRequest):
     )
 
 
-async def _run_analysis(session_id: str) -> None:
-    """Background task: call AI analysis and store result in session cache."""
-    session = session_cache.get(session_id)
-    if not session:
-        return
-
-    results_table = _build_results_table(session)
-    analysis_data = await ai_service.analyse_session(
-        {
-            "year_level": session["year_level"],
-            "difficulty": session["difficulty"],
-            "score": session["score"],
-            "total": session["count"],
-            "results_table": results_table,
-        }
-    )
-    session["analysis"] = analysis_data
-    session_cache.update(session_id, session)
-
-
 @router.post("/{session_id}/submit", response_model=SessionResultResponse)
 async def submit_session(
     session_id: str,
     req: SessionSubmitRequest,
-    background_tasks: BackgroundTasks,
 ):
     """
-    Auto-mark the session (pure Python — no AI), then trigger background
-    AI analysis. Returns score immediately; analysis: null until ready.
+    Auto-mark the session (pure Python — no AI) and compute an instant
+    code-based summary. Returns score and summary immediately.
     """
     session = session_cache.get(session_id)
     if not session:
@@ -231,13 +187,13 @@ async def submit_session(
 
     session["responses"] = marked
     session["score"] = score
-    session["submitted_count"] = total   # responses actually submitted
-    # session["count"] is preserved as the original question count
+    session["submitted_count"] = total
     session["status"] = "submitted"
     session["completed_at"] = completed_at
+    session["total_time_ms"] = req.total_time_ms
+    summary = generate_session_summary(session, session["questions"], req.total_time_ms)
+    session["summary"] = summary.model_dump()
     session_cache.update(session_id, session)
-
-    background_tasks.add_task(_run_analysis, session_id)
 
     response_items = [
         _make_response_result_item(r, session["questions"][r["question_id"]])
@@ -250,7 +206,8 @@ async def submit_session(
         total=session["count"],   # original question count, not submitted count
         score_pct=round(score / session["count"] * 100) if session["count"] > 0 else 0,
         responses=response_items,
-        analysis=None,  # AI running in background
+        summary=summary,
+        analysis=None,
         completed_at=completed_at,
     )
 
@@ -258,14 +215,20 @@ async def submit_session(
 @router.get("/{session_id}/result", response_model=SessionResultResponse)
 async def get_result(session_id: str):
     """
-    Poll this endpoint to retrieve score + AI analysis once it's ready.
-    analysis will be null while the background task is still running.
+    Retrieve the completed session result including the code-based summary.
     """
     session = session_cache.get(session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
     if session["status"] == "active":
         raise HTTPException(status_code=400, detail="Session not yet submitted")
+
+    summary_obj = None
+    if session.get("summary"):
+        try:
+            summary_obj = SessionSummaryObject(**session["summary"])
+        except Exception as e:
+            logger.warning("Failed to parse summary for session %s: %s", session_id, e)
 
     analysis_obj = None
     if session.get("analysis"):
@@ -288,6 +251,7 @@ async def get_result(session_id: str):
         total=total,
         score_pct=round(score / total * 100) if total > 0 else 0,
         responses=response_items,
+        summary=summary_obj,
         analysis=analysis_obj,
         completed_at=session.get("completed_at", ""),
     )
