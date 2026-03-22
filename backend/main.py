@@ -43,7 +43,7 @@ app.include_router(questions_router.router)
 app.include_router(progress_router.router)
 
 
-_FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
+_FRONTEND_DIST = Path(__file__).parent / "static"
 
 if _FRONTEND_DIST.exists():
     app.mount(

@@ -22,8 +22,6 @@ frontend/node_modules/
 dist/
 frontend/dist/
 
-# Build output (served by FastAPI in production)
-backend/static/
 
 # IDE
 .idea/
