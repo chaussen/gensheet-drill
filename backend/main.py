@@ -16,6 +16,8 @@ load_dotenv()  # also check cwd for local overrides
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from routers import session as session_router
 from routers import questions as questions_router
@@ -41,6 +43,16 @@ app.include_router(questions_router.router)
 app.include_router(progress_router.router)
 
 
+_FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
+
+if _FRONTEND_DIST.exists():
+    app.mount(
+        "/assets",
+        StaticFiles(directory=str(_FRONTEND_DIST / "assets")),
+        name="assets",
+    )
+
+
 @app.get("/api/health")
 async def health():
     """Keep-alive endpoint — pinged by UptimeRobot every 14 min in production."""
@@ -49,3 +61,13 @@ async def health():
         "ts": datetime.now(timezone.utc).isoformat(),
         "cache_size": session_cache.size() + question_cache.size(),
     }
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def spa_fallback(full_path: str):
+    """Serve index.html for all non-API paths (React SPA routing)."""
+    index = _FRONTEND_DIST / "index.html"
+    if index.exists():
+        return FileResponse(str(index))
+    from fastapi.responses import JSONResponse
+    return JSONResponse({"error": "frontend not built"}, status_code=503)
