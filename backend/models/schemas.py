@@ -57,6 +57,7 @@ class SessionStartRequest(BaseModel):
     strand: Literal["Number", "Algebra", "Measurement", "Space", "Statistics", "Probability", "Mixed"] = "Mixed"
     difficulty: Literal["foundation", "standard", "advanced"]
     count: int = Field(default=10, ge=5, le=20)
+    student_id: str | None = None
 
 
 class SessionStartResponse(BaseModel):
@@ -170,6 +171,13 @@ class SessionResultResponse(BaseModel):
     summary: SessionSummaryObject | None = None
     analysis: AnalysisObject | None = None
     completed_at: str
+
+
+class TierConfigResponse(BaseModel):
+    tier: str
+    daily_session_limit: int
+    max_question_count: int
+    question_count_options: list[int]
 
 
 class HealthResponse(BaseModel):

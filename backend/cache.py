@@ -6,6 +6,7 @@ No database. Phase 1 only.
 """
 import time
 import os
+from datetime import datetime, timezone
 
 CACHE_TTL = int(os.getenv("QUESTION_CACHE_TTL_SECONDS", "3600"))
 
@@ -26,6 +27,22 @@ class SessionCache:
     def update(self, session_id: str, data: dict) -> None:
         if session_id in self._store:
             self._store[session_id]["data"] = data
+
+    def count_today(self, student_id: str) -> int:
+        """Count sessions created today (UTC) for a given student_id."""
+        if not student_id:
+            return 0
+        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        count = 0
+        for entry in self._store.values():
+            data = entry["data"]
+            sid = data.get("student_id")
+            if not sid or sid != student_id:
+                continue
+            created = data.get("created_at", "")
+            if len(created) >= 10 and created[:10] == today:
+                count += 1
+        return count
 
     def size(self) -> int:
         return len(self._store)

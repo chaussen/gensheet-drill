@@ -4,26 +4,34 @@ import { TEST_IDS } from '../testing/testIds.ts'
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E']
 
-export default function DrillQuestion({ question, questionNumber, totalQuestions, onAnswer }) {
+// NOTE: Parent uses key={question_id} so this component remounts on question change.
+// Initial state from selectedAnswer is set via useState initialiser (no useEffect needed).
+export default function DrillQuestion({ question, questionNumber, totalQuestions, selectedAnswer, onSelect }) {
   const isMultiSelect = question.question_type === 'multi_select'
 
-  // Single-select state
-  const [selected, setSelected] = useState(null)
-  const [locked, setLocked]     = useState(false)
+  // Brief flash effect when answer changes on revisit
+  const [flash, setFlash] = useState(false)
 
-  // Multi-select state
-  const [checkedSet, setCheckedSet] = useState(new Set())
-  const [confirmed, setConfirmed]   = useState(false)
+  // Multi-select local state — initialised from selectedAnswer if revisiting
+  const [checkedSet, setCheckedSet] = useState(
+    () => new Set(selectedAnswer?.selectedIndices ?? [])
+  )
+
+  // For single-select, derive from selectedAnswer prop
+  const singleSelected = selectedAnswer?.selectedIndex ?? null
 
   function handleSingleSelect(index) {
-    if (locked) return
-    setSelected(index)
-    setLocked(true)
-    setTimeout(() => onAnswer(index), 300)
+    // Flash if changing an existing answer
+    const isChange = singleSelected !== null && singleSelected !== index
+    if (isChange) {
+      setFlash(true)
+      setTimeout(() => setFlash(false), 200)
+    }
+    // Auto-advance on first answer; stay on revisit change
+    onSelect(index, { advance: !isChange && singleSelected === null })
   }
 
   function handleCheckboxToggle(index) {
-    if (confirmed) return
     setCheckedSet(prev => {
       const next = new Set(prev)
       next.has(index) ? next.delete(index) : next.add(index)
@@ -32,13 +40,17 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
   }
 
   function handleConfirm() {
-    if (confirmed || checkedSet.size === 0) return
-    setConfirmed(true)
-    onAnswer([...checkedSet].sort((a, b) => a - b))
+    if (checkedSet.size === 0) return
+    // Flash if changing an existing answer
+    if (selectedAnswer?.selectedIndices) {
+      setFlash(true)
+      setTimeout(() => setFlash(false), 200)
+    }
+    onSelect([...checkedSet].sort((a, b) => a - b))
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+    <div className={`bg-white rounded-2xl shadow-sm border border-slate-200 p-6 transition-opacity ${flash ? 'opacity-60' : 'opacity-100'}`}>
       <p className="text-xs font-medium text-indigo-500 uppercase tracking-wide mb-3">
         Question {questionNumber} of {totalQuestions}
       </p>
@@ -62,18 +74,16 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
                 key={i}
                 data-testid={TEST_IDS.drill.optionLabel(i)}
                 className={[
-                  'w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-colors',
+                  'w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-colors cursor-pointer',
                   isChecked
                     ? 'bg-indigo-50 border-indigo-400 text-slate-800'
                     : 'bg-white border-slate-200 text-slate-800 hover:border-indigo-300 hover:bg-slate-50',
-                  confirmed ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer',
                 ].join(' ')}
               >
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={() => handleCheckboxToggle(i)}
-                  disabled={confirmed}
                   className="w-4 h-4 accent-indigo-600 flex-shrink-0"
                 />
                 <span className={[
@@ -88,19 +98,17 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
           }
 
           // Single-select
-          const isSelected = selected === i
+          const isSelected = singleSelected === i
           return (
             <button
               key={i}
               data-testid={TEST_IDS.drill.optionBtn(i)}
               onClick={() => handleSingleSelect(i)}
-              disabled={locked && !isSelected}
               className={[
-                'w-full text-left px-4 py-3 rounded-xl border-2 transition-colors flex items-center gap-3',
+                'w-full text-left px-4 py-3 rounded-xl border-2 transition-colors flex items-center gap-3 cursor-pointer',
                 isSelected
                   ? 'bg-indigo-600 border-indigo-600 text-white'
                   : 'bg-white border-slate-200 text-slate-800 hover:border-indigo-300 hover:bg-slate-50',
-                locked && !isSelected ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
               ].join(' ')}
             >
               <span className={[
@@ -119,10 +127,10 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
         <button
           data-testid={TEST_IDS.drill.confirmBtn}
           onClick={handleConfirm}
-          disabled={checkedSet.size === 0 || confirmed}
+          disabled={checkedSet.size === 0}
           className="mt-4 w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors"
         >
-          Confirm Selection
+          {selectedAnswer?.selectedIndices ? 'Update Selection' : 'Confirm Selection'}
         </button>
       )}
     </div>

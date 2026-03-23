@@ -1,15 +1,31 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useSession } from './hooks/useSession.js'
+import { useProgress } from './hooks/useProgress.js'
+import { useDailyLimit } from './hooks/useDailyLimit.js'
+import { fetchTierConfig } from './config/tierConfig.js'
 import SessionSetup from './components/SessionSetup.jsx'
 import DrillSession from './components/DrillSession.jsx'
 import ResultsScreen from './components/ResultsScreen.jsx'
 import ProgressView from './components/ProgressView.jsx'
+import LimitReached from './components/LimitReached.jsx'
 import { TEST_IDS } from './testing/testIds.ts'
 
 export default function App() {
   // baseView tracks explicit user navigation; view is derived from baseView + session state
   const [baseView, setBaseView] = useState('setup')
+  const [tierConfig, setTierConfig] = useState(null)
   const session = useSession()
+  const { progress } = useProgress()
+
+  // refreshKey increments after each session result so useDailyLimit recomputes
+  const refreshKey = progress?.sessions?.length ?? 0
+  const dailyLimit = useDailyLimit(tierConfig, refreshKey)
+
+  useEffect(() => {
+    fetchTierConfig().then(setTierConfig)
+  }, [])
+
+  const studentId = progress?.student_id ?? null
 
   const view = useMemo(() => {
     if (baseView === 'loading') {
@@ -25,7 +41,7 @@ export default function App() {
 
   function handleStart(config) {
     setBaseView('loading')
-    session.startSession(config)
+    session.startSession(config, studentId)
   }
 
   function handleReset() {
@@ -34,12 +50,26 @@ export default function App() {
   }
 
   if (view === 'setup') {
+    // Show limit-reached screen if daily cap is hit or backend returned 429
+    if (dailyLimit.limitReached || session.errorCode === 'DAILY_LIMIT') {
+      return (
+        <div data-testid={TEST_IDS.views.setup}>
+          <LimitReached
+            resetTime={dailyLimit.resetTime}
+            sessionsToday={dailyLimit.sessionsToday}
+            onViewHistory={() => setBaseView('progress')}
+          />
+        </div>
+      )
+    }
+
     return (
       <div data-testid={TEST_IDS.views.setup}>
         <SessionSetup
           onStart={handleStart}
           onViewHistory={() => setBaseView('progress')}
           error={session.error}
+          tierConfig={tierConfig}
         />
       </div>
     )

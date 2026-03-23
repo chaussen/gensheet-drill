@@ -32,11 +32,16 @@ export const TEST_IDS = {
     multiWarning:      'multi-select-warning',
     confirmBtn:        'confirm-selection-btn',
     submittingSpinner: 'submitting-spinner',
+    prevBtn:           'prev-question-btn',
+    nextBtn:           'next-question-btn',
+    submitBtn:         'submit-session-btn',
+    navDot:      (i: number) => `nav-dot-${i}`,
     optionBtn:   (i: number) => `option-btn-${i}`,
     optionLabel: (i: number) => `option-label-${i}`,
   },
 
   results: {
+    skippedBadge:    'skipped-badge',
     scoreDisplay:    'score-display',
     scorePercent:    'score-percent',
     performanceBand: 'performance-band',
@@ -48,6 +53,14 @@ export const TEST_IDS = {
     yourAnswer:    (id: string) => `your-answer-${id}`,
     correctAnswer: (id: string) => `correct-answer-${id}`,
     explanation:   (id: string) => `explanation-${id}`,
+  },
+
+  limit: {
+    container:  'limit-reached',
+    message:    'limit-message',
+    resetTime:  'limit-reset-time',
+    unlockBtn:  'unlock-more-btn',
+    historyBtn: 'limit-history-btn',
   },
 
   progress: {

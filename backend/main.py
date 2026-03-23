@@ -23,6 +23,8 @@ from routers import session as session_router  # noqa: E402
 from routers import questions as questions_router  # noqa: E402
 from routers import progress as progress_router  # noqa: E402
 from cache import session_cache, question_cache  # noqa: E402
+from config.tiers import get_tier_config  # noqa: E402
+from models.schemas import TierConfigResponse  # noqa: E402
 
 app = FastAPI(
     title="GenSheet Drill API",
@@ -51,6 +53,12 @@ if _FRONTEND_DIST.exists():
         StaticFiles(directory=str(_FRONTEND_DIST / "assets")),
         name="assets",
     )
+
+
+@app.get("/api/config/limits", response_model=TierConfigResponse)
+async def get_limits():
+    """Return usage limits for the current tier (always 'free' until subscriptions are added)."""
+    return get_tier_config()
 
 
 @app.get("/api/health")

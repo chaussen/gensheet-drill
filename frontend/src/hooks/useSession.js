@@ -6,11 +6,12 @@ const initialState = {
   sessionId:     null,
   questions:     [],
   config:        null,
-  answers:       new Map(),
+  answers:       new Map(),   // question_id -> { selectedIndex | selectedIndices }
   questionIndex: 0,
   result:        null,
   loading:       false,
   error:         null,
+  errorCode:     null,
 }
 
 export function useSession() {
@@ -26,6 +27,7 @@ export function useSession() {
   // Derived
   const currentQuestion = state.questions[state.questionIndex] ?? null
   const totalQuestions  = state.questions.length
+  const answeredCount   = state.answers.size
 
   // ── Timer helpers ─────────────────────────────────────────────────────────────
 
@@ -46,18 +48,36 @@ export function useSession() {
   }
 
   function finaliseTimings() {
+    // Record time for the question the student is currently viewing
+    if (currentQuestion) {
+      recordQuestionTime(currentQuestion.question_id)
+    }
     return {
       total_time_ms:  sessionStartRef.current ? Date.now() - sessionStartRef.current : 0,
       question_times: { ...questionTimesRef.current },
     }
   }
 
+  // ── Navigation ────────────────────────────────────────────────────────────────
+
+  function goToQuestion(index) {
+    if (index < 0 || index >= totalQuestions) return
+    // Record time on the question we're leaving
+    if (currentQuestion) {
+      recordQuestionTime(currentQuestion.question_id)
+    }
+    // Reset timer for the question we're navigating to
+    questionStartRef.current = Date.now()
+    setState(s => ({ ...s, questionIndex: index }))
+  }
+
   // ── Actions ───────────────────────────────────────────────────────────────────
 
-  async function startSession(config) {
+  async function startSession(config, studentId) {
     setState(s => ({ ...s, loading: true, error: null }))
     try {
-      const data = await api.startSession(config)
+      const payload = studentId ? { ...config, student_id: studentId } : config
+      const data = await api.startSession(payload)
       setState(s => ({
         ...s,
         sessionId:     data.session_id,
@@ -70,16 +90,16 @@ export function useSession() {
         error:         null,
       }))
     } catch (e) {
-      setState(s => ({ ...s, loading: false, error: e.message }))
+      setState(s => ({ ...s, loading: false, error: e.message, errorCode: e.status === 429 ? 'DAILY_LIMIT' : null }))
     }
   }
 
-  function answerQuestion(selectionOrArray) {
+  function setAnswer(selectionOrArray, { advance = false } = {}) {
     const q = state.questions[state.questionIndex]
     if (!q) return
 
-    // Record time spent on this question before advancing
-    recordQuestionTime(q.question_id)
+    // Record time on the current question before potentially advancing
+    if (advance) recordQuestionTime(q.question_id)
 
     const isMulti = Array.isArray(selectionOrArray)
     setState(s => {
@@ -88,12 +108,14 @@ export function useSession() {
         selectedIndex:   isMulti ? null : selectionOrArray,
         selectedIndices: isMulti ? selectionOrArray : null,
       })
-      return {
-        ...s,
-        answers,
-        questionIndex: s.questionIndex + 1,
-      }
+      const nextIndex = advance && s.questionIndex < s.questions.length - 1
+        ? s.questionIndex + 1
+        : s.questionIndex
+      return { ...s, answers, questionIndex: nextIndex }
     })
+
+    // Reset question timer for the next question
+    if (advance) questionStartRef.current = Date.now()
   }
 
   async function submitSession() {
@@ -136,14 +158,17 @@ export function useSession() {
     questionIndex:   state.questionIndex,
     totalQuestions,
     answers:         state.answers,
+    answeredCount,
     result:          state.result,
     loading:         state.loading,
     error:           state.error,
+    errorCode:       state.errorCode,
     sessionStartTime,
     // actions
     startSession,
     startSessionTimer,
-    answerQuestion,
+    setAnswer,
+    goToQuestion,
     submitSession,
     resetSession,
   }

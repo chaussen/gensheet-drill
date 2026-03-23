@@ -15,14 +15,22 @@ const BAND_LABELS = {
   exceeding:     'Exceeding',
 }
 
+function isSkipped(r) {
+  if (r.question_type === 'multi_select') {
+    return !r.selected_indices || r.selected_indices.length === 0
+  }
+  return r.selected_index == null
+}
+
 function renderSelected(r) {
   if (r.question_type === 'multi_select') {
     const texts = (r.selected_indices || []).map(i => r.options[i])
-    if (texts.length === 0) return '(none)'
+    if (texts.length === 0) return '(skipped)'
     return texts.map((t, i) => (
       <span key={i}>{i > 0 && ', '}<MathText>{t}</MathText></span>
     ))
   }
+  if (r.selected_index == null) return '(skipped)'
   return <MathText>{r.options[r.selected_index]}</MathText>
 }
 
@@ -33,6 +41,7 @@ function renderCorrect(r) {
       <span key={i}>{i > 0 && ', '}<MathText>{t}</MathText></span>
     ))
   }
+  if (r.correct_index == null) return '—'
   return <MathText>{r.options[r.correct_index]}</MathText>
 }
 
@@ -155,20 +164,26 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
           <div className="space-y-2">
             {result.responses.map((r) => {
               const isSlow = r.time_taken_ms != null && r.time_taken_ms > 90000
+              const skipped = isSkipped(r)
               return (
                 <div
                   key={r.question_id}
                   data-testid={TEST_IDS.results.questionRow(r.question_id)}
                   className={`border-l-4 rounded-r-lg px-4 py-3 cursor-pointer transition-colors ${
-                    r.correct ? 'border-green-500' : 'border-red-500'
+                    skipped ? 'border-slate-400' : r.correct ? 'border-green-500' : 'border-red-500'
                   } ${isSlow ? 'bg-amber-50 hover:bg-amber-100' : 'hover:bg-slate-50'}`}
                   onClick={() => setExpanded(expanded === r.question_id ? null : r.question_id)}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className={`flex-shrink-0 text-base ${r.correct ? 'text-green-500' : 'text-red-500'}`}>
-                        {r.correct ? '✓' : '✗'}
+                      <span className={`flex-shrink-0 text-base ${skipped ? 'text-slate-400' : r.correct ? 'text-green-500' : 'text-red-500'}`}>
+                        {skipped ? '—' : r.correct ? '✓' : '✗'}
                       </span>
+                      {skipped && (
+                        <span data-testid={TEST_IDS.results.skippedBadge} className="flex-shrink-0 text-xs bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded-full font-medium">
+                          skipped
+                        </span>
+                      )}
                       <MathText className="text-sm text-slate-700 truncate">{r.question_text}</MathText>
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
@@ -182,12 +197,14 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
                   {expanded === r.question_id && (
                     <div className="mt-3 pt-3 border-t border-slate-100 space-y-2">
                       <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <span className="text-slate-500">Your answer: </span>
-                          <span data-testid={TEST_IDS.results.yourAnswer(r.question_id)} className={r.correct ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
-                            {renderSelected(r)}
-                          </span>
-                        </div>
+                        {!skipped && (
+                          <div>
+                            <span className="text-slate-500">Your answer: </span>
+                            <span data-testid={TEST_IDS.results.yourAnswer(r.question_id)} className={r.correct ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
+                              {renderSelected(r)}
+                            </span>
+                          </div>
+                        )}
                         {!r.correct && (
                           <div>
                             <span className="text-slate-500">Correct: </span>

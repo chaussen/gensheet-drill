@@ -7,7 +7,7 @@ const DIFFICULTIES = [
   { value: 'advanced',   label: 'Advanced'   },
 ]
 
-export default function SessionSetup({ onStart, onViewHistory, error }) {
+export default function SessionSetup({ onStart, onViewHistory, error, tierConfig }) {
   function handleSubmit(e) {
     e.preventDefault()
     const fd = new FormData(e.target)
@@ -54,11 +54,11 @@ export default function SessionSetup({ onStart, onViewHistory, error }) {
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Questions</label>
-            <select name="count" defaultValue="10" data-testid={TEST_IDS.setup.countSelect}
+            <select name="count" defaultValue={String(tierConfig?.question_count_options?.[1] ?? tierConfig?.question_count_options?.[0] ?? 10)} data-testid={TEST_IDS.setup.countSelect}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <option value="5">5 questions</option>
-              <option value="10">10 questions</option>
-              <option value="15">15 questions</option>
+              {(tierConfig?.question_count_options ?? [5, 10]).map(n => (
+                <option key={n} value={n}>{n} questions</option>
+              ))}
             </select>
           </div>
 

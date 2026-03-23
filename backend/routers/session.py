@@ -26,6 +26,7 @@ from models.schemas import (
 from services.question_service import generate_session_questions
 from services.session_service import generate_session_summary
 from cache import session_cache
+from config.tiers import get_tier_config
 
 router = APIRouter(prefix="/api/session")
 logger = logging.getLogger(__name__)
@@ -63,6 +64,23 @@ async def start_session(req: SessionStartRequest):
     Create a new drill session. Generates questions, stores full objects
     (with correct_index) in server memory, returns public view to frontend.
     """
+    tier = get_tier_config()
+
+    if req.count > tier["max_question_count"]:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Question count {req.count} exceeds maximum of {tier['max_question_count']} for {tier['tier']} tier.",
+        )
+
+    if req.student_id:
+        today_count = session_cache.count_today(req.student_id)
+        if today_count >= tier["daily_session_limit"]:
+            raise HTTPException(
+                status_code=429,
+                detail="Daily session limit reached",
+                headers={"Retry-After": "3600"},
+            )
+
     try:
         questions = await generate_session_questions(
             year_level=req.year_level,
@@ -89,6 +107,7 @@ async def start_session(req: SessionStartRequest):
     # Store full question objects (including correct_index) server-side
     session_data = {
         "session_id": session_id,
+        "student_id": req.student_id,
         "year_level": req.year_level,
         "strand": req.strand,
         "difficulty": req.difficulty,
