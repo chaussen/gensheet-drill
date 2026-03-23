@@ -18,6 +18,9 @@ from services.question_service import (
     MULTI_SELECT_TEMPLATE_IDS,
     _build_multi_select_question,
     _build_t7n02_multi_select,
+    _to_latex_inner,
+    _math_wrap_option,
+    _math_wrap_text,
 )
 
 
@@ -42,7 +45,7 @@ def test_fallback_params_choice():
 def test_fallback_params_choice_difficulty():
     template = load_template_meta("T-7N-01")
     foundation = _fallback_params(template, "foundation")
-    advanced = _fallback_params(template, "advanced")
+    _fallback_params(template, "advanced")  # verify no crash for advanced tier
     # Advanced pool is larger; foundation values are a subset of advanced
     assert foundation["n"] in [4, 9, 16, 25, 36, 49, 64, 81, 100]
 
@@ -183,7 +186,6 @@ def test_build_question_curated_bank_empty_returns_none():
 
 def test_build_question_bad_params_returns_none():
     """If params cause verification to fail, build_question returns None gracefully."""
-    template = load_template_meta("T-7N-01")
     # n=7 is not a perfect square — sqrt returns non-integer but verifier won't raise;
     # use a template with strict requirements and broken params
     template2 = load_template_meta("T-7N-05")
@@ -293,8 +295,8 @@ def test_build_question_t8a02_fractional_answer_displays_as_fraction():
     q = build_question(template, {"a": 1, "b": 3, "c": 8, "d": 13, "op1": "+", "op2": "+"}, "standard")
     assert q is not None
     correct_option = q.options[q.correct_index]
-    assert correct_option == "-10/7", \
-        f"Expected '-10/7' as correct option, got '{correct_option}'"
+    assert correct_option == r"$\frac{-10}{7}$", \
+        f"Expected '$\\frac{{-10}}{{7}}$' as correct option, got '{correct_option}'"
     assert "-1" not in q.options or correct_option != "-1", \
         "Must not silently use the truncated answer -1 as correct"
 
@@ -440,6 +442,143 @@ def test_response_item_validation_both_raises():
     from models.schemas import ResponseItem
     with pytest.raises(ValidationError):
         ResponseItem(question_id="abc", selected_index=0, selected_indices=[0, 2])
+
+
+# ── Math wrapping unit tests ──────────────────────────────────────────────────
+
+class TestToLatexInner:
+    """_to_latex_inner converts plain/sympy notation to LaTeX (no surrounding $)."""
+
+    def test_plain_integer(self):
+        assert _to_latex_inner("5") == "5"
+
+    def test_plain_negative(self):
+        assert _to_latex_inner("-3") == "-3"
+
+    def test_fraction_positive(self):
+        assert _to_latex_inner("3/4") == r"\frac{3}{4}"
+
+    def test_fraction_negative_numerator(self):
+        assert _to_latex_inner("-10/7") == r"\frac{-10}{7}"
+
+    def test_fraction_negative_numerator_no_space(self):
+        assert _to_latex_inner("-1/2") == r"\frac{-1}{2}"
+
+    def test_fraction_positive_large(self):
+        assert _to_latex_inner("22/7") == r"\frac{22}{7}"
+
+    def test_plain_float_unchanged(self):
+        # floats are not converted to fractions
+        result = _to_latex_inner("1.5")
+        assert result == "1.5"
+
+    def test_variable_expression_unchanged(self):
+        # expressions without fractions pass through
+        result = _to_latex_inner("x + 3")
+        assert result == "x + 3"
+
+
+class TestMathWrapOption:
+    """_math_wrap_option wraps option strings that contain math; leaves plain values."""
+
+    def test_plain_integer_unchanged(self):
+        assert _math_wrap_option("5") == "5"
+
+    def test_plain_negative_integer_unchanged(self):
+        assert _math_wrap_option("-3") == "-3"
+
+    def test_plain_float_unchanged(self):
+        assert _math_wrap_option("1.5") == "1.5"
+
+    def test_fraction_wrapped(self):
+        assert _math_wrap_option("3/4") == r"$\frac{3}{4}$"
+
+    def test_negative_fraction_wrapped(self):
+        assert _math_wrap_option("-10/7") == r"$\frac{-10}{7}$"
+
+    def test_unit_measurement_unchanged(self):
+        # "50 cm²" should not be wrapped — it's a measurement
+        result = _math_wrap_option("50 cm²")
+        assert result == "50 cm²"
+
+    def test_algebraic_expression_wrapped(self):
+        # "x + 3" contains a variable so should be wrapped
+        result = _math_wrap_option("x + 3")
+        assert result.startswith("$") and result.endswith("$")
+
+    def test_already_wrapped_not_double_wrapped(self):
+        # If somehow already wrapped, should not add another layer
+        already = r"$\frac{-10}{7}$"
+        result = _math_wrap_option(already)
+        assert result == already
+
+
+class TestMathWrapText:
+    """_math_wrap_text adds $...$ around math in prose question_text / explanation."""
+
+    def test_plain_sentence_unchanged(self):
+        text = "What is the value of the expression?"
+        assert _math_wrap_text(text) == text
+
+    def test_sqrt_symbol_wrapped(self):
+        result = _math_wrap_text("Evaluate √16")
+        assert r"$\sqrt{16}$" in result
+
+    def test_cube_root_wrapped(self):
+        result = _math_wrap_text("Evaluate ∛8")
+        assert r"$\sqrt[3]{8}$" in result
+
+    def test_pi_standalone_wrapped(self):
+        result = _math_wrap_text("The area is π times radius squared.")
+        assert r"$\pi$" in result
+
+    def test_equation_line_wrapped(self):
+        result = _math_wrap_text("Solve: y = 3x + 5")
+        assert "$" in result
+        assert "3x" in result
+
+    def test_fraction_in_prose_wrapped(self):
+        result = _math_wrap_text("Find the value of 3/4 + 1/4.")
+        assert r"\frac" in result
+
+    def test_no_double_wrapping(self):
+        # Applying twice should not produce nested $...$
+        text = "Find √9 and √16."
+        once = _math_wrap_text(text)
+        twice = _math_wrap_text(once)
+        assert once == twice
+
+    def test_times_symbol_wrapped(self):
+        result = _math_wrap_text("Calculate 3 × 4.")
+        assert r"\times" in result
+
+
+class TestBuildQuestionMathWrapping:
+    """Integration: build_question returns options/question_text with $ wrapping applied."""
+
+    def test_fractional_answer_wrapped(self):
+        """T-8A-02 fractional answer becomes $\\frac{...}$."""
+        template = load_template_meta("T-8A-02")
+        q = build_question(template, {"a": 1, "b": 3, "c": 8, "d": 13, "op1": "+", "op2": "+"}, "standard")
+        assert q is not None
+        correct = q.options[q.correct_index]
+        assert correct == r"$\frac{-10}{7}$"
+
+    def test_integer_answer_plain(self):
+        """Integer answers must not be wrapped in dollar signs."""
+        template = load_template_meta("T-8A-02")
+        q = build_question(template, {"a": 3, "b": 2, "c": 1, "d": 8, "op1": "+", "op2": "+"}, "standard")
+        assert q is not None
+        correct = q.options[q.correct_index]
+        assert correct == "3"
+        assert "$" not in correct
+
+    def test_question_text_contains_math(self):
+        """question_text for an equation-solve template should contain $...$ math."""
+        template = load_template_meta("T-8A-02")
+        q = build_question(template, {"a": 3, "b": 2, "c": 1, "d": 8, "op1": "+", "op2": "+"}, "standard")
+        assert q is not None
+        assert "$" in q.question_text
 
 
 def test_response_item_validation_neither_raises():

@@ -28,6 +28,18 @@ Bugs are logged here. Fixed bugs are kept for historical reference.
   2. `question_service.py` generate_session_questions: added session-level deduplication by question_text as a safety net for all templates
 **Resolved:** 2026-03-22
 
+## BUG-004 — MathText crashes: @pkasila/react-katex not Vite 8 compatible
+**Found:** 2026-03-23
+**Status:** Resolved
+**Reproduce:**
+  Any session start — frontend receives questions from backend but page does not render.
+  Expected: question text and options render with KaTeX math.
+  Actual: "Element type is invalid: expected a string or function but got: object. Check the render method of MathText."
+**Root cause:** `@pkasila/react-katex` is a CJS package (`exports.default = ReactKatex`, `__esModule: true`). Vite 8 does not apply the `__esModule` interop trick — `import ReactKatex from '...'` returns the full `module.exports` object (`{ default: ReactKatex }`), not the class. Both named-import (`{ ReactKatex }` → undefined) and default-import (→ object) forms fail.
+**Root cause class:** SCHEMA_DRIFT
+**Fix applied:** Removed `@pkasila/react-katex` usage. Rewrote `MathText.jsx` to use `katex` directly (already a direct dep with proper ESM exports). Implemented `$...$` segment splitting inline, with `\$` → `$` escape handling for currency signs.
+**Resolved:** 2026-03-23
+
 ## BUG-002 — Verification crash: `_transversal_angle` does not handle "supplementary" relationship
 **Found:** 2026-03-22
 **Status:** Resolved

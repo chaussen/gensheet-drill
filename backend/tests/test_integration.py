@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-import services.ai_service as ai_service
+import services.ai_service as ai_service  # noqa: E402
 
 # ── Skip markers ──────────────────────────────────────────────────────────────
 

@@ -14,15 +14,15 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent / ".env")
 load_dotenv()  # also check cwd for local overrides
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import FileResponse  # noqa: E402
+from fastapi.staticfiles import StaticFiles  # noqa: E402
 
-from routers import session as session_router
-from routers import questions as questions_router
-from routers import progress as progress_router
-from cache import session_cache, question_cache
+from routers import session as session_router  # noqa: E402
+from routers import questions as questions_router  # noqa: E402
+from routers import progress as progress_router  # noqa: E402
+from cache import session_cache, question_cache  # noqa: E402
 
 app = FastAPI(
     title="GenSheet Drill API",

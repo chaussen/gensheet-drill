@@ -22,6 +22,201 @@ from models.schemas import QuestionObject
 logger = logging.getLogger(__name__)
 _engine = VerificationEngine()
 
+# ── Math delimiter helpers ($...$ wrapping for MathText/KaTeX) ─────────────────
+
+_PLAIN_NUM_RE = re.compile(r'^-?\d+(?:\.\d+)?$')
+_FRACTION_PURE_RE = re.compile(r'^(-?\d+)\s*/\s*(\d+)$')
+_UNICODE_SUPS = '²³⁴⁵⁶⁷⁸⁹'
+_SUP_MAP = {'²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9'}
+# Measurement answers: number + unit suffix — no math wrapping needed
+_UNIT_RE = re.compile(
+    r'^\$?-?\d+(?:\.\d+)?\s*'
+    r'(?:cm[²³]?|m[²³]?|km[²³]?|mm|kg|g|mg|L|mL|°[CF]?|'
+    r'km/h|m/s[²]?|kJ|J|N|Pa|W|A|V|Hz|s\b|min|hrs?)\s*$',
+    re.I,
+)
+
+
+def _to_latex_inner(s: str) -> str:
+    """Convert plain-text / sympy-style math to LaTeX notation (without surrounding $)."""
+    # Unicode minus → ASCII minus
+    s = s.replace('\u2212', '-')
+    # Unicode superscripts → ^{N}
+    for sup, digit in _SUP_MAP.items():
+        s = s.replace(sup, f'^{{{digit}}}')
+    # π → \pi
+    s = s.replace('π', r'\pi')
+    # sympy: x**2 → x^{2}
+    s = re.sub(r'\*\*(\d+)', r'^{\1}', s)
+    # sympy: 6*x → 6x
+    s = re.sub(r'(-?\d+)\*([a-zA-Z])', r'\1\2', s)
+    # √(expr) → \sqrt{expr}, √N → \sqrt{N}
+    s = re.sub(r'√\(([^)]+)\)', r'\\sqrt{\1}', s)
+    s = re.sub(r'√(\d+(?:\.\d+)?)', r'\\sqrt{\1}', s)
+    # ∛(expr) → \sqrt[3]{expr}, ∛N → \sqrt[3]{N}
+    s = re.sub(r'∛\(([^)]+)\)', r'\\sqrt[3]{\1}', s)
+    s = re.sub(r'∛(\d+(?:\.\d+)?)', r'\\sqrt[3]{\1}', s)
+    # Integer fractions N/M → \frac{N}{M}
+    s = re.sub(r'(-?\d+)\s*/\s*(\d+)', r'\\frac{\1}{\2}', s)
+    # × → \times, ÷ → \div
+    s = s.replace('×', r'\times').replace('÷', r'\div')
+    return s
+
+
+def _math_wrap_option(s: str) -> str:
+    """
+    Wrap an option/answer string in $LaTeX$ if it contains mathematical notation.
+    Plain integers and floats are returned unchanged.
+    """
+    s = s.strip()
+    if not s or '$' in s:
+        return s
+    # Plain number → no wrapping
+    if _PLAIN_NUM_RE.match(s):
+        return s
+    # Number with measurement unit → no wrapping (e.g. "50 cm²", "12 kg")
+    if _UNIT_RE.match(s):
+        return s
+    # Pure fraction N/M → \frac
+    m = _FRACTION_PURE_RE.match(s)
+    if m:
+        return f'$\\frac{{{m.group(1)}}}{{{m.group(2)}}}$'
+    # Detect math content
+    has_math = (
+        any(c in s for c in ('√', '∛', '×', '÷', '^', 'π'))
+        or any(c in s for c in _UNICODE_SUPS)
+        or '**' in s
+        or bool(re.search(r'-?\d+\*[a-zA-Z]', s))           # sympy N*x
+        or bool(re.search(r'(?<!\w)\d+[a-z]', s))            # coefficient·var: 3x, 2y
+        or bool(re.search(r'[a-z]\s*[+\-*/^=]', s))          # var with operator
+        or bool(re.search(r'[=+\-*/]\s*[a-z](?!\w)', s))     # operator before var
+    )
+    if not has_math:
+        return s
+    return f'${_to_latex_inner(s)}$'
+
+
+def _math_wrap_text(text: str) -> str:
+    """
+    Add $...$ delimiters around mathematical sub-expressions in prose text.
+    Applied to question_text and explanation strings.
+    """
+    # Escape currency dollar signs ($40 → \$40) before any other processing
+    text = re.sub(r'\$(?=\d)', r'\\$', text)
+
+    # 1. √(expr) → $\sqrt{expr}$
+    text = re.sub(
+        r'√\(([^)]+)\)',
+        lambda m: f'$\\sqrt{{{m.group(1)}}}$',
+        text,
+    )
+    # 2. √N → $\sqrt{N}$
+    text = re.sub(
+        r'√(\d+(?:\.\d+)?)',
+        lambda m: f'$\\sqrt{{{m.group(1)}}}$',
+        text,
+    )
+    # 3. ∛N → $\sqrt[3]{N}$
+    text = re.sub(
+        r'∛(\d+(?:\.\d+)?)',
+        lambda m: f'$\\sqrt[3]{{{m.group(1)}}}$',
+        text,
+    )
+    # 4. Standalone π → $\pi$
+    text = re.sub(r'(?<!\w)π(?!\w)', r'$\\pi$', text)
+
+    # 5. Products with × or ÷ (e.g. "2^3 × 5", "4 × 3")
+    def _wrap_product(m: re.Match) -> str:
+        inner = m.group(0).replace('×', r'\times').replace('÷', r'\div')
+        return f'${inner}$'
+    text = re.sub(
+        r'\d+(?:\^\d+)?(?:\s*[×÷]\s*\d+(?:\^\d+)?)+',
+        _wrap_product,
+        text,
+    )
+
+    # 6. Inline fractions N/M (standalone — not inside a word)
+    text = re.sub(
+        r'(?<!\w)(-?\d+)\s*/\s*(\d+)(?!\w)',
+        lambda m: f'$\\frac{{{m.group(1)}}}{{{m.group(2)}}}$',
+        text,
+    )
+
+    # 7. Expression after keyword colon — wrap if contains variable or math symbol
+    def _wrap_after_keyword(m: re.Match) -> str:
+        prefix = m.group(1)
+        expr = m.group(2)
+        if '$' in expr:
+            return prefix + expr  # already partially wrapped by earlier rules
+        if re.search(r'[a-z][+\-*/^=²³⁴]|[+\-*/=][a-z](?!\w)|\d[a-z]|[√∛×÷^]', expr):
+            return prefix + f'${_to_latex_inner(expr.strip())}$'
+        return m.group(0)
+    text = re.sub(
+        r'((?:Solve|Simplify|Expand|Evaluate|Calculate):\s*)(.+)',
+        _wrap_after_keyword,
+        text,
+        flags=re.IGNORECASE | re.MULTILINE,
+    )
+
+    # Helper: apply a substitution only to segments outside existing $...$ blocks
+    def _outside_math(pattern: str, repl_fn) -> None:
+        nonlocal text
+        # Split preserving $...$ delimited blocks
+        segments = re.split(r'(\$[^$]+\$)', text)
+        result = []
+        for seg in segments:
+            if seg.startswith('$') and seg.endswith('$') and len(seg) > 1:
+                result.append(seg)  # already math — leave untouched
+            else:
+                result.append(re.sub(pattern, repl_fn, seg))
+        text = ''.join(result)
+
+    # 8. Equation lines: "y = 3x + 5", "x = 2y − 1" (single lowercase var = expression)
+    def _wrap_eq_line(m: re.Match) -> str:
+        return f'${_to_latex_inner(m.group(0))}$'
+    _outside_math(
+        r'(?<!\w)[a-z]\s*=\s*-?\d*\.?\d*[a-z](?:\s*[+\-]\s*\d+)*(?!\w)',
+        _wrap_eq_line,
+    )
+
+    # 9. Inline variable expressions — applied only outside existing math blocks.
+    # Use actual Unicode minus sign (−, U+2212) in character classes, not \u2212.
+    def _wrap_var_expr(m: re.Match) -> str:
+        return f'${_to_latex_inner(m.group(0))}$'
+
+    # 9a. Variable with unicode superscript, e.g. "x² + 3x − 4 = 0", "x³ − 1 = 0"
+    # Run this first so the full expression is captured before rule 9b.
+    _outside_math(
+        r'(?<!\w)-?\d*[a-z][²³⁴⁵⁶⁷⁸⁹]'
+        r'(?:\s*[+\-−]\s*(?:-?\d+[a-z]?[²³⁴]?|-?\d+))*'
+        r'(?:\s*=\s*(?:-?\d*[a-z][²³⁴]?|-?\d+)'
+        r'(?:\s*[+\-−]\s*(?:-?\d*[a-z][²³⁴]?|-?\d+))*)?'
+        r'(?![²³⁴\w])',
+        _wrap_var_expr,
+    )
+
+    # 9b. Coefficient + variable terms, e.g. "3x + 5", "2x − 3 = 7"
+    _outside_math(
+        r'(?<!\w)-?\d+[a-z][²³⁴]?'
+        r'(?:\s*[+\-−]\s*(?:-?\d+[a-z]?[²³⁴]?|-?\d+))*'
+        r'(?:\s*=\s*(?:-?\d*[a-z][²³⁴]?|-?\d+)'
+        r'(?:\s*[+\-−]\s*(?:-?\d*[a-z][²³⁴]?|-?\d+))*)?'
+        r'(?![²³⁴\w])',
+        _wrap_var_expr,
+    )
+
+    return text
+
+
+def _wrap_question_math(q: QuestionObject) -> QuestionObject:
+    """Apply $...$ math delimiters to question_text, options, and explanation."""
+    return q.model_copy(update={
+        'question_text': _math_wrap_text(q.question_text),
+        'options': [_math_wrap_option(o) for o in q.options],
+        'explanation': _math_wrap_text(q.explanation),
+    })
+
+
 # ── Validation gate ────────────────────────────────────────────────────────────
 
 _PLACEHOLDER_RE = re.compile(r'\{[a-z_][a-z_0-9]*\}')
@@ -293,7 +488,7 @@ def _fallback_params(template: dict, difficulty: str) -> dict:
                 hi = spec.get(f"{difficulty}_max", spec.get("max", 10))
                 exclude = spec.get("exclude", [])
                 for _ in range(20):
-                    val = random.randint(int(lo), int(hi))
+                    val = random.randint(int(lo or 1), int(hi or 10))
                     if val not in exclude:
                         params[key] = val
                         break
@@ -573,6 +768,89 @@ def _resolve_derived_params(template: dict, params: dict) -> dict:
     if template.get("id") == "T-9P-03" and "table" not in params:
         _derive_t9p03_table(params)
 
+    # T-9M-01: generate real dimension params from shape.
+    # Schema uses a prose 'dimensions' string rather than typed param entries, so
+    # _fallback_params only generates 'shape'. Actual dimension keys (l, w, h, r, etc.)
+    # are derived here to match what _surface_area() expects.
+    if template.get("id") == "T-9M-01" and "l" not in params and "r" not in params and "a" not in params:
+        shape = params.get("shape", "rectangular prism")
+        if shape == "cylinder":
+            r = random.randint(3, 9)
+            h = random.randint(4, 15)
+            params.update({"r": r, "h": h})
+            params["dimensions"] = f"radius {r} cm, height {h} cm"
+        elif shape == "triangular prism":
+            triple = random.choice([(3, 4, 5), (5, 12, 13), (6, 8, 10), (8, 15, 17)])
+            a, b_leg, c_side = triple
+            length = random.randint(4, 12)
+            params.update({"a": a, "b": b_leg, "c_side": c_side, "length": length})
+            params["dimensions"] = (
+                f"triangular base with legs {a} cm and {b_leg} cm "
+                f"(hypotenuse {c_side} cm), length {length} cm"
+            )
+        else:  # rectangular prism (default)
+            ln = random.randint(3, 12)
+            w = random.randint(3, 12)
+            h = random.randint(3, 12)
+            params.update({"l": ln, "w": w, "h": h})
+            params["dimensions"] = f"length {ln} cm, width {w} cm, height {h} cm"
+
+    # T-9M-02: generate real dimension params from shape.
+    # Same pattern as T-9M-01: 'dimensions' in schema is a prose dict, not typed params.
+    if template.get("id") == "T-9M-02" and "s" not in params and "r" not in params:
+        shape = params.get("shape", "square pyramid")
+        if shape == "cone":
+            r = random.randint(3, 9)
+            h = random.randint(4, 15)
+            params.update({"r": r, "h": h})
+            params["dimensions"] = f"radius {r} cm, height {h} cm"
+        elif shape == "sphere":
+            r = random.randint(3, 9)
+            params["r"] = r
+            params["dimensions"] = f"radius {r} cm"
+        else:  # square pyramid (default)
+            s = random.randint(3, 12)
+            h = random.randint(4, 15)
+            params.update({"s": s, "h": h})
+            params["dimensions"] = f"base side {s} cm, height {h} cm"
+
+    # T-9M-03: derive unknown_side (rule is natural language — "different from known_side;
+    # requires sin/cos/tan" — which _safe_eval cannot evaluate).
+    if template.get("id") == "T-9M-03" and "unknown_side" not in params:
+        known = params.get("known_side", "hypotenuse")
+        sides = ["hypotenuse", "opposite side", "adjacent side"]
+        params["unknown_side"] = random.choice([s for s in sides if s != known])
+
+    # T-9M-04: derive b from a using an integer scale factor.
+    # Rule "b = a × k where k ∈ {2, 3, 4, 1.5, 2.5}" fails _safe_eval due to the
+    # "where k ∈ {...}" clause. Use integer k only so the answer is always a clean integer.
+    if template.get("id") == "T-9M-04" and "b" not in params:
+        a = params.get("a", random.randint(2, 8))
+        k = random.choice([2, 3, 4])
+        params["b"] = a * k
+
+    # T-9M-04b: derive measured from actual + error_pct + direction.
+    # Conditional rule ("if over ... if under") cannot be handled by _safe_eval.
+    # Also enforces the generation_constraint: measured must be a clean integer.
+    if template.get("id") == "T-9M-04b" and "measured" not in params:
+        actual = params.get("actual", 100)
+        error_pct = params.get("error_pct", 5)
+        direction = params.get("direction", "over")
+        error_amount = actual * error_pct / 100
+        if error_amount == int(error_amount):
+            measured = int(actual + error_amount) if direction == "over" else int(actual - error_amount)
+        else:
+            # Pick a clean error_pct that yields an integer error_amount
+            for ep in [5, 10, 20, 2, 4, 1]:
+                ea = actual * ep / 100
+                if ea == int(ea):
+                    error_pct = ep
+                    error_amount = ea
+                    break
+            params["error_pct"] = error_pct
+            measured = int(actual + error_amount) if direction == "over" else int(actual - error_amount)
+        params["measured"] = measured
+
     return params
 
 
@@ -730,7 +1008,7 @@ def _build_multi_select_question(
     shuffled_correct = sorted(old_to_new[i] for i in item["correct_indices"])
 
     try:
-        return QuestionObject(
+        q = QuestionObject(
             question_id=str(uuid.uuid4()),
             template_id=template_id,
             vc_code=bank["vc_code"],
@@ -744,9 +1022,9 @@ def _build_multi_select_question(
             correct_indices=shuffled_correct,
             explanation=item["explanation"],
             params=params,
-            latex_notation=bank.get("strand") in ("Number", "Algebra"),
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
+        return _wrap_question_math(q)
     except Exception as e:
         logger.warning("Multi-select QuestionObject build failed for %s: %s", template_id, e)
         return None
@@ -788,7 +1066,7 @@ def _build_t7n02_multi_select(params: dict, difficulty: str) -> QuestionObject |
 
     try:
         meta = load_template_meta("T-7N-02")
-        return QuestionObject(
+        q = QuestionObject(
             question_id=str(uuid.uuid4()),
             template_id="T-7N-02",
             vc_code=meta["vc_code"],
@@ -802,9 +1080,9 @@ def _build_t7n02_multi_select(params: dict, difficulty: str) -> QuestionObject |
             correct_indices=correct_indices,
             explanation=explanation,
             params=params,
-            latex_notation=True,
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
+        return _wrap_question_math(q)
     except Exception as e:
         logger.warning("T-7N-02 multi_select build failed: %s", e)
         return None
@@ -854,7 +1132,7 @@ def _build_curated_bank_question(
             new_i for new_i, (_, opt) in enumerate(indexed) if opt in correct_answers
         )
         try:
-            return QuestionObject(
+            q = QuestionObject(
                 question_id=str(uuid.uuid4()),
                 template_id=template_id,
                 vc_code=template["vc_code"],
@@ -868,9 +1146,9 @@ def _build_curated_bank_question(
                 correct_indices=correct_indices,
                 explanation=explanation,
                 params={},
-                latex_notation=template.get("latex_notation", False),
                 generated_at=datetime.now(timezone.utc).isoformat(),
             )
+            return _wrap_question_math(q)
         except Exception as e:
             logger.warning("Curated bank multi_select build failed for %s: %s", template_id, e)
             return None
@@ -887,7 +1165,7 @@ def _build_curated_bank_question(
     correct_index = options.index(correct_answer)
 
     try:
-        return QuestionObject(
+        q = QuestionObject(
             question_id=str(uuid.uuid4()),
             template_id=template_id,
             vc_code=template["vc_code"],
@@ -899,9 +1177,9 @@ def _build_curated_bank_question(
             correct_index=correct_index,
             explanation=explanation,
             params={},
-            latex_notation=template.get("latex_notation", False),
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
+        return _wrap_question_math(q)
     except Exception as e:
         logger.warning("Curated bank QuestionObject build failed for %s: %s", template_id, e)
         return None
@@ -991,7 +1269,7 @@ def build_question(
     # 5. Explanation
     explanation = _build_explanation(template, params, correct_answer)
 
-    # 6. Validate with Pydantic
+    # 6. Validate with Pydantic (use raw strings — wrapping happens after validation)
     try:
         q = QuestionObject(
             question_id=str(uuid.uuid4()),
@@ -1005,7 +1283,6 @@ def build_question(
             correct_index=correct_index,
             explanation=explanation,
             params=params,
-            latex_notation=template.get("latex_notation", False),
             generated_at=datetime.now(timezone.utc).isoformat(),
         )
     except Exception as e:
@@ -1017,7 +1294,8 @@ def build_question(
         logger.warning("validate_question rejected assembled question for %s", template_id)
         return None
 
-    return q
+    # 8. Apply $...$ math wrapping now that the question is validated
+    return _wrap_question_math(q)
 
 
 # ── Session question generator ────────────────────────────────────────────────
@@ -1088,7 +1366,7 @@ async def generate_session_questions(
         template = template_by_id[template_id]
 
         if template_id in MULTI_SELECT_BANKS or template.get("generation_mode") == "curated_bank":
-            params_list = [{} for _ in range(n)]
+            params_list: list[dict] = [{} for _ in range(n)]
 
             # Pre-select bank items without replacement to avoid repeats within a session.
             if template_id in MULTI_SELECT_BANKS:

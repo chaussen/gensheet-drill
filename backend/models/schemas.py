@@ -12,9 +12,7 @@ def _now_iso() -> str:
 
 
 class QuestionObject(BaseModel):
-    """Full question object including correct_index. Stored server-side, never sent to frontend.
-    TODO(schema-drift): latex_notation field is not in docs/schemas.json — added post-schema.
-    """
+    """Full question object including correct_index. Stored server-side, never sent to frontend."""
     question_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     template_id: str
     vc_code: str
@@ -28,7 +26,6 @@ class QuestionObject(BaseModel):
     correct_indices: list[int] | None = None  # multi_select only; correct_index is -1 sentinel
     explanation: str
     params: dict
-    latex_notation: bool = False
     generated_at: str = Field(default_factory=_now_iso)
 
 
@@ -45,7 +42,6 @@ class QuestionObjectPublic(BaseModel):
     options: list[str]
     explanation: str
     params: dict
-    latex_notation: bool = False
     generated_at: str
 
 
@@ -104,7 +100,6 @@ class ResponseResultItem(BaseModel):
     correct: bool
     explanation: str
     vc_code: str
-    latex_notation: bool = False
     time_taken_ms: int | None = None
 
 
@@ -165,9 +160,8 @@ class SessionSummaryObject(BaseModel):
 
 
 class SessionResultResponse(BaseModel):
-    # TODO(schema-drift): summary field (SessionSummaryObject) is not in docs/schemas.json —
-    # added post-schema. ResponseResultItem also has latex_notation and time_taken_ms not in
-    # the JSON schema. Update docs/schemas.json when the schema is next revised.
+    # TODO(schema-drift): summary field (SessionSummaryObject) and ResponseResultItem.time_taken_ms
+    # are not in docs/schemas.json — added post-schema. Update docs/schemas.json when next revised.
     session_id: str
     score: int
     total: int

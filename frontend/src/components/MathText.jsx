@@ -1,36 +1,35 @@
-import { InlineMath } from 'react-katex'
-import { toLatex } from '../utils/math.js'
+import { useMemo } from 'react'
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
 
-// Matches math tokens that need KaTeX rendering:
-// √N, √(expr), ∛N, ∛(expr), N², N³, N⁴, N/M, × ÷
-const MATH_TOKEN_RE = /√(?:\([^)]+\)|\d+(?:\.\d+)?)|∛(?:\([^)]+\)|\d+(?:\.\d+)?)|[²³⁴]|\d+\/\d+|[×÷]/g
+const KATEX_OPTS = { throwOnError: false, errorColor: '#cc0000', displayMode: false }
 
-export default function MathText({ text, latex, className }) {
-  if (!latex) return <span className={className}>{text}</span>
+// Split "text $expr$ more" into segments.
+// Odd-indexed segments are math; even-indexed are plain text.
+// \$ in source is an escaped dollar sign (currency) — rendered as literal "$".
+const DOLLAR_ESC = '\uFFFD'
+const DOLLAR_ESC_RE = new RegExp(DOLLAR_ESC, 'g')
 
-  const segments = []
-  let lastIndex = 0
+function latexSegments(text) {
+  if (!text) return []
+  const safe = String(text).replace(/\\\$/g, DOLLAR_ESC)
+  const parts = safe.split(/\$([^$]+)\$/g)
+  return parts.map((part, i) => ({ math: i % 2 === 1, text: part.replace(DOLLAR_ESC_RE, '$') }))
+}
 
-  for (const match of text.matchAll(MATH_TOKEN_RE)) {
-    if (match.index > lastIndex) {
-      segments.push({ type: 'text', content: text.slice(lastIndex, match.index) })
-    }
-    segments.push({ type: 'math', content: toLatex(match[0]) })
-    lastIndex = match.index + match[0].length
-  }
-  if (lastIndex < text.length) {
-    segments.push({ type: 'text', content: text.slice(lastIndex) })
-  }
-
-  if (segments.length === 0) return <span className={className}>{text}</span>
-
+export default function MathText({ children, className }) {
+  const segments = useMemo(() => latexSegments(children), [children])
   return (
     <span className={className}>
-      {segments.map((seg, i) =>
-        seg.type === 'math'
-          ? <InlineMath key={i} math={seg.content} renderError={() => <span>{seg.content}</span>} />
-          : <span key={i}>{seg.content}</span>
-      )}
+      {segments.map((seg, i) => {
+        if (!seg.math) return seg.text || null
+        try {
+          const html = katex.renderToString(seg.text, KATEX_OPTS)
+          return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />
+        } catch {
+          return <span key={i}>{seg.text}</span>
+        }
+      })}
     </span>
   )
 }

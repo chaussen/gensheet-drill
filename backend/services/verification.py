@@ -17,12 +17,8 @@ Usage:
 import math
 import operator
 from fractions import Fraction
-from sympy import (
-    symbols, solve, expand, factorint, simplify, Rational,
-    pi, sin, cos, tan, sqrt, nsimplify, Integer, Float
-)
+from sympy import symbols, solve, expand, factorint
 from sympy import Eq as SymEq
-import random
 
 x, y, n, m = symbols('x y n m')
 
@@ -109,7 +105,6 @@ class VerificationEngine:
         var = p["var"]
         val = p["val"]
         expr_str = p["expr"].replace("×", "*").replace("²", "**2").replace("³", "**3")
-        sym = symbols(var)
         expr = __import__("sympy").sympify(expr_str.replace(var, f"({val})"))
         return int(expr)
 
@@ -333,10 +328,9 @@ class VerificationEngine:
         raise ValueError(f"Unknown side type: {unknown}")
 
     def _volume_prism(self, p):
-        prism_type = p.get("prism_type", "rectangular")
-        l = float(p["l"])
+        length = float(p["l"])
         base_area = float(p["base_area"])
-        result = base_area * l
+        result = base_area * length
         return int(result) if result == int(result) else round(result, 2)
 
     def _mean_from_frequency_table(self, p):
@@ -420,8 +414,8 @@ class VerificationEngine:
     def _surface_area(self, p):
         shape = p["shape"]
         if shape == "rectangular prism":
-            l, w, h = float(p["l"]), float(p["w"]), float(p["h"])
-            return 2 * (l*w + l*h + w*h)
+            ln, w, h = float(p["l"]), float(p["w"]), float(p["h"])
+            return 2 * (ln*w + ln*h + w*h)
         elif shape == "cylinder":
             r, h = float(p["r"]), float(p["h"])
             return round(2 * math.pi * r * h + 2 * math.pi * r**2, 2)
@@ -480,13 +474,13 @@ class VerificationEngine:
         mA, mB = float(p["meanA"]), float(p["meanB"])
         rA, rB = float(p["rangeA"]), float(p["rangeB"])
         if mA > mB and rA > rB:
-            return f"Set A has a higher mean and greater spread than Set B"
+            return "Set A has a higher mean and greater spread than Set B"
         elif mA > mB and rA < rB:
-            return f"Set A has a higher mean but less spread than Set B"
+            return "Set A has a higher mean but less spread than Set B"
         elif mA < mB and rA > rB:
-            return f"Set B has a higher mean but Set A has greater spread"
+            return "Set B has a higher mean but Set A has greater spread"
         else:
-            return f"Set B has a higher mean and greater spread than Set A"
+            return "Set B has a higher mean and greater spread than Set A"
 
     def _venn_diagram_probability(self, p):
         total = int(p["total"])
@@ -889,7 +883,7 @@ class VerificationEngine:
 if __name__ == "__main__":
     engine = VerificationEngine()
 
-    tests = [
+    tests: list[tuple[str, dict, object]] = [
         ("T-7N-01", {"n": 64}, 8),
         ("T-7N-07", {"pct": 25, "amount": 200}, 50),
         ("T-7N-08", {"a": -5, "b": 3, "op": "+"}, -2),

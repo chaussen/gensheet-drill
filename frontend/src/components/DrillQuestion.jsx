@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { InlineMath } from 'react-katex'
 import MathText from './MathText.jsx'
-import { toLatex } from '../utils/math.js'
 import { TEST_IDS } from '../testing/testIds.ts'
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E']
@@ -45,11 +43,9 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
         Question {questionNumber} of {totalQuestions}
       </p>
 
-      <MathText
-        text={question.question_text}
-        latex={!!question.latex_notation}
-        className="text-lg font-medium text-slate-800 mb-6 leading-relaxed block"
-      />
+      <MathText className="text-lg font-medium text-slate-800 mb-6 leading-relaxed block">
+        {question.question_text}
+      </MathText>
 
       {isMultiSelect && (
         <p data-testid={TEST_IDS.drill.multiWarning} className="text-xs font-medium text-amber-600 uppercase tracking-wide mb-3">
@@ -86,14 +82,12 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
                 ].join(' ')}>
                   {OPTION_LABELS[i]}
                 </span>
-                {question.latex_notation
-                  ? <InlineMath math={toLatex(opt)} renderError={() => <span>{opt}</span>} />
-                  : <span>{opt}</span>}
+                <MathText>{opt}</MathText>
               </label>
             )
           }
 
-          // Single-select (original behaviour)
+          // Single-select
           const isSelected = selected === i
           return (
             <button
@@ -115,9 +109,7 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
               ].join(' ')}>
                 {OPTION_LABELS[i]}
               </span>
-              {question.latex_notation
-                ? <InlineMath math={toLatex(opt)} renderError={() => <span>{opt}</span>} />
-                : <span>{opt}</span>}
+              <MathText>{opt}</MathText>
             </button>
           )
         })}

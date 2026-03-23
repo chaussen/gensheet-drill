@@ -51,7 +51,6 @@ def _make_response_result_item(r: dict, q: dict) -> ResponseResultItem:
         correct=r["correct"],
         explanation=q["explanation"],
         vc_code=q["vc_code"],
-        latex_notation=q.get("latex_notation", False),
         time_taken_ms=r.get("time_taken_ms"),
     )
 
@@ -73,16 +72,15 @@ async def start_session(req: SessionStartRequest):
         )
     except ValueError as e:
         raise HTTPException(status_code=503, detail=str(e))
+    except Exception as e:
+        logger.error("Unexpected error generating questions: %s", e)
+        raise HTTPException(status_code=503, detail="Could not generate questions. Please try again.")
 
-    if not questions:
+    MIN_QUESTIONS = 5
+    if len(questions) < MIN_QUESTIONS:
         raise HTTPException(
             status_code=503,
-            detail="Could not generate questions. The AI service may be unavailable.",
-        )
-    if len(questions) < req.count:
-        raise HTTPException(
-            status_code=503,
-            detail=f"Only generated {len(questions)} of {req.count} requested questions. Please try again.",
+            detail="Could not generate enough questions. Please try again.",
         )
 
     session_id = str(uuid.uuid4())
@@ -126,7 +124,6 @@ async def start_session(req: SessionStartRequest):
             options=q.options,
             explanation=q.explanation,
             params=q.params,
-            latex_notation=q.latex_notation,
             generated_at=q.generated_at,
         )
         for q in questions
@@ -184,7 +181,6 @@ async def submit_session(
         })
 
     total = len(marked)
-    score_pct = round(score / total * 100) if total > 0 else 0
     completed_at = _now()
 
     session["responses"] = marked

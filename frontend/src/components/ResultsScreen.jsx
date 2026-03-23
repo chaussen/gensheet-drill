@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import { InlineMath } from 'react-katex'
 import MathText from './MathText.jsx'
-import { toLatex } from '../utils/math.js'
 import { TEST_IDS } from '../testing/testIds.ts'
 
 const BAND_STYLES = {
@@ -17,30 +15,25 @@ const BAND_LABELS = {
   exceeding:     'Exceeding',
 }
 
-function renderOption(text, latex) {
-  if (!latex) return text
-  return <InlineMath math={toLatex(text)} renderError={() => text} />
-}
-
 function renderSelected(r) {
   if (r.question_type === 'multi_select') {
     const texts = (r.selected_indices || []).map(i => r.options[i])
     if (texts.length === 0) return '(none)'
     return texts.map((t, i) => (
-      <span key={i}>{i > 0 && ', '}{renderOption(t, r.latex_notation)}</span>
+      <span key={i}>{i > 0 && ', '}<MathText>{t}</MathText></span>
     ))
   }
-  return renderOption(r.options[r.selected_index], r.latex_notation)
+  return <MathText>{r.options[r.selected_index]}</MathText>
 }
 
 function renderCorrect(r) {
   if (r.question_type === 'multi_select') {
     const texts = (r.correct_indices || []).map(i => r.options[i])
     return texts.map((t, i) => (
-      <span key={i}>{i > 0 && ', '}{renderOption(t, r.latex_notation)}</span>
+      <span key={i}>{i > 0 && ', '}<MathText>{t}</MathText></span>
     ))
   }
-  return renderOption(r.options[r.correct_index], r.latex_notation)
+  return <MathText>{r.options[r.correct_index]}</MathText>
 }
 
 function formatMs(ms) {
@@ -176,7 +169,7 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
                       <span className={`flex-shrink-0 text-base ${r.correct ? 'text-green-500' : 'text-red-500'}`}>
                         {r.correct ? '✓' : '✗'}
                       </span>
-                      <MathText text={r.question_text} latex={!!r.latex_notation} className="text-sm text-slate-700 truncate" />
+                      <MathText className="text-sm text-slate-700 truncate">{r.question_text}</MathText>
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
                       {r.time_taken_ms != null && (
@@ -203,7 +196,7 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
                         )}
                       </div>
                       <span data-testid={TEST_IDS.results.explanation(r.question_id)}>
-                        <MathText text={r.explanation} latex={!!r.latex_notation} className="text-xs text-slate-500 italic" />
+                        <MathText className="text-xs text-slate-500 italic">{r.explanation}</MathText>
                       </span>
                     </div>
                   )}

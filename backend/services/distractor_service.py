@@ -52,8 +52,8 @@ def _improve_string_distractors(correct_str: str, distractors: list) -> list:
             try:
                 const = int(const_str)
                 prefix = correct_str[:match.start()].rstrip()
-                for delta in [5, -5, 10, -10]:
-                    new_c = const + delta
+                for offset in [5, -5, 10, -10]:
+                    new_c = const + offset
                     sign = " + " if new_c >= 0 else " - "
                     alt = f"{prefix}{sign}{abs(new_c)}"
                     if alt != correct_str and alt not in alternatives:
