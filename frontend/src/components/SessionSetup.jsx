@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import { TEST_IDS } from '../testing/testIds.ts'
 
-const STRANDS = ['Number', 'Algebra', 'Measurement', 'Space', 'Statistics', 'Probability', 'Mixed']
+const ALL_STRANDS = ['Number', 'Algebra', 'Measurement', 'Space', 'Statistics', 'Probability', 'Mixed']
+// Year 9 has too few templates for Mixed (no even distribution) and Statistics (only 1 template).
+const YEAR_9_DISABLED_STRANDS = new Set(['Mixed', 'Statistics'])
 const DIFFICULTIES = [
   { value: 'foundation', label: 'Foundation' },
   { value: 'standard',   label: 'Standard'   },
@@ -8,6 +11,17 @@ const DIFFICULTIES = [
 ]
 
 export default function SessionSetup({ onStart, onViewHistory, error, tierConfig }) {
+  const [yearLevel, setYearLevel] = useState(8)
+
+  const strands = yearLevel === 9
+    ? ALL_STRANDS.filter(s => !YEAR_9_DISABLED_STRANDS.has(s))
+    : ALL_STRANDS
+
+  function handleYearChange(e) {
+    const year = Number(e.target.value)
+    setYearLevel(year)
+  }
+
   function handleSubmit(e) {
     e.preventDefault()
     const fd = new FormData(e.target)
@@ -28,7 +42,7 @@ export default function SessionSetup({ onStart, onViewHistory, error, tierConfig
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Year Level</label>
-            <select name="year_level" defaultValue="8" data-testid={TEST_IDS.setup.yearSelect}
+            <select name="year_level" value={yearLevel} onChange={handleYearChange} data-testid={TEST_IDS.setup.yearSelect}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
               <option value="7">Year 7</option>
               <option value="8">Year 8</option>
@@ -38,9 +52,9 @@ export default function SessionSetup({ onStart, onViewHistory, error, tierConfig
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Strand</label>
-            <select name="strand" defaultValue="Mixed" data-testid={TEST_IDS.setup.strandSelect}
+            <select key={yearLevel} name="strand" defaultValue={strands.includes('Mixed') ? 'Mixed' : strands[0]} data-testid={TEST_IDS.setup.strandSelect}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              {STRANDS.map(s => <option key={s} value={s}>{s}</option>)}
+              {strands.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
 

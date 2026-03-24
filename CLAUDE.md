@@ -287,3 +287,15 @@ Function parameter types should be the minimal union the function actually handl
 ### Test ID constants
 All `data-testid` strings are defined in `frontend/src/testing/testIds.ts` as a nested `as const` object. Both frontend components and Playwright tests import from this single file. No inline string literals for test IDs in either location.
 
+---
+
+## 12. Python Virtual Environment Rules
+
+> **These rules are mandatory for all Python execution in this project.**
+
+1. **Always use the virtual environment.** Never run Python, pytest, uvicorn, or any module assuming system-level installs.
+2. The venv is at `backend/venv` (NOT `.venv`). Activate: `cd backend/ && source venv/bin/activate`
+3. All `requirements.txt` dependencies are already installed in the venv. No need to re-install unless adding new packages.
+4. If a Python command fails due to missing modules, re-activate `backend/venv` first. If still broken, **stop and ask the user** to activate manually.
+5. When running commands in scripts or CI, always prefix with venv activation: `source backend/venv/bin/activate && ...`
+

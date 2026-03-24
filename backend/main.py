@@ -16,7 +16,7 @@ load_dotenv()  # also check cwd for local overrides
 
 from fastapi import FastAPI  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
-from fastapi.responses import FileResponse  # noqa: E402
+from fastapi.responses import FileResponse, JSONResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 
 from routers import session as session_router  # noqa: E402
@@ -77,5 +77,4 @@ async def spa_fallback(full_path: str):
     index = _FRONTEND_DIST / "index.html"
     if index.exists():
         return FileResponse(str(index))
-    from fastapi.responses import JSONResponse
     return JSONResponse({"error": "frontend not built"}, status_code=503)

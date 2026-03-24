@@ -5,13 +5,14 @@ Thin wrapper around VerificationEngine's distractor generation.
 Handles curated_bank templates and cleans up poor-quality fallback distractors.
 """
 import re
+import random
 import logging
 from fractions import Fraction
 
-from services.verification import VerificationEngine
+from services.engine import engine as _engine
+from docs_loader import load_curated_wrong_bank
 
 logger = logging.getLogger(__name__)
-_engine = VerificationEngine()
 
 
 def _is_garbage_distractor(d: str) -> bool:
@@ -82,8 +83,20 @@ def generate_distractors(template_id: str, correct_answer, params: dict) -> list
     Generate exactly 3 plausible wrong answers for the given template/answer.
     Returns a list of 3 distinct strings, none equal to str(correct_answer).
     """
-    # Curated-bank templates: distractor data lives in the bank, not the engine.
-    # TODO: implement curated bank data loading when bank files are available.
+    # CURATED_WRONG strategy: pick wrong answers from the curated bank file.
+    curated_wrong_entries = load_curated_wrong_bank(template_id)
+    if curated_wrong_entries:
+        correct_str = str(correct_answer)
+        # Find entries whose correct_answer matches (exact or close).
+        # If no exact match, pick a random entry's wrong_answers as plausible distractors.
+        matched = [e for e in curated_wrong_entries if e["correct_answer"] == correct_str]
+        if matched:
+            return list(matched[0]["wrong_answers"][:3])
+        # No exact match — pick random entry's wrong_answers as still-plausible distractors
+        entry = random.choice(curated_wrong_entries)
+        return list(entry["wrong_answers"][:3])
+
+    # Curated-bank templates (generation_mode=curated_bank): handled elsewhere.
     if template_id in _engine.curated_template_ids:
         logger.warning(
             "Template %s is curated_bank — falling back to numeric distractors", template_id

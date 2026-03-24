@@ -14,13 +14,17 @@ from collections import Counter
 from datetime import datetime, timezone
 
 from docs_loader import load_template_meta, get_templates_for, load_curated_bank
-from services.verification import VerificationEngine
+from services.engine import engine as _engine
 from services import ai_service
 from services.distractor_service import generate_distractors
+from services.multi_select_data import (
+    MULTI_SELECT_BANKS,
+    MULTI_SELECT_TEMPLATE_IDS,
+    T7N02_PRIME_POOL as _T7N02_PRIME_POOL,
+)
 from models.schemas import QuestionObject
 
 logger = logging.getLogger(__name__)
-_engine = VerificationEngine()
 
 # ── Math delimiter helpers ($...$ wrapping for MathText/KaTeX) ─────────────────
 
@@ -254,159 +258,7 @@ def validate_question(q: "QuestionObject", correct_str: str) -> bool:
     return True
 
 
-# ── Multi-select template registry ────────────────────────────────────────────
-
-# T-7N-02 is parametric; multi_select question is built from its `n` param.
-MULTI_SELECT_PARAMETRIC: set[str] = {"T-7N-02"}
-
-# Curated banks for the 4 curated_bank multi_select templates.
-# Each item has 5 pre-authored options, with correct_indices for the multi_select answer.
-MULTI_SELECT_BANKS: dict[str, dict] = {
-    "T-7SP-01": {
-        "vc_code": "VC2M7SP01",
-        "year": 7,
-        "strand": "Space",
-        "topic": "Properties of 2D shapes",
-        "items": [
-            {
-                "question_text": "Which properties does a rhombus have? Select all that apply.",
-                "options": [
-                    "All sides are equal",
-                    "All angles are 90°",
-                    "Opposite sides are parallel",
-                    "Diagonals are equal in length",
-                    "Diagonals are perpendicular",
-                ],
-                "correct_indices": [0, 2, 4],
-                "explanation": "A rhombus has all sides equal, opposite sides parallel, and perpendicular diagonals. Its angles are not necessarily 90° and its diagonals are not necessarily equal.",
-            },
-            {
-                "question_text": "Which properties does a rectangle have? Select all that apply.",
-                "options": [
-                    "All angles are 90°",
-                    "All sides are equal",
-                    "Opposite sides are equal",
-                    "Diagonals are perpendicular",
-                    "Diagonals are equal in length",
-                ],
-                "correct_indices": [0, 2, 4],
-                "explanation": "A rectangle has all right angles, equal opposite sides, and equal diagonals. Its sides are not all equal (unless it is a square) and its diagonals are not perpendicular.",
-            },
-            {
-                "question_text": "Which properties does a kite have? Select all that apply.",
-                "options": [
-                    "Two pairs of consecutive equal sides",
-                    "All sides are equal",
-                    "Diagonals are perpendicular",
-                    "Opposite sides are parallel",
-                    "One diagonal bisects the other",
-                ],
-                "correct_indices": [0, 2, 4],
-                "explanation": "A kite has two pairs of consecutive equal sides, perpendicular diagonals, and one diagonal bisects the other. It does not have all sides equal or parallel opposite sides.",
-            },
-        ],
-    },
-    "T-8SP-02": {
-        "vc_code": "VC2M8SP02",
-        "year": 8,
-        "strand": "Space",
-        "topic": "Properties of quadrilaterals",
-        "items": [
-            {
-                "question_text": "Select all true statements about a parallelogram.",
-                "options": [
-                    "Opposite sides are parallel",
-                    "All angles are 90°",
-                    "Opposite angles are equal",
-                    "Diagonals are equal in length",
-                    "Diagonals bisect each other",
-                ],
-                "correct_indices": [0, 2, 4],
-                "explanation": "A parallelogram has parallel opposite sides, equal opposite angles, and diagonals that bisect each other. It does not require right angles or equal-length diagonals.",
-            },
-            {
-                "question_text": "Select all true statements about a square.",
-                "options": [
-                    "All sides are equal",
-                    "Diagonals bisect each other at right angles",
-                    "Diagonals are unequal in length",
-                    "All angles are 90°",
-                    "Opposite sides are not parallel",
-                ],
-                "correct_indices": [0, 1, 3],
-                "explanation": "A square has all sides equal, all angles 90°, and diagonals that bisect each other at right angles. Its diagonals are equal (not unequal) and all sides are parallel.",
-            },
-            {
-                "question_text": "Select all true statements about a trapezium.",
-                "options": [
-                    "Exactly one pair of parallel sides",
-                    "Both pairs of opposite sides are parallel",
-                    "Co-interior angles between parallel sides are supplementary",
-                    "Diagonals always bisect each other",
-                    "May have two equal non-parallel sides",
-                ],
-                "correct_indices": [0, 2, 4],
-                "explanation": "A trapezium has exactly one pair of parallel sides. Co-interior angles between the parallel sides sum to 180°. An isosceles trapezium has two equal non-parallel sides. Diagonals do not generally bisect each other.",
-            },
-        ],
-    },
-    "T-9N-01": {
-        "vc_code": "VC2M9N01",
-        "year": 9,
-        "strand": "Number",
-        "topic": "Rational and irrational numbers",
-        "items": [
-            {
-                "question_text": "Select all irrational numbers.",
-                "options": ["√2", "√9", "π", "0.4", "3/7"],
-                "correct_indices": [0, 2],
-                "explanation": "√2 and π are irrational — they cannot be expressed as p/q for integers p, q. √9 = 3, 0.4 = 2/5, and 3/7 are all rational.",
-            },
-            {
-                "question_text": "Select all irrational numbers.",
-                "options": ["0.333…", "√5", "5/8", "√7", "1.25"],
-                "correct_indices": [1, 3],
-                "explanation": "√5 and √7 are irrational. 0.333… = 1/3, 5/8, and 1.25 = 5/4 are all rational.",
-            },
-            {
-                "question_text": "Select all irrational numbers.",
-                "options": ["√3", "√4", "22/7", "√6", "0.1"],
-                "correct_indices": [0, 3],
-                "explanation": "√3 and √6 are irrational. √4 = 2, 22/7 is a rational approximation of π, and 0.1 = 1/10 are rational.",
-            },
-        ],
-    },
-    "T-9A-05": {
-        "vc_code": "VC2M9A05",
-        "year": 9,
-        "strand": "Algebra",
-        "topic": "Identify quadratic equations",
-        "items": [
-            {
-                "question_text": "Select all quadratic equations.",
-                "options": ["x² + 3x − 4 = 0", "2x + 5 = 0", "x² = 9", "x³ − 1 = 0", "y = x + 1"],
-                "correct_indices": [0, 2],
-                "explanation": "x² + 3x − 4 = 0 and x² = 9 are quadratic (highest degree 2). 2x + 5 = 0 and y = x + 1 are linear; x³ − 1 = 0 is cubic.",
-            },
-            {
-                "question_text": "Which of the following are quadratic equations?",
-                "options": ["y = x²", "y = 2x + 1", "3x² − 2x + 1 = 0", "y = 1/x", "x³ = 8"],
-                "correct_indices": [0, 2],
-                "explanation": "y = x² and 3x² − 2x + 1 = 0 are quadratic. y = 2x + 1 is linear, y = 1/x is a hyperbola, and x³ = 8 is cubic.",
-            },
-            {
-                "question_text": "Identify all quadratic equations from the list.",
-                "options": ["x² − 5x + 6 = 0", "x = 4", "2x² + x = 0", "y = 3/x", "4x − 1 = 0"],
-                "correct_indices": [0, 2],
-                "explanation": "x² − 5x + 6 = 0 and 2x² + x = 0 are quadratic. x = 4 is a constant equation, y = 3/x is a hyperbola, and 4x − 1 = 0 is linear.",
-            },
-        ],
-    },
-}
-
-MULTI_SELECT_TEMPLATE_IDS: set[str] = set(MULTI_SELECT_BANKS) | MULTI_SELECT_PARAMETRIC
-
-_T7N02_PRIME_POOL: list[int] = [2, 3, 5, 7, 11, 13, 17, 19]
+# ── Multi-select template registry (data in services/multi_select_data.py) ────
 
 
 # ── Param helpers ─────────────────────────────────────────────────────────────
@@ -594,7 +446,7 @@ def _derive_t9a02_equation(params: dict) -> None:
         params["lhs"] = lhs_tmpl.format(**{**params, **eq})
         params["rhs"] = str(int(rhs) if rhs == int(rhs) else rhs)
     except Exception as exc:
-        logger.debug("T-9A-02 equation derivation failed: %s", exc)
+        logger.warning("T-9A-02 equation derivation failed: %s", exc)
         a, b = 2, 3
         params["lhs"] = f"{a}x + {b}"
         params["rhs"] = str(a * sol + b)
@@ -656,7 +508,7 @@ def _resolve_derived_params(template: dict, params: dict) -> dict:
         try:
             params[key] = _safe_eval(expr, params)
         except Exception as e:
-            logger.debug("Could not derive %s from rule '%s': %s", key, rule, e)
+            logger.warning("Could not derive %s from rule '%s': %s", key, rule, e)
 
     # Top-level "derived" dict (e.g. T-7A-03)
     for key, rule in template.get("derived", {}).items():
@@ -666,7 +518,7 @@ def _resolve_derived_params(template: dict, params: dict) -> dict:
         try:
             params[key] = _safe_eval(expr, params)
         except Exception as e:
-            logger.debug("Could not derive top-level %s from '%s': %s", key, rule, e)
+            logger.warning("Could not derive top-level %s from '%s': %s", key, rule, e)
 
     # expr_template → expr (T-8A-01 style: question_template uses {expr})
     if "expr_template" in params and "expr" not in params:
@@ -1353,8 +1205,18 @@ async def generate_session_questions(
             f"No parametric templates available for Year {year_level} {strand}"
         )
 
-    # Distribute count across templates for variety
-    selected = random.choices(available, k=count)
+    # Distribute count across templates for variety.
+    # For Mixed sessions (Y7/Y8), weight strand selection by template count so that
+    # strands with fewer than 3 parametric templates appear proportionally less often.
+    # Each template's weight = number of templates in its strand. This means a strand
+    # with 8 templates gets 8× the total weight of a strand with 1 template, producing
+    # natural proportional representation rather than over-representing thin strands.
+    if strand == "Mixed":
+        strand_counts = Counter(t.get("strand") for t in available)
+        weights = [strand_counts[t.get("strand")] for t in available]
+        selected = random.choices(available, weights=weights, k=count)
+    else:
+        selected = random.choices(available, k=count)
 
     # Group by template_id to batch the AI calls
     template_counts = Counter(t["id"] for t in selected)

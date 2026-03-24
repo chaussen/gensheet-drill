@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const STORAGE_KEY = 'gensheet_progress'
+export const STORAGE_KEY = 'gensheet_progress'
 
 function readFromStorage() {
   try {

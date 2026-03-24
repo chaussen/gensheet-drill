@@ -1,0 +1,1109 @@
+{
+  "_meta": {
+    "purpose": "Curated wrong answer banks for 7 parametric templates switching to CURATED_WRONG distractor strategy",
+    "generated": "2026-03-24",
+    "error_pattern_notes": {
+      "T-7N-02": "Exponent off-by-one, composite factors (4,6,8,9,10,14,15,16,25,27,32), swapped exponents, incomplete factorisation",
+      "T-8N-02": "Multiplied instead of added exponents (product law), added instead of subtracted (quotient), added instead of multiplied (power-of-power), base=0 or base-itself for zero exponent, squared base confusion",
+      "T-8A-01": "Forgot to distribute to second term, sign errors with subtraction, didn't collect like terms, forgot outer multiplier on squared expansion",
+      "T-8A-03": "Inverted rise/run, sign flip, off-by-one on numerator",
+      "T-8P-03": "Inverted fraction (n/a), complement (1-p), off-by-one numerator, wrong simplification",
+      "T-9A-01": "Sign error on constant, missing middle term (F+L only), only outer term in middle (forgot inner), negated middle, added constants instead of multiplying",
+      "T-9A-03": "Swapped m and c, negated gradient, negated y-intercept, both signs flipped"
+    }
+  },
+  "T-7N-02_prime_factorisation_bank": [
+    {
+      "question_key": "pf_12",
+      "correct_answer": "2^2 × 3",
+      "wrong_answers": [
+        "2 × 3^2",
+        "2 × 6",
+        "2^3 × 3"
+      ]
+    },
+    {
+      "question_key": "pf_18",
+      "correct_answer": "2 × 3^2",
+      "wrong_answers": [
+        "2^2 × 3",
+        "2 × 9",
+        "3^2 × 6"
+      ]
+    },
+    {
+      "question_key": "pf_20",
+      "correct_answer": "2^2 × 5",
+      "wrong_answers": [
+        "4 × 5",
+        "2 × 5^2",
+        "2 × 10"
+      ]
+    },
+    {
+      "question_key": "pf_24",
+      "correct_answer": "2^3 × 3",
+      "wrong_answers": [
+        "2^2 × 3^2",
+        "2^2 × 6",
+        "2^4 × 3"
+      ]
+    },
+    {
+      "question_key": "pf_28",
+      "correct_answer": "2^2 × 7",
+      "wrong_answers": [
+        "4 × 7",
+        "2 × 7^2",
+        "2 × 14"
+      ]
+    },
+    {
+      "question_key": "pf_30",
+      "correct_answer": "2 × 3 × 5",
+      "wrong_answers": [
+        "6 × 5",
+        "2 × 15",
+        "2 × 3^2 × 5"
+      ]
+    },
+    {
+      "question_key": "pf_36",
+      "correct_answer": "2^2 × 3^2",
+      "wrong_answers": [
+        "2 × 3^3",
+        "4 × 9",
+        "2^3 × 3"
+      ]
+    },
+    {
+      "question_key": "pf_40",
+      "correct_answer": "2^3 × 5",
+      "wrong_answers": [
+        "2^2 × 5^2",
+        "8 × 5",
+        "2^2 × 10"
+      ]
+    },
+    {
+      "question_key": "pf_48",
+      "correct_answer": "2^4 × 3",
+      "wrong_answers": [
+        "2^3 × 3^2",
+        "2^3 × 6",
+        "2^5 × 3"
+      ]
+    },
+    {
+      "question_key": "pf_50",
+      "correct_answer": "2 × 5^2",
+      "wrong_answers": [
+        "2^2 × 5",
+        "2 × 25",
+        "5^2 × 10"
+      ]
+    },
+    {
+      "question_key": "pf_60",
+      "correct_answer": "2^2 × 3 × 5",
+      "wrong_answers": [
+        "2 × 3^2 × 5",
+        "4 × 3 × 5",
+        "2^2 × 15"
+      ]
+    },
+    {
+      "question_key": "pf_72",
+      "correct_answer": "2^3 × 3^2",
+      "wrong_answers": [
+        "2^2 × 3^3",
+        "8 × 9",
+        "2^4 × 3"
+      ]
+    },
+    {
+      "question_key": "pf_80",
+      "correct_answer": "2^4 × 5",
+      "wrong_answers": [
+        "2^3 × 10",
+        "2^3 × 5^2",
+        "16 × 5"
+      ]
+    },
+    {
+      "question_key": "pf_90",
+      "correct_answer": "2 × 3^2 × 5",
+      "wrong_answers": [
+        "2 × 3 × 5^2",
+        "2 × 9 × 5",
+        "2^2 × 3 × 5"
+      ]
+    },
+    {
+      "question_key": "pf_100",
+      "correct_answer": "2^2 × 5^2",
+      "wrong_answers": [
+        "4 × 25",
+        "2 × 5^3",
+        "2^2 × 5 × 10"
+      ]
+    },
+    {
+      "question_key": "pf_108",
+      "correct_answer": "2^2 × 3^3",
+      "wrong_answers": [
+        "2^3 × 3^2",
+        "4 × 27",
+        "2^2 × 3^2 × 3"
+      ]
+    },
+    {
+      "question_key": "pf_120",
+      "correct_answer": "2^3 × 3 × 5",
+      "wrong_answers": [
+        "2^2 × 3^2 × 5",
+        "2^3 × 15",
+        "8 × 3 × 5"
+      ]
+    },
+    {
+      "question_key": "pf_126",
+      "correct_answer": "2 × 3^2 × 7",
+      "wrong_answers": [
+        "2 × 3 × 7^2",
+        "2 × 9 × 7",
+        "2^2 × 3 × 7"
+      ]
+    },
+    {
+      "question_key": "pf_144",
+      "correct_answer": "2^4 × 3^2",
+      "wrong_answers": [
+        "2^3 × 3^3",
+        "2^4 × 9",
+        "12^2"
+      ]
+    },
+    {
+      "question_key": "pf_160",
+      "correct_answer": "2^5 × 5",
+      "wrong_answers": [
+        "2^4 × 10",
+        "2^4 × 5^2",
+        "32 × 5"
+      ]
+    },
+    {
+      "question_key": "pf_180",
+      "correct_answer": "2^2 × 3^2 × 5",
+      "wrong_answers": [
+        "2 × 3^2 × 10",
+        "2^2 × 3 × 5^2",
+        "4 × 9 × 5"
+      ]
+    },
+    {
+      "question_key": "pf_200",
+      "correct_answer": "2^3 × 5^2",
+      "wrong_answers": [
+        "2^2 × 5^3",
+        "8 × 25",
+        "2^3 × 25"
+      ]
+    },
+    {
+      "question_key": "pf_216",
+      "correct_answer": "2^3 × 3^3",
+      "wrong_answers": [
+        "2^3 × 3^2 × 3",
+        "6^3",
+        "2^2 × 3^4"
+      ]
+    },
+    {
+      "question_key": "pf_252",
+      "correct_answer": "2^2 × 3^2 × 7",
+      "wrong_answers": [
+        "2 × 3^2 × 14",
+        "2^2 × 3 × 7^2",
+        "4 × 9 × 7"
+      ]
+    }
+  ],
+  "T-8N-02_index_laws_bank": [
+    {
+      "question_key": "idx_prod_2_3_4",
+      "correct_answer": "2^7",
+      "wrong_answers": [
+        "2^12",
+        "2^1",
+        "4^7"
+      ]
+    },
+    {
+      "question_key": "idx_prod_3_2_4",
+      "correct_answer": "3^6",
+      "wrong_answers": [
+        "3^8",
+        "3^2",
+        "9^6"
+      ]
+    },
+    {
+      "question_key": "idx_prod_5_3_2",
+      "correct_answer": "5^5",
+      "wrong_answers": [
+        "5^6",
+        "5^1",
+        "25^5"
+      ]
+    },
+    {
+      "question_key": "idx_prod_4_1_5",
+      "correct_answer": "4^6",
+      "wrong_answers": [
+        "4^5",
+        "16^3",
+        "4^4"
+      ]
+    },
+    {
+      "question_key": "idx_prod_2_5_3",
+      "correct_answer": "2^8",
+      "wrong_answers": [
+        "2^15",
+        "2^2",
+        "4^4"
+      ]
+    },
+    {
+      "question_key": "idx_quot_3_5_2",
+      "correct_answer": "3^3",
+      "wrong_answers": [
+        "3^7",
+        "3^10",
+        "9^3"
+      ]
+    },
+    {
+      "question_key": "idx_quot_2_6_4",
+      "correct_answer": "2^2",
+      "wrong_answers": [
+        "2^10",
+        "2^24",
+        "4^1"
+      ]
+    },
+    {
+      "question_key": "idx_quot_5_4_1",
+      "correct_answer": "5^3",
+      "wrong_answers": [
+        "5^5",
+        "5^4",
+        "25^3"
+      ]
+    },
+    {
+      "question_key": "idx_quot_4_6_3",
+      "correct_answer": "4^3",
+      "wrong_answers": [
+        "4^9",
+        "4^18",
+        "4^2"
+      ]
+    },
+    {
+      "question_key": "idx_zero_5",
+      "correct_answer": "1",
+      "wrong_answers": [
+        "5",
+        "0",
+        "5^1"
+      ]
+    },
+    {
+      "question_key": "idx_zero_3",
+      "correct_answer": "1",
+      "wrong_answers": [
+        "3",
+        "0",
+        "3^1"
+      ]
+    },
+    {
+      "question_key": "idx_zero_2",
+      "correct_answer": "1",
+      "wrong_answers": [
+        "2",
+        "0",
+        "2^1"
+      ]
+    },
+    {
+      "question_key": "idx_pow_2_3_2",
+      "correct_answer": "2^6",
+      "wrong_answers": [
+        "2^5",
+        "2^9",
+        "4^3"
+      ]
+    },
+    {
+      "question_key": "idx_pow_3_2_3",
+      "correct_answer": "3^6",
+      "wrong_answers": [
+        "3^5",
+        "3^8",
+        "9^3"
+      ]
+    },
+    {
+      "question_key": "idx_pow_5_2_2",
+      "correct_answer": "5^4",
+      "wrong_answers": [
+        "25^2",
+        "5^3",
+        "5^6"
+      ]
+    },
+    {
+      "question_key": "idx_pow_2_4_2",
+      "correct_answer": "2^8",
+      "wrong_answers": [
+        "2^6",
+        "4^4",
+        "2^16"
+      ]
+    },
+    {
+      "question_key": "idx_prod_3_4_3",
+      "correct_answer": "3^7",
+      "wrong_answers": [
+        "3^12",
+        "3^1",
+        "9^7"
+      ]
+    },
+    {
+      "question_key": "idx_quot_2_5_2",
+      "correct_answer": "2^3",
+      "wrong_answers": [
+        "2^7",
+        "2^10",
+        "4^3"
+      ]
+    },
+    {
+      "question_key": "idx_prod_4_2_3",
+      "correct_answer": "4^5",
+      "wrong_answers": [
+        "4^6",
+        "4^1",
+        "16^5"
+      ]
+    }
+  ],
+  "T-8A-01_expand_simplify_bank": [
+    {
+      "question_key": "exp_3_2x_4",
+      "correct_answer": "6x + 12",
+      "wrong_answers": [
+        "6x + 4",
+        "3x + 12",
+        "6x + 7"
+      ]
+    },
+    {
+      "question_key": "exp_4_3x_5",
+      "correct_answer": "12x + 20",
+      "wrong_answers": [
+        "12x + 5",
+        "4x + 20",
+        "12x + 9"
+      ]
+    },
+    {
+      "question_key": "exp_2_x_7",
+      "correct_answer": "2x + 14",
+      "wrong_answers": [
+        "2x + 7",
+        "x + 14",
+        "2x + 9"
+      ]
+    },
+    {
+      "question_key": "exp_5_2x_m3",
+      "correct_answer": "10x - 15",
+      "wrong_answers": [
+        "10x + 15",
+        "10x - 3",
+        "5x - 15"
+      ]
+    },
+    {
+      "question_key": "exp_3_2x_4_p5x",
+      "correct_answer": "11x + 12",
+      "wrong_answers": [
+        "6x + 17",
+        "11x + 4",
+        "6x + 12"
+      ]
+    },
+    {
+      "question_key": "exp_2_x_3_p4_x_1",
+      "correct_answer": "6x + 10",
+      "wrong_answers": [
+        "6x + 4",
+        "2x + 10",
+        "6x + 7"
+      ]
+    },
+    {
+      "question_key": "exp_3xp2_p_2xp5",
+      "correct_answer": "5x + 16",
+      "wrong_answers": [
+        "5x + 7",
+        "3x + 16",
+        "5x + 11"
+      ]
+    },
+    {
+      "question_key": "exp_3_2xp4_m2_xm3",
+      "correct_answer": "4x + 18",
+      "wrong_answers": [
+        "4x + 6",
+        "8x + 18",
+        "4x + 12"
+      ]
+    },
+    {
+      "question_key": "exp_2_3xp5_m3_xm2",
+      "correct_answer": "3x + 16",
+      "wrong_answers": [
+        "3x + 4",
+        "9x + 16",
+        "3x + 10"
+      ]
+    },
+    {
+      "question_key": "exp_2_xp3_sq",
+      "correct_answer": "2x^2 + 12x + 18",
+      "wrong_answers": [
+        "2x^2 + 6x + 9",
+        "2x^2 + 12x + 9",
+        "x^2 + 6x + 18"
+      ]
+    },
+    {
+      "question_key": "exp_3_xp2_sq",
+      "correct_answer": "3x^2 + 12x + 12",
+      "wrong_answers": [
+        "3x^2 + 6x + 4",
+        "3x^2 + 12x + 4",
+        "3x^2 + 6x + 12"
+      ]
+    },
+    {
+      "question_key": "exp_4_xp1_sq",
+      "correct_answer": "4x^2 + 8x + 4",
+      "wrong_answers": [
+        "4x^2 + 4x + 1",
+        "4x^2 + 8x + 1",
+        "4x^2 + 4x + 4"
+      ]
+    },
+    {
+      "question_key": "exp_5_2xp3",
+      "correct_answer": "10x + 15",
+      "wrong_answers": [
+        "10x + 3",
+        "5x + 15",
+        "10x + 8"
+      ]
+    },
+    {
+      "question_key": "exp_2_4xm3",
+      "correct_answer": "8x - 6",
+      "wrong_answers": [
+        "8x + 6",
+        "8x - 3",
+        "2x - 6"
+      ]
+    }
+  ],
+  "T-8A-03_gradient_bank": [
+    {
+      "question_key": "grad_01",
+      "correct_answer": "2",
+      "wrong_answers": [
+        "1/2",
+        "-2",
+        "5/2"
+      ]
+    },
+    {
+      "question_key": "grad_02",
+      "correct_answer": "2",
+      "wrong_answers": [
+        "1/2",
+        "-2",
+        "5/2"
+      ]
+    },
+    {
+      "question_key": "grad_03",
+      "correct_answer": "2",
+      "wrong_answers": [
+        "1/2",
+        "-2",
+        "7/3"
+      ]
+    },
+    {
+      "question_key": "grad_04",
+      "correct_answer": "1",
+      "wrong_answers": [
+        "-1",
+        "5/4",
+        "3/4"
+      ]
+    },
+    {
+      "question_key": "grad_05",
+      "correct_answer": "3/4",
+      "wrong_answers": [
+        "4/3",
+        "-3/4",
+        "1"
+      ]
+    },
+    {
+      "question_key": "grad_06",
+      "correct_answer": "3/2",
+      "wrong_answers": [
+        "2/3",
+        "-3/2",
+        "7/4"
+      ]
+    },
+    {
+      "question_key": "grad_07",
+      "correct_answer": "-2",
+      "wrong_answers": [
+        "-1/2",
+        "2",
+        "-3/2"
+      ]
+    },
+    {
+      "question_key": "grad_08",
+      "correct_answer": "-1",
+      "wrong_answers": [
+        "1",
+        "-3/4",
+        "-5/4"
+      ]
+    },
+    {
+      "question_key": "grad_09",
+      "correct_answer": "2",
+      "wrong_answers": [
+        "1/2",
+        "-2",
+        "7/3"
+      ]
+    },
+    {
+      "question_key": "grad_10",
+      "correct_answer": "-2",
+      "wrong_answers": [
+        "-1/2",
+        "2",
+        "-5/3"
+      ]
+    },
+    {
+      "question_key": "grad_11",
+      "correct_answer": "1",
+      "wrong_answers": [
+        "-1",
+        "5/4",
+        "3/4"
+      ]
+    },
+    {
+      "question_key": "grad_12",
+      "correct_answer": "1/2",
+      "wrong_answers": [
+        "2",
+        "-1/2",
+        "3/4"
+      ]
+    },
+    {
+      "question_key": "grad_13",
+      "correct_answer": "-3/4",
+      "wrong_answers": [
+        "-4/3",
+        "3/4",
+        "-1/2"
+      ]
+    },
+    {
+      "question_key": "grad_14",
+      "correct_answer": "3/2",
+      "wrong_answers": [
+        "2/3",
+        "-3/2",
+        "7/4"
+      ]
+    }
+  ],
+  "T-8P-03_relative_frequency_bank": [
+    {
+      "question_key": "rf_2_10",
+      "correct_answer": "1/5",
+      "wrong_answers": [
+        "5",
+        "4/5",
+        "3/10"
+      ]
+    },
+    {
+      "question_key": "rf_3_10",
+      "correct_answer": "3/10",
+      "wrong_answers": [
+        "10/3",
+        "7/10",
+        "2/5"
+      ]
+    },
+    {
+      "question_key": "rf_4_10",
+      "correct_answer": "2/5",
+      "wrong_answers": [
+        "5/2",
+        "3/5",
+        "1/2"
+      ]
+    },
+    {
+      "question_key": "rf_7_10",
+      "correct_answer": "7/10",
+      "wrong_answers": [
+        "10/7",
+        "3/10",
+        "4/5"
+      ]
+    },
+    {
+      "question_key": "rf_5_20",
+      "correct_answer": "1/4",
+      "wrong_answers": [
+        "4",
+        "3/4",
+        "3/10"
+      ]
+    },
+    {
+      "question_key": "rf_8_20",
+      "correct_answer": "2/5",
+      "wrong_answers": [
+        "5/2",
+        "3/5",
+        "9/20"
+      ]
+    },
+    {
+      "question_key": "rf_13_20",
+      "correct_answer": "13/20",
+      "wrong_answers": [
+        "20/13",
+        "7/20",
+        "7/10"
+      ]
+    },
+    {
+      "question_key": "rf_15_20",
+      "correct_answer": "3/4",
+      "wrong_answers": [
+        "4/3",
+        "1/4",
+        "4/5"
+      ]
+    },
+    {
+      "question_key": "rf_5_25",
+      "correct_answer": "1/5",
+      "wrong_answers": [
+        "5",
+        "4/5",
+        "6/25"
+      ]
+    },
+    {
+      "question_key": "rf_10_25",
+      "correct_answer": "2/5",
+      "wrong_answers": [
+        "5/2",
+        "3/5",
+        "11/25"
+      ]
+    },
+    {
+      "question_key": "rf_15_25",
+      "correct_answer": "3/5",
+      "wrong_answers": [
+        "5/3",
+        "2/5",
+        "16/25"
+      ]
+    },
+    {
+      "question_key": "rf_10_40",
+      "correct_answer": "1/4",
+      "wrong_answers": [
+        "4",
+        "3/4",
+        "11/40"
+      ]
+    },
+    {
+      "question_key": "rf_16_40",
+      "correct_answer": "2/5",
+      "wrong_answers": [
+        "5/2",
+        "3/5",
+        "17/40"
+      ]
+    },
+    {
+      "question_key": "rf_30_40",
+      "correct_answer": "3/4",
+      "wrong_answers": [
+        "4/3",
+        "1/4",
+        "31/40"
+      ]
+    },
+    {
+      "question_key": "rf_15_50",
+      "correct_answer": "3/10",
+      "wrong_answers": [
+        "10/3",
+        "7/10",
+        "8/25"
+      ]
+    },
+    {
+      "question_key": "rf_20_50",
+      "correct_answer": "2/5",
+      "wrong_answers": [
+        "5/2",
+        "3/5",
+        "21/50"
+      ]
+    },
+    {
+      "question_key": "rf_35_50",
+      "correct_answer": "7/10",
+      "wrong_answers": [
+        "10/7",
+        "3/10",
+        "18/25"
+      ]
+    },
+    {
+      "question_key": "rf_25_100",
+      "correct_answer": "1/4",
+      "wrong_answers": [
+        "4",
+        "3/4",
+        "13/50"
+      ]
+    },
+    {
+      "question_key": "rf_40_100",
+      "correct_answer": "2/5",
+      "wrong_answers": [
+        "5/2",
+        "3/5",
+        "41/100"
+      ]
+    },
+    {
+      "question_key": "rf_60_100",
+      "correct_answer": "3/5",
+      "wrong_answers": [
+        "5/3",
+        "2/5",
+        "61/100"
+      ]
+    },
+    {
+      "question_key": "rf_75_100",
+      "correct_answer": "3/4",
+      "wrong_answers": [
+        "4/3",
+        "1/4",
+        "19/25"
+      ]
+    }
+  ],
+  "T-9A-01_expand_binomial_bank": [
+    {
+      "question_key": "bin_1xp2_1xp3",
+      "correct_answer": "x^2 + 5x + 6",
+      "wrong_answers": [
+        "x^2 + 5x - 6",
+        "x^2 + 6",
+        "x^2 + 3x + 6"
+      ]
+    },
+    {
+      "question_key": "bin_1xp3_1xp4",
+      "correct_answer": "x^2 + 7x + 12",
+      "wrong_answers": [
+        "x^2 + 7x - 12",
+        "x^2 + 12",
+        "x^2 + 4x + 12"
+      ]
+    },
+    {
+      "question_key": "bin_1xp5_1xp2",
+      "correct_answer": "x^2 + 7x + 10",
+      "wrong_answers": [
+        "x^2 + 7x - 10",
+        "x^2 + 10",
+        "x^2 + 2x + 10"
+      ]
+    },
+    {
+      "question_key": "bin_1xm1_1xp4",
+      "correct_answer": "x^2 + 3x - 4",
+      "wrong_answers": [
+        "x^2 + 3x + 4",
+        "x^2 - 4",
+        "x^2 + 4x - 4"
+      ]
+    },
+    {
+      "question_key": "bin_1xm3_1xp2",
+      "correct_answer": "x^2 - x - 6",
+      "wrong_answers": [
+        "x^2 - x + 6",
+        "x^2 - 6",
+        "x^2 + 2x - 6"
+      ]
+    },
+    {
+      "question_key": "bin_1xp6_1xm6",
+      "correct_answer": "x^2 - 36",
+      "wrong_answers": [
+        "x^2 + 36",
+        "x^2 - 6x - 36",
+        "x^2 + x - 36"
+      ]
+    },
+    {
+      "question_key": "bin_1xm4_1xm4",
+      "correct_answer": "x^2 - 8x + 16",
+      "wrong_answers": [
+        "x^2 - 8x - 16",
+        "x^2 + 16",
+        "x^2 - 4x + 16"
+      ]
+    },
+    {
+      "question_key": "bin_2xp1_1xp3",
+      "correct_answer": "2x^2 + 7x + 3",
+      "wrong_answers": [
+        "2x^2 + 7x - 3",
+        "2x^2 + 3",
+        "2x^2 + 6x + 3"
+      ]
+    },
+    {
+      "question_key": "bin_2xm3_1xp5",
+      "correct_answer": "2x^2 + 7x - 15",
+      "wrong_answers": [
+        "2x^2 + 7x + 15",
+        "2x^2 - 15",
+        "2x^2 + 10x - 15"
+      ]
+    },
+    {
+      "question_key": "bin_3xp2_1xm1",
+      "correct_answer": "3x^2 - x - 2",
+      "wrong_answers": [
+        "3x^2 - x + 2",
+        "3x^2 - 2",
+        "3x^2 - 3x - 2"
+      ]
+    },
+    {
+      "question_key": "bin_1xp3_1xp3",
+      "correct_answer": "x^2 + 6x + 9",
+      "wrong_answers": [
+        "x^2 + 6x - 9",
+        "x^2 + 9",
+        "x^2 + 3x + 9"
+      ]
+    },
+    {
+      "question_key": "bin_2xp1_2xm1",
+      "correct_answer": "4x^2 - 1",
+      "wrong_answers": [
+        "4x^2 + 1",
+        "4x^2 - 2x - 1",
+        "4x^2 + x - 1"
+      ]
+    },
+    {
+      "question_key": "bin_1xp7_1xm2",
+      "correct_answer": "x^2 + 5x - 14",
+      "wrong_answers": [
+        "x^2 + 5x + 14",
+        "x^2 - 14",
+        "x^2 - 2x - 14"
+      ]
+    },
+    {
+      "question_key": "bin_3xp1_2xp3",
+      "correct_answer": "6x^2 + 11x + 3",
+      "wrong_answers": [
+        "6x^2 + 11x - 3",
+        "6x^2 + 3",
+        "6x^2 + 9x + 3"
+      ]
+    }
+  ],
+  "T-9A-03_line_equation_bank": [
+    {
+      "question_key": "line_m2c3",
+      "correct_answer": "y = 2x + 3",
+      "wrong_answers": [
+        "y = 3x + 2",
+        "y = -2x + 3",
+        "y = 2x - 3"
+      ]
+    },
+    {
+      "question_key": "line_m2cn1",
+      "correct_answer": "y = 2x - 1",
+      "wrong_answers": [
+        "y = -x + 2",
+        "y = -2x - 1",
+        "y = 2x + 1"
+      ]
+    },
+    {
+      "question_key": "line_m3c5",
+      "correct_answer": "y = 3x + 5",
+      "wrong_answers": [
+        "y = 5x + 3",
+        "y = -3x + 5",
+        "y = 3x - 5"
+      ]
+    },
+    {
+      "question_key": "line_m3cn4",
+      "correct_answer": "y = 3x - 4",
+      "wrong_answers": [
+        "y = -4x + 3",
+        "y = -3x - 4",
+        "y = 3x + 4"
+      ]
+    },
+    {
+      "question_key": "line_mn2c1",
+      "correct_answer": "y = -2x + 1",
+      "wrong_answers": [
+        "y = x - 2",
+        "y = 2x + 1",
+        "y = -2x - 1"
+      ]
+    },
+    {
+      "question_key": "line_mn2c6",
+      "correct_answer": "y = -2x + 6",
+      "wrong_answers": [
+        "y = 6x - 2",
+        "y = 2x + 6",
+        "y = -2x - 6"
+      ]
+    },
+    {
+      "question_key": "line_mn1c3",
+      "correct_answer": "y = -x + 3",
+      "wrong_answers": [
+        "y = 3x - 1",
+        "y = x + 3",
+        "y = -x - 3"
+      ]
+    },
+    {
+      "question_key": "line_mn3c2",
+      "correct_answer": "y = -3x + 2",
+      "wrong_answers": [
+        "y = 2x - 3",
+        "y = 3x + 2",
+        "y = -3x - 2"
+      ]
+    },
+    {
+      "question_key": "line_m1c4",
+      "correct_answer": "y = x + 4",
+      "wrong_answers": [
+        "y = 4x + 1",
+        "y = -x + 4",
+        "y = x - 4"
+      ]
+    },
+    {
+      "question_key": "line_m1cn7",
+      "correct_answer": "y = x - 7",
+      "wrong_answers": [
+        "y = -7x + 1",
+        "y = -x - 7",
+        "y = x + 7"
+      ]
+    },
+    {
+      "question_key": "line_mn1cn5",
+      "correct_answer": "y = -x - 5",
+      "wrong_answers": [
+        "y = -5x - 1",
+        "y = x - 5",
+        "y = -x + 5"
+      ]
+    },
+    {
+      "question_key": "line_m4cn2",
+      "correct_answer": "y = 4x - 2",
+      "wrong_answers": [
+        "y = -2x + 4",
+        "y = -4x - 2",
+        "y = 4x + 2"
+      ]
+    },
+    {
+      "question_key": "line_m2c0",
+      "correct_answer": "y = 2x",
+      "wrong_answers": [
+        "y = 2",
+        "y = -2x",
+        "y = 3x"
+      ]
+    },
+    {
+      "question_key": "line_mn3c0",
+      "correct_answer": "y = -3x",
+      "wrong_answers": [
+        "y = -3",
+        "y = 3x",
+        "y = -2x"
+      ]
+    }
+  ]
+}

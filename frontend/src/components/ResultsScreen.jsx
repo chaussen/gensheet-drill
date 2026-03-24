@@ -1,19 +1,7 @@
 import { useState } from 'react'
 import MathText from './MathText.jsx'
 import { TEST_IDS } from '../testing/testIds.ts'
-
-const BAND_STYLES = {
-  needs_support: 'bg-red-100 text-red-800',
-  developing:    'bg-amber-100 text-amber-800',
-  strong:        'bg-green-100 text-green-800',
-  exceeding:     'bg-indigo-100 text-indigo-800',
-}
-const BAND_LABELS = {
-  needs_support: 'Needs Support',
-  developing:    'Developing',
-  strong:        'Strong',
-  exceeding:     'Exceeding',
-}
+import { BAND_LABELS, BAND_STYLES } from '../constants/bands.js'
 
 function isSkipped(r) {
   if (r.question_type === 'multi_select') {

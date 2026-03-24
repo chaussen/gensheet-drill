@@ -2,13 +2,7 @@ import { useState } from 'react'
 import { useProgress } from '../hooks/useProgress.js'
 import { analyseProgress } from '../api/client.js'
 import { TEST_IDS } from '../testing/testIds.ts'
-
-const BAND_LABELS = {
-  needs_support: 'Needs Support',
-  developing:    'Developing',
-  strong:        'Strong',
-  exceeding:     'Exceeding',
-}
+import { BAND_LABELS } from '../constants/bands.js'
 
 const STRAND_COLOURS = {
   Number:       '#6366f1',

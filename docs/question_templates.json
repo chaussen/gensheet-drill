@@ -148,7 +148,7 @@
       },
       "answer_type": "factored_string",
       "verifier_fn": "prime_factorisation",
-      "distractor_strategy": "FACTOR_SKIP",
+      "distractor_strategy": "CURATED_WRONG",
       "options_count": 4,
       "latex_notation": true
     },
@@ -1244,7 +1244,7 @@
       },
       "answer_type": "power_string",
       "verifier_fn": "index_laws",
-      "distractor_strategy": "FACTOR_SKIP",
+      "distractor_strategy": "CURATED_WRONG",
       "options_count": 4,
       "generation_constraint": "for quotient: m > n; answer exponent ∈ [0..9]",
       "latex_notation": true
@@ -1452,7 +1452,7 @@
       },
       "answer_type": "polynomial_string",
       "verifier_fn": "expand_simplify",
-      "distractor_strategy": "PARTIAL",
+      "distractor_strategy": "CURATED_WRONG",
       "options_count": 4,
       "latex_notation": true
     },
@@ -1556,7 +1556,7 @@
       },
       "answer_type": "fraction_or_integer_string",
       "verifier_fn": "gradient_two_points",
-      "distractor_strategy": "INVERSION",
+      "distractor_strategy": "CURATED_WRONG",
       "options_count": 4,
       "generation_constraint": "gradient must be integer or fraction with denominator ≤ 4",
       "latex_notation": true
@@ -2044,7 +2044,7 @@
       },
       "answer_type": "fraction_or_decimal",
       "verifier_fn": "relative_frequency",
-      "distractor_strategy": "INVERSION",
+      "distractor_strategy": "CURATED_WRONG",
       "options_count": 4
     },
     {
@@ -2251,7 +2251,7 @@
       },
       "answer_type": "polynomial_string",
       "verifier_fn": "expand_binomial",
-      "distractor_strategy": "PARTIAL",
+      "distractor_strategy": "CURATED_WRONG",
       "options_count": 4,
       "generation_constraint": "all coefficients must be integers; result has form ax²+bx+c",
       "latex_notation": true
@@ -2350,7 +2350,7 @@
       },
       "answer_type": "equation_string",
       "verifier_fn": "line_equation",
-      "distractor_strategy": "OP_SWAP",
+      "distractor_strategy": "CURATED_WRONG",
       "options_count": 4,
       "latex_notation": true
     },

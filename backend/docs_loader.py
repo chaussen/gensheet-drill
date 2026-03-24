@@ -12,6 +12,7 @@ from pathlib import Path
 from functools import lru_cache
 
 _TEMPLATES_PATH = Path(__file__).parent.parent / "docs" / "question_templates.json"
+_CURATED_WRONG_PATH = Path(__file__).parent.parent / "docs" / "curated_wrong_banks.json"
 
 
 @lru_cache(maxsize=1)
@@ -57,6 +58,30 @@ def get_templates_for(year_level: int, strand: str) -> list:
 
 def get_all_template_ids() -> list:
     return list(_template_index().keys())
+
+
+@lru_cache(maxsize=1)
+def _load_curated_wrong_banks() -> dict:
+    """Load the curated wrong answer banks from docs/curated_wrong_banks.json."""
+    if not _CURATED_WRONG_PATH.exists():
+        return {}
+    with open(_CURATED_WRONG_PATH, encoding="utf-8") as f:
+        data = json.load(f)
+    # Strip the _meta key, keep only bank arrays
+    return {k: v for k, v in data.items() if k != "_meta"}
+
+
+def load_curated_wrong_bank(template_id: str) -> list:
+    """
+    Return the curated wrong answer entries for a template, or [] if not found.
+    Bank keys in the JSON follow the pattern: {template_id}_{description}_bank
+    """
+    banks = _load_curated_wrong_banks()
+    # Find the bank whose key starts with the template_id
+    for key, entries in banks.items():
+        if key.startswith(template_id):
+            return entries
+    return []
 
 
 def load_curated_bank(bank_name: str) -> list:

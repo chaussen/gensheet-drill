@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
-
-const STORAGE_KEY = 'gensheet_progress'
+import { STORAGE_KEY } from './useProgress.js'
 
 function readSessions() {
   try {

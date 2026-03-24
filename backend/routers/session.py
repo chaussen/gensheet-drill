@@ -6,9 +6,9 @@ Session lifecycle endpoints:
   POST /api/session/{id}/submit
   GET  /api/session/{id}/result
 """
+import os
 import uuid
 import logging
-from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException
 
@@ -22,21 +22,21 @@ from models.schemas import (
     ResponseResultItem,
     QuestionObjectPublic,
     AnalysisObject,
+    _now_iso,
 )
 from services.question_service import generate_session_questions
 from services.session_service import generate_session_summary
 from cache import session_cache
 from config.tiers import get_tier_config
 
+MIN_QUESTIONS_LIMIT = int(os.getenv("MIN_QUESTIONS_PER_SESSION", "5"))
+MAX_QUESTIONS_LIMIT = int(os.getenv("MAX_QUESTIONS_PER_SESSION", "20"))
+
 router = APIRouter(prefix="/api/session")
 logger = logging.getLogger(__name__)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-
-def _now() -> str:
-    return datetime.now(timezone.utc).isoformat()
-
 
 def _make_response_result_item(r: dict, q: dict) -> ResponseResultItem:
     q_type = q.get("question_type", "single_select")
@@ -64,6 +64,26 @@ async def start_session(req: SessionStartRequest):
     Create a new drill session. Generates questions, stores full objects
     (with correct_index) in server memory, returns public view to frontend.
     """
+    # Year 9 restrictions: Mixed and Statistics are not available
+    if req.year_level == 9 and req.strand == "Mixed":
+        raise HTTPException(
+            status_code=400,
+            detail="Mixed sessions are not available for Year 9. Please select a specific strand.",
+        )
+    if req.year_level == 9 and req.strand == "Statistics":
+        raise HTTPException(
+            status_code=400,
+            detail="Statistics is not available for Year 9 (insufficient templates). Please select a different strand.",
+        )
+
+    # Enforce absolute min/max from env vars
+    if req.count < MIN_QUESTIONS_LIMIT or req.count > MAX_QUESTIONS_LIMIT:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Question count must be between {MIN_QUESTIONS_LIMIT} and {MAX_QUESTIONS_LIMIT}. Got {req.count}.",
+        )
+
+    # Enforce tier-specific maximum
     tier = get_tier_config()
 
     if req.count > tier["max_question_count"]:
@@ -94,15 +114,14 @@ async def start_session(req: SessionStartRequest):
         logger.error("Unexpected error generating questions: %s", e)
         raise HTTPException(status_code=503, detail="Could not generate questions. Please try again.")
 
-    MIN_QUESTIONS = 5
-    if len(questions) < MIN_QUESTIONS:
+    if len(questions) < MIN_QUESTIONS_LIMIT:
         raise HTTPException(
             status_code=503,
             detail="Could not generate enough questions. Please try again.",
         )
 
     session_id = str(uuid.uuid4())
-    created_at = _now()
+    created_at = _now_iso()
 
     # Store full question objects (including correct_index) server-side
     session_data = {
@@ -200,7 +219,7 @@ async def submit_session(
         })
 
     total = len(marked)
-    completed_at = _now()
+    completed_at = _now_iso()
 
     session["responses"] = marked
     session["score"] = score
