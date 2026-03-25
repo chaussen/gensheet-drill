@@ -89,12 +89,40 @@
           "correct_indices":  "array[integer] | null — null for single_select",
           "correct":          "boolean",
           "explanation":      "string",
-          "vc_code":          "string"
+          "vc_code":          "string",
+          "time_taken_ms":    "integer | null — time student spent on this question"
         }
+      },
+      "summary": {
+        "$ref": "SessionSummaryObject",
+        "description": "Code-computed summary. Available immediately after submission."
       },
       "analysis":     { "$ref": "AnalysisObject", "description": "null while AI is computing; poll GET /api/session/{id}/result" },
       "completed_at": { "type": "string", "format": "iso_datetime" }
     }
+  },
+
+  "SessionSummaryObject": {
+    "_description": "Code-computed session summary. No AI involved. Returned immediately with SessionResultResponse.",
+    "fields": {
+      "score":                    { "type": "integer" },
+      "total":                    { "type": "integer" },
+      "score_pct":                { "type": "integer" },
+      "performance_band":         { "type": "string", "enum": ["needs_support", "developing", "strong", "exceeding"] },
+      "by_strand":                { "type": "object", "description": "Map of strand → { attempted, correct, score_pct }" },
+      "weakest_strand":           { "type": "string", "nullable": true },
+      "strongest_strand":         { "type": "string", "nullable": true },
+      "next_session_suggestion": {
+        "strand":     "string",
+        "difficulty": "string",
+        "reason":     "string"
+      },
+      "total_time_ms":            { "type": "integer", "description": "Total wall time for the session in milliseconds" },
+      "avg_time_per_question_ms": { "type": "integer" },
+      "time_band":                { "type": "string", "enum": ["fast", "moderate", "slow", ""] },
+      "time_accuracy_summary":    { "type": "string", "description": "Plain English one-liner about time vs accuracy" }
+    },
+    "required": ["score", "total", "score_pct", "performance_band", "by_strand", "next_session_suggestion"]
   },
 
   "AnalysisObject": {

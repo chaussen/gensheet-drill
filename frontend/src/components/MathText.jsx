@@ -17,12 +17,25 @@ function latexSegments(text) {
   return parts.map((part, i) => ({ math: i % 2 === 1, text: part.replace(DOLLAR_ESC_RE, '$') }))
 }
 
+function renderPlainSegment(text, key) {
+  if (!text) return null
+  if (!text.includes('\n')) return <span key={key}>{text}</span>
+  const lines = text.split('\n')
+  return (
+    <span key={key}>
+      {lines.map((line, j) => (
+        <span key={j}>{j > 0 && <br />}{line}</span>
+      ))}
+    </span>
+  )
+}
+
 export default function MathText({ children, className }) {
   const segments = useMemo(() => latexSegments(children), [children])
   return (
     <span className={className}>
       {segments.map((seg, i) => {
-        if (!seg.math) return seg.text || null
+        if (!seg.math) return renderPlainSegment(seg.text, i)
         try {
           const html = katex.renderToString(seg.text, KATEX_OPTS)
           return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />

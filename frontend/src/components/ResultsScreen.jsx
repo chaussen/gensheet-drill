@@ -107,7 +107,7 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
                         <tr key={strand} className="border-b border-slate-50">
                           <td className="py-2 pr-4 text-slate-700 font-medium">
                             {strand}
-                            {strand === summary.weakest_strand && (
+                            {strand === summary.weakest_strand && stat.score_pct < 100 && (
                               <span className="ml-2 text-xs text-red-500">weakest</span>
                             )}
                             {strand === summary.strongest_strand && strand !== summary.weakest_strand && (

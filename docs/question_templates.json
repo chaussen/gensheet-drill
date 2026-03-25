@@ -2,7 +2,7 @@
   "_meta": {
     "version": "1.0",
     "scope": "Victorian Curriculum Mathematics v2.0, Years 7-9",
-    "total_templates": 60,
+    "total_templates": 63,
     "generation_modes": {
       "parametric": "AI picks parameter values from declared ranges. Backend constructs question text and computes answer.",
       "curated_bank": "Answers come from a hardcoded lookup table. AI selects a question_key from the bank."
@@ -643,6 +643,19 @@
       "latex_notation": true
     },
     {
+      "id": "T-7A-04",
+      "vc_code": "VC2M7A04",
+      "year": 7,
+      "strand": "Algebra",
+      "topic": "Identify relationship type from a described real-world scenario",
+      "generation_mode": "curated_bank",
+      "question_template": "What type of relationship does this scenario describe?",
+      "answer_lookup": "relationship_type_bank",
+      "distractor_strategy": "CURATED_WRONG",
+      "options_count": 4,
+      "bank_note": "Each entry describes a real-world scenario in plain language. Student identifies whether the relationship between the two quantities is linear, constant, or non-linear. No graphs or equations — description only. Options always: Linear, Constant, Non-linear, No relationship."
+    },
+    {
       "_comment": "=== YEAR 7 — MEASUREMENT (4 templates) ===",
       "id": "T-7M-01",
       "vc_code": "VC2M7M01",
@@ -803,8 +816,7 @@
       "generation_mode": "parametric",
       "question_template": "Two angles are {relationship}. One angle is {a}°. What is the other angle?",
       "context_variants": [
-        "Angle ABC = {a}°. Angle ABC and angle DEF are {relationship}. What is angle DEF?",
-        "An angle measures {a}°. What is its {relationship_noun}?"
+        "Angle ABC = {a}°. Angle ABC and angle DEF are {relationship}. What is angle DEF?"
       ],
       "params": {
         "relationship": {
@@ -1040,10 +1052,7 @@
       "topic": "Assign probability as a fraction to a simple event",
       "generation_mode": "parametric",
       "question_template": "A bag contains {r} red and {b} blue marbles. What is the probability of picking a red marble?",
-      "context_variants": [
-        "A die has {n} sides numbered 1 to {n}. What is the probability of rolling a {target}?",
-        "A spinner has {total} equal sections, {favourable} of which are green. What is the probability of landing on green?"
-      ],
+      "context_variants": [],
       "params": {
         "r": {
           "type": "randint",
@@ -1516,10 +1525,7 @@
       "topic": "Gradient from two points; identify gradient and y-intercept from y=mx+c",
       "generation_mode": "parametric",
       "question_template": "What is the gradient of the line passing through ({x1},{y1}) and ({x2},{y2})?",
-      "context_variants": [
-        "A line has equation y = {m}x + {c}. What is its gradient?",
-        "A line has equation y = {m}x + {c}. What is its y-intercept?"
-      ],
+      "context_variants": [],
       "params": {
         "x1": {
           "type": "randint",
@@ -2070,10 +2076,7 @@
       "topic": "Scientific notation: convert to/from standard form; multiply/divide",
       "generation_mode": "parametric",
       "question_template": "Express {value} in scientific notation.",
-      "context_variants": [
-        "Write {sci_value} as an ordinary number.",
-        "Calculate ({a} × 10^{m}) × ({b} × 10^{n}). Express in scientific notation."
-      ],
+      "context_variants": [],
       "params": {
         "value": {
           "type": "choice",
@@ -2210,7 +2213,6 @@
       "generation_mode": "parametric",
       "question_template": "Expand and simplify: ({ax} {op1} {b})({cx} {op2} {d})",
       "context_variants": [
-        "Factorise: {expanded_form}",
         "Expand: ({ax} + {b})²"
       ],
       "params": {
@@ -2304,8 +2306,7 @@
       "question_template": "A line has gradient {m} and y-intercept {c}. What is the equation of the line?",
       "context_variants": [
         "What is the gradient of the line y = {m}x + {c}?",
-        "What is the y-intercept of the line y = {m}x + {c}?",
-        "A line passes through ({x1},{y1}) with gradient {m}. What is its equation?"
+        "What is the y-intercept of the line y = {m}x + {c}?"
       ],
       "params": {
         "m": {
@@ -2552,6 +2553,252 @@
       "distractor_strategy": "CURATED_WRONG",
       "options_count": 4,
       "bank_note": "Types: linear (y=mx+c), quadratic (y=ax²+bx+c), hyperbola (y=k/x), exponential (y=a^x). Options are 4 different equations.",
+      "latex_notation": true
+    },
+    {
+      "id": "T-9SP-01",
+      "vc_code": "VC2M9SP01",
+      "year": 9,
+      "strand": "Space",
+      "topic": "Similar triangles: find missing corresponding side using scale factor",
+      "generation_mode": "parametric",
+      "question_template": "Triangle ABC is similar to triangle DEF. AB = {ab} cm and DE = {de} cm. If BC = {bc} cm, what is the length of EF?",
+      "context_variants": [
+        "Two similar triangles have corresponding sides AB = {ab} cm and DE = {de} cm. Another side of the first triangle is BC = {bc} cm. What is the corresponding side EF of the second triangle?",
+        "Triangle PQR is similar to triangle XYZ. PQ = {ab} cm corresponds to XY = {de} cm. If QR = {bc} cm, find YZ."
+      ],
+      "params": {
+        "ab": {
+          "type": "choice",
+          "foundation": [
+            3,
+            4,
+            5,
+            6,
+            8,
+            10
+          ],
+          "standard": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            12
+          ],
+          "advanced": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            12,
+            14,
+            15
+          ]
+        },
+        "scale_factor": {
+          "type": "choice",
+          "foundation": [
+            2,
+            3,
+            4
+          ],
+          "standard": [
+            2,
+            3,
+            4,
+            5,
+            1.5,
+            2.5
+          ],
+          "advanced": [
+            2,
+            3,
+            4,
+            5,
+            1.5,
+            2.5,
+            3.5,
+            0.5
+          ]
+        },
+        "de": {
+          "type": "derived",
+          "rule": "de = ab × scale_factor"
+        },
+        "bc": {
+          "type": "choice",
+          "foundation": [
+            4,
+            5,
+            6,
+            8,
+            10,
+            12
+          ],
+          "standard": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            12
+          ],
+          "advanced": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            12,
+            14,
+            15
+          ]
+        }
+      },
+      "answer_type": "number",
+      "verifier_fn": "similar_triangles_missing_side",
+      "distractor_strategy": "OP_SWAP",
+      "distractor_notes": "distractors: bc + (de - ab) [additive error], bc × ab / de [inverted ratio], de × ab / bc [wrong pair], answer ± 1",
+      "options_count": 4,
+      "generation_constraint": "answer = bc × scale_factor must be integer or clean 1dp decimal; ab ≠ bc to avoid trivial cases; de must be integer or clean 1dp decimal",
+      "latex_notation": true
+    },
+    {
+      "id": "T-9SP-02",
+      "vc_code": "VC2M9SP02",
+      "year": 9,
+      "strand": "Space",
+      "topic": "Enlargement: find image or original dimension given a scale factor",
+      "generation_mode": "parametric",
+      "question_template": "A {shape} has a {dimension_name} of {original} cm. It is enlarged by a scale factor of {k}. What is the {dimension_name} of the image?",
+      "context_variants": [
+        "A {shape} with {dimension_name} {original} cm is enlarged using scale factor {k}. What is the new {dimension_name}?",
+        "An enlargement with scale factor {k} is applied to a {shape}. The original {dimension_name} is {original} cm. What is the image {dimension_name}?"
+      ],
+      "params": {
+        "shape": {
+          "type": "choice",
+          "all": [
+            "rectangle",
+            "triangle",
+            "square",
+            "parallelogram"
+          ]
+        },
+        "dimension_name": {
+          "type": "choice",
+          "all": [
+            "length",
+            "width",
+            "height",
+            "base",
+            "side"
+          ]
+        },
+        "original": {
+          "type": "choice",
+          "foundation": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            10
+          ],
+          "standard": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            12,
+            15
+          ],
+          "advanced": [
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            14,
+            15,
+            18,
+            20
+          ]
+        },
+        "k": {
+          "type": "choice",
+          "foundation": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "standard": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            8,
+            10
+          ],
+          "advanced": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            10
+          ]
+        },
+        "direction": {
+          "type": "choice",
+          "foundation": [
+            "enlarge"
+          ],
+          "standard": [
+            "enlarge"
+          ],
+          "advanced": [
+            "enlarge",
+            "reduce"
+          ]
+        },
+        "_note_reduce": "When direction = 'reduce', question_template changes to: 'The image {dimension_name} is {image_dim} cm after an enlargement with scale factor {k}. What was the original {dimension_name}?' where image_dim = original × k is derived and shown to student. Answer = original. This variant only appears at advanced difficulty."
+      },
+      "answer_type": "integer",
+      "verifier_fn": "enlargement_dimension",
+      "distractor_strategy": "OP_SWAP",
+      "distractor_notes": "distractors: original + k [additive instead of multiplicative], original × (k+1), original × (k-1), answer ± original",
+      "options_count": 4,
+      "generation_constraint": "answer = original × k must be a clean integer; for 'reduce' direction, image_dim = original × k is derived and must be a reasonable size (≤ 200)",
       "latex_notation": true
     },
     {
@@ -6796,6 +7043,188 @@
           "3.14"
         ],
         "question_type": "multi_select"
+      }
+    ],
+    "relationship_type_bank": [
+      {
+        "question_key": "rt_linear_01",
+        "question_text": "A plumber charges a $50 call-out fee plus $30 for every hour worked. What type of relationship exists between the total cost and the number of hours?",
+        "correct_answer": "Linear",
+        "wrong_answers": [
+          "Constant",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_linear_02",
+        "question_text": "A bath is being filled at a steady rate of 10 litres per minute. What type of relationship exists between the volume of water and the time?",
+        "correct_answer": "Linear",
+        "wrong_answers": [
+          "Constant",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_linear_03",
+        "question_text": "A taxi charges $3.50 per kilometre on top of a $5 flag fall. What type of relationship exists between the fare and the distance?",
+        "correct_answer": "Linear",
+        "wrong_answers": [
+          "Constant",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_linear_04",
+        "question_text": "A phone plan costs $20 per month plus $0.10 per text message. What type of relationship exists between the monthly bill and the number of texts?",
+        "correct_answer": "Linear",
+        "wrong_answers": [
+          "Constant",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_linear_05",
+        "question_text": "A candle is 30 cm tall and burns down by 2 cm every hour. What type of relationship exists between the candle height and the time?",
+        "correct_answer": "Linear",
+        "wrong_answers": [
+          "Constant",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_constant_01",
+        "question_text": "A car drives along a flat road at exactly 60 km/h for 3 hours. What type of relationship exists between the speed and the time?",
+        "correct_answer": "Constant",
+        "wrong_answers": [
+          "Linear",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_constant_02",
+        "question_text": "A room is kept at exactly 22°C by an air conditioner all day. What type of relationship exists between the temperature and the time?",
+        "correct_answer": "Constant",
+        "wrong_answers": [
+          "Linear",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_constant_03",
+        "question_text": "Every student in a class receives the same $10 book voucher, regardless of their test score. What type of relationship exists between the voucher amount and the test score?",
+        "correct_answer": "Constant",
+        "wrong_answers": [
+          "Linear",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_constant_04",
+        "question_text": "A swimming pool stays at a depth of 1.5 metres throughout the day. What type of relationship exists between the water depth and the time of day?",
+        "correct_answer": "Constant",
+        "wrong_answers": [
+          "Linear",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_constant_05",
+        "question_text": "A shop charges a flat delivery fee of $15 no matter how many items you order. What type of relationship exists between the delivery fee and the number of items?",
+        "correct_answer": "Constant",
+        "wrong_answers": [
+          "Linear",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_nonlinear_01",
+        "question_text": "A ball is thrown into the air. It rises, slows down, stops, and then falls back down, getting faster. What type of relationship exists between the ball's height and the time?",
+        "correct_answer": "Non-linear",
+        "wrong_answers": [
+          "Linear",
+          "Constant",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_nonlinear_02",
+        "question_text": "A population of bacteria doubles every hour. What type of relationship exists between the number of bacteria and the time?",
+        "correct_answer": "Non-linear",
+        "wrong_answers": [
+          "Linear",
+          "Constant",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_nonlinear_03",
+        "question_text": "A square garden has its side length increased each week. The area of the garden depends on the side length. What type of relationship exists between the area and the side length?",
+        "correct_answer": "Non-linear",
+        "wrong_answers": [
+          "Linear",
+          "Constant",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_nonlinear_04",
+        "question_text": "A car slows down gradually as it approaches a red light. The speed decreases faster and faster over time. What type of relationship exists between the speed and the time?",
+        "correct_answer": "Non-linear",
+        "wrong_answers": [
+          "Linear",
+          "Constant",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_nonlinear_05",
+        "question_text": "A cup of hot coffee cools down quickly at first, then more slowly as it approaches room temperature. What type of relationship exists between the coffee temperature and the time?",
+        "correct_answer": "Non-linear",
+        "wrong_answers": [
+          "Linear",
+          "Constant",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_linear_06",
+        "question_text": "A hiker walks at a steady pace of 4 km per hour along a trail. What type of relationship exists between the distance walked and the time?",
+        "correct_answer": "Linear",
+        "wrong_answers": [
+          "Constant",
+          "Non-linear",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_nonlinear_06",
+        "question_text": "You share a pizza equally among friends. As more friends arrive, each person gets a smaller slice. What type of relationship exists between the size of each slice and the number of friends?",
+        "correct_answer": "Non-linear",
+        "wrong_answers": [
+          "Linear",
+          "Constant",
+          "No relationship"
+        ]
+      },
+      {
+        "question_key": "rt_linear_07",
+        "question_text": "A leaking tap drips at a steady rate of 5 mL per minute into a bucket. What type of relationship exists between the total water collected and the time?",
+        "correct_answer": "Linear",
+        "wrong_answers": [
+          "Constant",
+          "Non-linear",
+          "No relationship"
+        ]
       }
     ]
   }

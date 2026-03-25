@@ -45,7 +45,7 @@ def test_get_templates_for_mixed_returns_all_year():
 def test_total_template_count():
     all_ids = get_all_template_ids()
     # The JSON file is the source of truth; _meta.total_templates field is informational
-    assert len(all_ids) == 68
+    assert len(all_ids) == 71
 
 
 def test_all_templates_have_required_fields():

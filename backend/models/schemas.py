@@ -161,8 +161,6 @@ class SessionSummaryObject(BaseModel):
 
 
 class SessionResultResponse(BaseModel):
-    # TODO(schema-drift): summary field (SessionSummaryObject) and ResponseResultItem.time_taken_ms
-    # are not in docs/schemas.json — added post-schema. Update docs/schemas.json when next revised.
     session_id: str
     score: int
     total: int

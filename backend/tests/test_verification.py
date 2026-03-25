@@ -299,6 +299,65 @@ def test_curated_template_ids_includes_t8n01b():
     assert "T-8N-01b" in engine.curated_template_ids
 
 
+# ── T-9SP-01: similar triangles — missing corresponding side ─────────────────
+
+def test_similar_triangles_integer_answer():
+    """ab=4, de=8 (scale=2), bc=6 → ef=12."""
+    result = engine.verify("T-9SP-01", {"ab": 4, "de": 8, "bc": 6})
+    assert result == "12"
+
+
+def test_similar_triangles_decimal_answer():
+    """ab=4, de=6 (scale=1.5), bc=8 → ef=12.0 → '12'."""
+    result = engine.verify("T-9SP-01", {"ab": 4, "de": 6, "bc": 8})
+    assert result == "12"
+
+
+def test_similar_triangles_half_scale():
+    """ab=6, de=3 (scale=0.5), bc=10 → ef=5."""
+    result = engine.verify("T-9SP-01", {"ab": 6, "de": 3, "bc": 10})
+    assert result == "5"
+
+
+def test_similar_triangles_one_dp_answer():
+    """ab=4, de=6 (scale=1.5), bc=3 → ef=4.5 (1 dp)."""
+    result = engine.verify("T-9SP-01", {"ab": 4, "de": 6, "bc": 3})
+    assert result == "4.5"
+
+
+# ── T-9SP-02: enlargement / reduction ─────────────────────────────────────────
+
+def test_enlargement_basic():
+    """original=5, k=3, direction=enlarge → answer=15."""
+    result = engine.verify("T-9SP-02", {"original": 5, "k": 3, "direction": "enlarge"})
+    assert result == "15"
+
+
+def test_enlargement_default_direction():
+    """Omitting direction defaults to 'enlarge': original=4, k=4 → 16."""
+    result = engine.verify("T-9SP-02", {"original": 4, "k": 4})
+    assert result == "16"
+
+
+def test_enlargement_reduce_returns_original():
+    """direction='reduce': image_dim=original×k is shown; answer=original."""
+    result = engine.verify("T-9SP-02", {"original": 6, "k": 3, "direction": "reduce"})
+    assert result == "6"
+
+
+def test_enlargement_large_scale():
+    """original=12, k=10, direction=enlarge → 120."""
+    result = engine.verify("T-9SP-02", {"original": 12, "k": 10, "direction": "enlarge"})
+    assert result == "120"
+
+
+# ── T-7A-04: relationship type curated bank ───────────────────────────────────
+
+def test_t7a04_in_curated_template_ids():
+    """T-7A-04 is a curated_bank template — must not have a verifier registration."""
+    assert "T-7A-04" in engine.curated_template_ids
+
+
 # ── Unknown template raises ───────────────────────────────────────────────────
 
 def test_unknown_template_raises():

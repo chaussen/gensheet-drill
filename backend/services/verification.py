@@ -16,6 +16,7 @@ Usage:
 
 import math
 import operator
+from decimal import Decimal, ROUND_HALF_UP
 from fractions import Fraction
 from sympy import symbols, solve, expand, factorint
 from sympy import Eq as SymEq
@@ -584,6 +585,55 @@ class VerificationEngine:
         pct_error = abs(measured - actual) / actual * 100
         return round(pct_error, 1)
 
+    def _similar_triangles_missing_side(self, p: dict):
+        """
+        Given two similar triangles with one pair of corresponding sides
+        (ab ↔ de) and one other side (bc), find the missing corresponding
+        side ef using the scale factor.
+
+        scale_factor = de / ab
+        ef = bc × scale_factor
+
+        Returns: integer as string if whole, else 1dp decimal as string.
+        """
+        ab = Fraction(p["ab"])
+        de = Fraction(p["de"])
+        bc = Fraction(p["bc"])
+
+        scale_factor = de / ab
+        ef = bc * scale_factor
+
+        if ef.denominator == 1:
+            return str(int(ef))
+        else:
+            result = Decimal(str(float(ef))).quantize(
+                Decimal("0.1"), rounding=ROUND_HALF_UP
+            )
+            return str(result)
+
+    def _enlargement_dimension(self, p: dict):
+        """
+        Given an original dimension and a scale factor k, compute the image
+        dimension (enlarge) or the original dimension (reduce).
+
+        enlarge:  answer = original × k
+        reduce:   image_dim = original × k  (derived, shown to student)
+                  answer = image_dim / k    (what student must find = original)
+
+        Returns: integer as string (constraint guarantees clean integer).
+        """
+        original = int(p["original"])
+        k = int(p["k"])
+        direction = p.get("direction", "enlarge")
+
+        if direction == "enlarge":
+            answer = original * k
+        else:
+            image_dim = original * k
+            answer = image_dim // k
+
+        return str(answer)
+
     # ─── DISTRACTOR GENERATION ────────────────────────────────────────────────
 
     def _distractor_dispatch(self, strategy: str, template_id: str, correct, params: dict) -> list:
@@ -862,6 +912,8 @@ class VerificationEngine:
             "T-9ST-03": self._compare_statistics,
             "T-9P-01":  self._venn_diagram_probability,
             "T-9P-03":  self._two_way_table_probability,
+            "T-9SP-01": self._similar_triangles_missing_side,
+            "T-9SP-02": self._enlargement_dimension,
         }
 
     @property
@@ -869,7 +921,7 @@ class VerificationEngine:
         """Templates that use curated_bank mode — verification comes from the bank, not this engine."""
         return {
             "T-7N-03", "T-7M-03", "T-7SP-01", "T-7SP-03", "T-7ST-02",
-            "T-7P-02", "T-8M-01", "T-8M-04", "T-8N-01b", "T-8SP-01", "T-8SP-02",
+            "T-7A-04", "T-7P-02", "T-8M-01", "T-8M-04", "T-8N-01b", "T-8SP-01", "T-8SP-02",
             "T-8ST-03", "T-9N-01", "T-9A-05",
             # TODO: T-9ST-03 is generation_mode=parametric (not curated_bank) and has a
             # working verifier (_compare_statistics). Its presence here causes distractor_service
@@ -895,6 +947,24 @@ if __name__ == "__main__":
         ("T-8A-03", {"x1": 1, "y1": 2, "x2": 3, "y2": 8}, "3"),
         ("T-9A-04", {"a": 2, "b": 1, "c": -1, "d": 7}, 2),
         ("T-9M-03", {"theta": 30, "value": 10, "known_side": "hypotenuse", "unknown_side": "opposite side"}, 5.0),
+        # T-9SP-01: similar triangles — integer answer
+        ("T-9SP-01", {"ab": 4, "de": 8, "bc": 6, "scale_factor": 2}, "12"),
+        # T-9SP-01: similar triangles — 1dp decimal answer (ab=4, de=6, scale=1.5, bc=6 → ef=9)
+        ("T-9SP-01", {"ab": 4, "de": 6, "bc": 6, "scale_factor": 1.5}, "9"),
+        # T-9SP-01: similar triangles — 1dp decimal answer (ab=4, de=6, scale=1.5, bc=5 → ef=7.5)
+        ("T-9SP-01", {"ab": 4, "de": 6, "bc": 5, "scale_factor": 1.5}, "7.5"),
+        # T-9SP-01: inverted scale (ab=6, de=3, scale=0.5, bc=10 → ef=5)
+        ("T-9SP-01", {"ab": 6, "de": 3, "bc": 10, "scale_factor": 0.5}, "5"),
+        # T-9SP-02: enlarge — basic (original=5, k=3 → 15)
+        ("T-9SP-02", {"original": 5, "k": 3, "direction": "enlarge"}, "15"),
+        # T-9SP-02: enlarge — default direction (original=8, k=4 → 32)
+        ("T-9SP-02", {"original": 8, "k": 4}, "32"),
+        # T-9SP-02: reduce — student finds original (original=6, k=3 → image=18, answer=6)
+        ("T-9SP-02", {"original": 6, "k": 3, "direction": "reduce"}, "6"),
+        # T-9SP-02: reduce — student finds original (original=10, k=5 → image=50, answer=10)
+        ("T-9SP-02", {"original": 10, "k": 5, "direction": "reduce"}, "10"),
+        # T-9SP-02: enlarge — large values (original=15, k=6 → 90)
+        ("T-9SP-02", {"original": 15, "k": 6, "direction": "enlarge"}, "90"),
     ]
 
     passed, failed = 0, 0

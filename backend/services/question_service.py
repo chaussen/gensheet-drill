@@ -175,11 +175,11 @@ def _math_wrap_text(text: str) -> str:
                 result.append(re.sub(pattern, repl_fn, seg))
         text = ''.join(result)
 
-    # 8. Equation lines: "y = 3x + 5", "x = 2y − 1" (single lowercase var = expression)
+    # 8. Equation lines: "y = 3x + 5", "x = 2y − 1", "y = 4" (single lowercase var = expression or constant)
     def _wrap_eq_line(m: re.Match) -> str:
         return f'${_to_latex_inner(m.group(0))}$'
     _outside_math(
-        r'(?<!\w)[a-z]\s*=\s*-?\d*\.?\d*[a-z](?:\s*[+\-]\s*\d+)*(?!\w)',
+        r'(?<!\w)[a-z]\s*=\s*(?:-?\d*\.?\d*[a-z](?:\s*[+\-]\s*\d+)*|-?\d+(?:\.\d+)?)(?!\w)',
         _wrap_eq_line,
     )
 
@@ -216,15 +216,15 @@ def _wrap_question_math(q: QuestionObject) -> QuestionObject:
     """Apply $...$ math delimiters to question_text, options, and explanation."""
     return q.model_copy(update={
         'question_text': _math_wrap_text(q.question_text),
-        'options': [_math_wrap_option(o) for o in q.options],
-        'explanation': _math_wrap_text(q.explanation),
+        'options': [_math_wrap_option(_clean_math_coefficients(o)) for o in q.options],
+        'explanation': _math_wrap_text(_clean_math_coefficients(q.explanation)),
     })
 
 
 # ── Validation gate ────────────────────────────────────────────────────────────
 
 _PLACEHOLDER_RE = re.compile(r'\{[a-z_][a-z_0-9]*\}')
-_BAD_OPTION_PATTERNS = ("_wrong", "_0", "_1", "_2", "**", "_neg", "_a", "_b", "_c", "?")
+_BAD_OPTION_PATTERNS = ("_wrong", "_0", "_1", "_2", "**", "_neg", "_a", "_b", "_c", "?", "None")
 
 # T-9A-04: this context_variant asks for (x,y) but the verifier only returns x.
 _T9A04_EXCLUDED_VARIANTS: frozenset[str] = frozenset([
@@ -681,6 +681,15 @@ def _resolve_derived_params(template: dict, params: dict) -> dict:
         k = random.choice([2, 3, 4])
         params["b"] = a * k
 
+    # T-9SP-02: for direction="reduce", derive image_dim = original × k so the question
+    # can show the image dimension to the student and ask them to find the original.
+    if template.get("id") == "T-9SP-02" and "image_dim" not in params:
+        direction = params.get("direction", "enlarge")
+        if direction == "reduce":
+            original = int(params.get("original", 6))
+            k = int(params.get("k", 3))
+            params["image_dim"] = original * k
+
     # T-9M-04b: derive measured from actual + error_pct + direction.
     # Conditional rule ("if over ... if under") cannot be handled by _safe_eval.
     # Also enforces the generation_constraint: measured must be a clean integer.
@@ -829,10 +838,6 @@ def _render_question_text(
         cleaned = _clean_math_coefficients(_apply_composite_placeholders(text, params))
         return cleaned, template_str
     except (KeyError, ValueError):
-        # TODO: 6 context_variants in docs/question_templates.json reference placeholders
-        # that are not present in their params dict (T-7M-04b, T-7P-01, T-8A-03, T-9N-02,
-        # T-9A-01, T-9A-03). Those variants silently fall through to the base template here.
-        # Fix by removing the invalid variants from the JSON or adding the missing params.
         try:
             text = base.format(**params)
             cleaned = _clean_math_coefficients(_apply_composite_placeholders(text, params))
@@ -1077,6 +1082,16 @@ def build_question(
     # only returns x — exclude it entirely.
     exclude_vars = _T9A04_EXCLUDED_VARIANTS if template_id == "T-9A-04" else None
     question_text, chosen_variant = _render_question_text(template, params, exclude_variants=exclude_vars)
+
+    # T-9SP-02 reduce direction: override question text to show image_dim and ask for original.
+    if template_id == "T-9SP-02" and params.get("direction") == "reduce":
+        dim = params.get("dimension_name", "length")
+        image_dim = params.get("image_dim", "?")
+        k = params.get("k", "?")
+        question_text = (
+            f"The image {dim} is {image_dim} cm after an enlargement with scale factor {k}. "
+            f"What was the original {dim}?"
+        )
 
     # Root cause B: T-9A-03 gradient / y-intercept context variants need a different answer
     # format than the default line_equation verifier (which returns a full "y = mx + c" string).

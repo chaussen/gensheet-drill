@@ -21,6 +21,8 @@ from services.question_service import (
     _to_latex_inner,
     _math_wrap_option,
     _math_wrap_text,
+    _clean_math_coefficients,
+    _wrap_question_math,
 )
 
 
@@ -724,3 +726,195 @@ def test_build_multi_select_bank_item_passed_directly():
     # The question text should match the pinned item
     # (options are shuffled so we can't check order, but the text is fixed)
     assert q.question_text == specific_item["question_text"]
+
+
+# ── _clean_math_coefficients ─────────────────────────────────────────────────
+
+class TestCleanMathCoefficients:
+    """_clean_math_coefficients fixes 1x, -1x, 0x and double-sign artifacts."""
+
+    def test_leading_one_coefficient_removed(self):
+        assert _clean_math_coefficients("y = 1x + 4") == "y = x + 4"
+
+    def test_leading_minus_one_coefficient_removed(self):
+        assert _clean_math_coefficients("y = -1x + 4") == "y = -x + 4"
+
+    def test_leading_one_in_isolation(self):
+        assert _clean_math_coefficients("1x") == "x"
+
+    def test_leading_one_coefficient_not_stripped_from_10x(self):
+        # "10x" must not become "0x"
+        assert _clean_math_coefficients("10x + 3") == "10x + 3"
+
+    def test_zero_coefficient_with_positive_constant(self):
+        assert _clean_math_coefficients("y = 0x + 5") == "y = 5"
+
+    def test_zero_coefficient_with_negative_constant(self):
+        assert _clean_math_coefficients("y = 0x - 3") == "y = -3"
+
+    def test_double_negative_sign_collapsed(self):
+        assert _clean_math_coefficients("y = 2x - -3") == "y = 2x + 3"
+
+    def test_plus_negative_sign_collapsed(self):
+        assert _clean_math_coefficients("y = 2x + -4") == "y = 2x - 4"
+
+    def test_no_change_for_clean_expression(self):
+        assert _clean_math_coefficients("y = 3x + 5") == "y = 3x + 5"
+
+
+# ── _math_wrap_text — newline rendering (Bug 2) ───────────────────────────────
+
+class TestMathWrapTextNewlines:
+    """_math_wrap_text must preserve newlines in question text."""
+
+    def test_simultaneous_equation_newline_preserved(self):
+        """Simultaneous equation with embedded newline: newline must survive wrapping."""
+        text = "Solve the simultaneous equations:\ny = 3x + 5\ny = x + 1"
+        result = _math_wrap_text(text)
+        assert "\n" in result, "Newline must be preserved in wrapped text"
+
+    def test_newline_not_stripped_in_plain_text(self):
+        text = "Step 1: find x\nStep 2: substitute"
+        result = _math_wrap_text(text)
+        assert "\n" in result
+
+    def test_constant_equation_wrapped(self):
+        """'y = 4' (constant RHS) must be wrapped in $...$."""
+        result = _math_wrap_text("Solve: y = 4")
+        assert "$" in result
+
+
+# ── Bug 3: coefficient-1 cleaning in option pipeline ─────────────────────────
+
+class TestOptionPipelineCoefficient1:
+    """Options containing '1x' must have the 1 stripped before KaTeX wrapping."""
+
+    def test_1x_plus_4_cleaned(self):
+        opt = "y = 1x + 4"
+        cleaned = _clean_math_coefficients(opt)
+        assert cleaned == "y = x + 4"
+
+    def test_wrap_option_after_cleaning_no_1x(self):
+        """Full pipeline: clean then wrap — final option must not contain '1x'."""
+        opt = "y = 1x + 4"
+        result = _math_wrap_option(_clean_math_coefficients(opt))
+        assert "1x" not in result
+
+    def test_wrap_question_math_cleans_options(self):
+        """_wrap_question_math applies cleaning to all options including distractors."""
+        template = load_template_meta("T-8A-03")
+        # Gradient of a line through two points — distractors may contain "1x" forms
+        # Use params that guarantee a gradient that produces simple options
+        q = build_question(template, {"x1": 0, "y1": 0, "x2": 2, "y2": 4}, "standard")
+        if q is not None:
+            for opt in q.options:
+                assert "1x" not in opt, f"Option '{opt}' still contains '1x' coefficient"
+
+
+# ── Bug 3 extension: explanation cleaned through coefficient pipeline ─────────
+
+class TestExplanationCleaning:
+    """Explanations must also be cleaned through _clean_math_coefficients."""
+
+    def test_wrap_question_math_cleans_explanation(self):
+        """_wrap_question_math must apply _clean_math_coefficients to explanation."""
+        from models.schemas import QuestionObject
+        from datetime import datetime, timezone
+        # Construct a QuestionObject with an explanation that has "1x"
+        q = QuestionObject(
+            question_id="test-id",
+            template_id="T-9A-03",
+            vc_code="VC2M9A03",
+            year_level=9,
+            strand="Algebra",
+            difficulty="standard",
+            question_text="A line has gradient 1 and y-intercept 4. What is the equation?",
+            options=["y = x + 4", "y = 2x + 4", "y = x - 4", "y = -x + 4"],
+            correct_index=0,
+            explanation="The equation is y = 1x + 4.",
+            params={"m": 1, "c": 4},
+            generated_at=datetime.now(timezone.utc).isoformat(),
+        )
+        wrapped = _wrap_question_math(q)
+        assert "1x" not in wrapped.explanation, \
+            f"'1x' not cleaned from explanation: {wrapped.explanation!r}"
+
+
+# ── New templates: T-9SP-01 and T-9SP-02 ─────────────────────────────────────
+
+class TestBuildQuestionT9SP01:
+    """T-9SP-01: similar triangles — find missing corresponding side."""
+
+    def test_integer_scale_factor_produces_integer_answer(self):
+        template = load_template_meta("T-9SP-01")
+        # ab=4, scale=2 → de=8; bc=6 → ef=12
+        params = {"ab": 4, "scale_factor": 2, "de": 8, "bc": 6}
+        q = build_question(template, params, "standard")
+        assert q is not None
+        assert q.options[q.correct_index] == "12"
+        assert q.template_id == "T-9SP-01"
+        assert q.year_level == 9
+        assert q.strand == "Space"
+
+    def test_non_integer_scale_produces_decimal_answer(self):
+        """ab=4, scale=1.5 → de=6; bc=4 → ef=6."""
+        template = load_template_meta("T-9SP-01")
+        params = {"ab": 4, "scale_factor": 1.5, "de": 6.0, "bc": 4}
+        q = build_question(template, params, "standard")
+        assert q is not None
+        # ef = 4 × 1.5 = 6 (whole number)
+        assert q.options[q.correct_index] == "6"
+
+    def test_four_options_all_distinct(self):
+        template = load_template_meta("T-9SP-01")
+        params = {"ab": 3, "scale_factor": 2, "de": 6, "bc": 5}
+        q = build_question(template, params, "standard")
+        assert q is not None
+        assert len(q.options) == 4
+        assert len(set(q.options)) == 4
+
+
+class TestBuildQuestionT9SP02:
+    """T-9SP-02: enlargement — find image or original dimension."""
+
+    def test_enlarge_direction(self):
+        template = load_template_meta("T-9SP-02")
+        params = {
+            "shape": "rectangle", "dimension_name": "length",
+            "original": 5, "k": 3, "direction": "enlarge",
+        }
+        q = build_question(template, params, "standard")
+        assert q is not None
+        assert q.options[q.correct_index] == "15"
+
+    def test_reduce_direction_question_text(self):
+        """When direction='reduce', question text must mention the image dimension."""
+        template = load_template_meta("T-9SP-02")
+        params = {
+            "shape": "square", "dimension_name": "side",
+            "original": 4, "k": 3, "direction": "reduce",
+        }
+        q = build_question(template, params, "advanced")
+        assert q is not None
+        # image_dim = 4 × 3 = 12; answer = original = 4
+        assert q.options[q.correct_index] == "4"
+        assert "12" in q.question_text, \
+            f"Question text must show image_dim=12, got: {q.question_text!r}"
+
+    def test_resolve_derived_params_sets_image_dim_for_reduce(self):
+        template = load_template_meta("T-9SP-02")
+        params = {
+            "shape": "rectangle", "dimension_name": "width",
+            "original": 6, "k": 4, "direction": "reduce",
+        }
+        resolved = _resolve_derived_params(template, params)
+        assert resolved["image_dim"] == 24
+
+    def test_resolve_derived_params_no_image_dim_for_enlarge(self):
+        template = load_template_meta("T-9SP-02")
+        params = {
+            "shape": "rectangle", "dimension_name": "length",
+            "original": 5, "k": 3, "direction": "enlarge",
+        }
+        resolved = _resolve_derived_params(template, params)
+        assert "image_dim" not in resolved

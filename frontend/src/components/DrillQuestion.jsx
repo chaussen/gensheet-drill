@@ -41,12 +41,12 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
 
   function handleConfirm() {
     if (checkedSet.size === 0) return
-    // Flash if changing an existing answer
-    if (selectedAnswer?.selectedIndices) {
+    const isChange = !!selectedAnswer?.selectedIndices
+    if (isChange) {
       setFlash(true)
       setTimeout(() => setFlash(false), 200)
     }
-    onSelect([...checkedSet].sort((a, b) => a - b))
+    onSelect([...checkedSet].sort((a, b) => a - b), { advance: !isChange })
   }
 
   return (
