@@ -2,10 +2,11 @@ name: Keep Render Alive
 
 on:
   schedule:
-    # Every 10 minutes. GitHub Actions can run a few minutes late,
-    # but combined with UptimeRobot (every 5 min) this ensures
-    # Render's 15-min inactivity timer is never reached.
-    - cron: "*/10 * * * *"
+    # Every 5 minutes — the minimum GitHub allows.
+    # GitHub Actions can run a few minutes late in practice, so using
+    # the minimum interval gives the best chance of staying within
+    # Render's 15-min inactivity spindown window.
+    - cron: "*/5 * * * *"
   workflow_dispatch: # allow manual trigger from GitHub UI
 
 jobs:
