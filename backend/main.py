@@ -16,7 +16,7 @@ load_dotenv()  # also check cwd for local overrides
 
 from fastapi import FastAPI  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
-from fastapi.responses import FileResponse, JSONResponse  # noqa: E402
+from fastapi.responses import FileResponse, JSONResponse, Response  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 
 from routers import session as session_router  # noqa: E402
@@ -59,6 +59,12 @@ if _FRONTEND_DIST.exists():
 async def get_limits():
     """Return usage limits for the current tier (always 'free' until subscriptions are added)."""
     return get_tier_config()
+
+
+@app.head("/api/health", include_in_schema=False)
+async def health_head():
+    """Explicit HEAD handler for UptimeRobot (free tier only supports HEAD)."""
+    return Response(status_code=200)
 
 
 @app.get("/api/health")
