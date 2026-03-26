@@ -1,0 +1,23 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    # Every 10 minutes. GitHub Actions can run a few minutes late,
+    # but combined with UptimeRobot (every 5 min) this ensures
+    # Render's 15-min inactivity timer is never reached.
+    - cron: "*/10 * * * *"
+  workflow_dispatch: # allow manual trigger from GitHub UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        # --max-time 60: wait up to 60s for cold-start response
+        # --fail: exit non-zero on HTTP 4xx/5xx so the job shows red
+        # --silent: suppress progress output
+        # --show-error: but still show errors if any
+        run: |
+          curl --max-time 60 --fail --silent --show-error \
+            https://gensheet-drill.onrender.com/api/health
+          echo "Response received — service is alive."
