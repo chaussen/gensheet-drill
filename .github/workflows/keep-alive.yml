@@ -20,5 +20,5 @@ jobs:
         # --show-error: but still show errors if any
         run: |
           curl --max-time 60 --fail --silent --show-error \
-            https://gensheet-drill.onrender.com/api/health
+            https://gensheet-drill.onrender.com
           echo "Response received — service is alive."
