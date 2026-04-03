@@ -23,6 +23,7 @@ from services.question_service import (
     _math_wrap_text,
     _clean_math_coefficients,
     _wrap_question_math,
+    _build_explanation,
 )
 
 
@@ -583,12 +584,20 @@ class TestBuildQuestionMathWrapping:
         assert "$" in q.question_text
 
 
-def test_response_item_validation_neither_raises():
-    """ResponseItem rejects neither field set."""
+def test_response_item_validation_neither_is_skipped():
+    """ResponseItem with neither selected_index nor selected_indices is valid — represents a skipped question."""
+    from models.schemas import ResponseItem
+    item = ResponseItem(question_id="abc")
+    assert item.selected_index is None
+    assert item.selected_indices is None
+
+
+def test_response_item_validation_both_raises():
+    """ResponseItem rejects both selected_index and selected_indices being set simultaneously."""
     from pydantic import ValidationError
     from models.schemas import ResponseItem
     with pytest.raises(ValidationError):
-        ResponseItem(question_id="abc")
+        ResponseItem(question_id="abc", selected_index=0, selected_indices=[1, 2])
 
 
 # ── New patch templates — build_question ──────────────────────────────────────
@@ -918,3 +927,159 @@ class TestBuildQuestionT9SP02:
         }
         resolved = _resolve_derived_params(template, params)
         assert "image_dim" not in resolved
+
+
+# ── Bug 1: pluralization fix — "1 years" → "1 year" ──────────────────────────
+
+class TestPluralYears:
+    """_clean_math_coefficients must fix '1 years' → '1 year'."""
+
+    def test_one_years_singular(self):
+        assert _clean_math_coefficients("for 1 years") == "for 1 year"
+
+    def test_one_years_in_full_sentence(self):
+        result = _clean_math_coefficients(
+            "Calculate the compound interest on $2000 at 10% per annum for 1 years."
+        )
+        assert "1 year." in result
+        assert "1 years" not in result
+
+    def test_two_years_unchanged(self):
+        assert _clean_math_coefficients("for 2 years") == "for 2 years"
+
+    def test_five_years_unchanged(self):
+        assert _clean_math_coefficients("for 5 years") == "for 5 years"
+
+    def test_pluralization_does_not_affect_11_years(self):
+        # "11 years" must not be touched (only "1 years" matches)
+        assert _clean_math_coefficients("for 11 years") == "for 11 years"
+
+
+# ── Bug 2: 1-year compound interest forces years >= 2 ────────────────────────
+
+class TestCompoundInterestYearsOverride:
+    """build_question for T-9N-03 must never produce compound interest for 1 year."""
+
+    def test_compound_interest_years_1_overridden(self):
+        """Params with years=1, interest_type=compound must be upgraded to years=2."""
+        template = load_template_meta("T-9N-03")
+        params = {"principal": 1000, "rate": 10, "years": 1, "interest_type": "compound"}
+        q = build_question(template, params, "advanced")
+        assert q is not None
+        # The question text must not contain "1 year" with compound interest
+        assert "1 year" not in q.question_text or "compound" not in q.question_text.lower()
+
+    def test_compound_interest_years_2_unaffected(self):
+        """years=2 compound is valid and must pass through unchanged."""
+        template = load_template_meta("T-9N-03")
+        params = {"principal": 1000, "rate": 10, "years": 2, "interest_type": "compound"}
+        q = build_question(template, params, "advanced")
+        assert q is not None
+        assert q.correct_index is not None
+
+    def test_simple_interest_years_1_allowed(self):
+        """Simple interest with years=1 is mathematically valid — must not be overridden."""
+        template = load_template_meta("T-9N-03")
+        params = {"principal": 500, "rate": 5, "years": 1, "interest_type": "simple"}
+        q = build_question(template, params, "standard")
+        assert q is not None
+        assert q.correct_index is not None
+
+    def test_correct_answer_compound_years_2(self):
+        """T-9N-03 compound interest: 1000 at 10% for 2 years → I = 210."""
+        template = load_template_meta("T-9N-03")
+        params = {"principal": 1000, "rate": 10, "years": 2, "interest_type": "compound"}
+        q = build_question(template, params, "advanced")
+        assert q is not None
+        correct = q.options[q.correct_index]
+        assert correct == "210"
+
+
+# ── Bug 4: T-9N-03 explanation shows step-by-step working ────────────────────
+
+class TestBuildExplanationT9N03:
+    """_build_explanation for T-9N-03 must show formula, substituted values, result."""
+
+    def _template(self):
+        return load_template_meta("T-9N-03")
+
+    def test_simple_interest_explanation_contains_formula(self):
+        params = {"principal": 1000, "rate": 6, "years": 3, "interest_type": "simple"}
+        explanation = _build_explanation(self._template(), params, 180.0)
+        assert "I = P" in explanation
+        assert "1000" in explanation
+        assert "6" in explanation
+        assert "3" in explanation
+        assert "$180.00" in explanation
+
+    def test_simple_interest_explanation_not_generic(self):
+        params = {"principal": 1000, "rate": 6, "years": 3, "interest_type": "simple"}
+        explanation = _build_explanation(self._template(), params, 180.0)
+        # Must not be the old generic placeholder
+        assert explanation != "The correct answer is 180.0. (Simple and compound interest)"
+
+    def test_compound_interest_explanation_contains_formula(self):
+        params = {"principal": 1000, "rate": 10, "years": 2, "interest_type": "compound"}
+        explanation = _build_explanation(self._template(), params, 210.0)
+        assert "A = P" in explanation
+        assert "1000" in explanation
+        assert "10" in explanation
+        assert "2" in explanation
+        assert "$210.00" in explanation
+        assert "interest = A" in explanation
+
+    def test_compound_interest_explanation_shows_total_amount(self):
+        """Explanation must include the intermediate total amount (A), not just interest."""
+        params = {"principal": 1000, "rate": 10, "years": 2, "interest_type": "compound"}
+        explanation = _build_explanation(self._template(), params, 210.0)
+        # A = 1000 × (1.10)^2 = 1210
+        assert "$1210.00" in explanation
+
+    def test_other_template_returns_generic(self):
+        """Non-T-9N-03 templates still return the generic explanation."""
+        template = load_template_meta("T-7N-01")
+        explanation = _build_explanation(template, {"n": 64}, 8)
+        assert "The correct answer is 8" in explanation
+
+    def test_explanation_singular_year_label(self):
+        """Explanation must use 'year' (not 'years') when years=1."""
+        params = {"principal": 500, "rate": 5, "years": 1, "interest_type": "simple"}
+        explanation = _build_explanation(self._template(), params, 25.0)
+        assert "1 year " in explanation
+        assert "1 years" not in explanation
+
+
+# ── T-9N-03 build_question integration ───────────────────────────────────────
+
+class TestBuildQuestionT9N03:
+    """T-9N-03: simple/compound interest question end-to-end."""
+
+    def test_simple_interest_produces_valid_question(self):
+        template = load_template_meta("T-9N-03")
+        q = build_question(template, {"principal": 500, "rate": 5, "years": 3, "interest_type": "simple"}, "standard")
+        assert q is not None
+        assert q.year_level == 9
+        assert q.strand == "Number"
+        assert q.vc_code == "VC2M9N03"
+        assert len(q.options) == 4
+
+    def test_simple_interest_correct_answer(self):
+        """500 at 5% for 3 years simple interest = 75 (float formatted as plain int)."""
+        template = load_template_meta("T-9N-03")
+        q = build_question(template, {"principal": 500, "rate": 5, "years": 3, "interest_type": "simple"}, "standard")
+        assert q is not None
+        assert q.options[q.correct_index] == "75"
+
+    def test_compound_interest_correct_answer(self):
+        """1000 at 10% for 2 years compound: A = 1210, I = 210."""
+        template = load_template_meta("T-9N-03")
+        q = build_question(template, {"principal": 1000, "rate": 10, "years": 2, "interest_type": "compound"}, "advanced")
+        assert q is not None
+        assert q.options[q.correct_index] == "210"
+
+    def test_explanation_attached_to_question(self):
+        """build_question must attach the formula explanation, not a generic placeholder."""
+        template = load_template_meta("T-9N-03")
+        q = build_question(template, {"principal": 500, "rate": 5, "years": 3, "interest_type": "simple"}, "standard")
+        assert q is not None
+        assert "I = P" in q.explanation

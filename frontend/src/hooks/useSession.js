@@ -129,9 +129,9 @@ export function useSession() {
           time_taken_ms: timings.question_times[q.question_id] ?? 0,
         }
         if (q.question_type === 'multi_select') {
-          return { ...base, selected_indices: ans?.selectedIndices ?? [] }
+          return { ...base, selected_indices: ans?.selectedIndices ?? null }
         }
-        return { ...base, selected_index: ans?.selectedIndex ?? 0 }
+        return { ...base, selected_index: ans?.selectedIndex ?? null }
       })
       const result = await api.submitSession(state.sessionId, responses, timings.total_time_ms)
       saveSession(result, state.config)

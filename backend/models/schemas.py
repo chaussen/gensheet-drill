@@ -77,10 +77,11 @@ class ResponseItem(BaseModel):
     def check_exactly_one_selection(self) -> "ResponseItem":
         has_single = self.selected_index is not None
         has_multi = self.selected_indices is not None
-        if has_single == has_multi:
+        if has_single and has_multi:
             raise ValueError(
-                "Exactly one of selected_index or selected_indices must be provided"
+                "Only one of selected_index or selected_indices may be provided"
             )
+        # Both null is allowed: represents a skipped question.
         return self
 
 

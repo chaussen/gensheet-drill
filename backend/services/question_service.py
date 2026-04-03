@@ -64,6 +64,9 @@ def _to_latex_inner(s: str) -> str:
     s = re.sub(r'(-?\d+)\s*/\s*(\d+)', r'\\frac{\1}{\2}', s)
     # × → \times, ÷ → \div
     s = s.replace('×', r'\times').replace('÷', r'\div')
+    # Bare exponents ^N and ^-N → ^{N} / ^{-N} (e.g. from scientific notation verifier output)
+    # Runs after **N→^{N} so existing ^{N} is not double-wrapped (regex requires bare digit after ^).
+    s = re.sub(r'\^(-?\d+)', r'^{\1}', s)
     return s
 
 
@@ -740,9 +743,32 @@ def _format_answer(answer) -> str:
 
 
 def _build_explanation(template: dict, params: dict, correct_answer) -> str:
-    """Minimal step-by-step explanation placeholder."""
-    topic = template.get("topic", template["id"])
+    """Build a step-by-step explanation for a question."""
+    template_id = template.get("id", "")
+    topic = template.get("topic", template_id)
     answer_str = _format_answer(correct_answer)
+
+    if template_id == "T-9N-03":
+        principal = float(params.get("principal", 0))
+        rate = float(params.get("rate", 0))
+        years = int(params.get("years", 0))
+        interest_type = params.get("interest_type", "simple")
+        year_label = "year" if years == 1 else "years"
+        if interest_type == "simple":
+            return (
+                f"Simple interest: I = P × r/100 × t "
+                f"= {principal:.0f} × {rate}/100 × {years} {year_label} "
+                f"= ${correct_answer:.2f}"
+            )
+        else:
+            amount = round(principal * (1 + rate / 100) ** years, 2)
+            return (
+                f"Compound interest: A = P(1 + r/100)^n "
+                f"= {principal:.0f} × (1 + {rate}/100)^{years} "
+                f"= ${amount:.2f}, "
+                f"so interest = A − P = ${amount:.2f} − ${principal:.0f} = ${correct_answer:.2f}"
+            )
+
     return f"The correct answer is {answer_str}. ({topic})"
 
 
@@ -811,6 +837,9 @@ def _clean_math_coefficients(text: str) -> str:
     # Allow optional sign prefix so "= -1x" → "= -x" and "= 1x" → "= x".
     text = re.sub(r'(?<![0-9])-1x(?![0-9])', '-x', text)
     text = re.sub(r'(?<![0-9])1x(?![0-9])', 'x', text)
+
+    # Pluralization: "1 years" → "1 year" (and other common time units)
+    text = re.sub(r'\b1 years\b', '1 year', text)
 
     return text
 
@@ -1060,6 +1089,20 @@ def build_question(
 
     # Resolve derived params (t2/t3, op from expr_template, etc.)
     params = _resolve_derived_params(template, params)
+
+    # T-9N-03: compound interest with years=1 is identical to simple — enforce years >= 2
+    if template_id == "T-9N-03" and params.get("interest_type") == "compound" and int(params.get("years", 0)) == 1:
+        params = {**params, "years": 2}
+
+    # T-9N-02: convert float value to decimal notation so question text reads as a real number
+    # (e.g. 5.6e-05 → "0.000056") not as Python scientific repr, which already looks like sci notation.
+    if template_id == "T-9N-02" and "value" in params:
+        from decimal import Decimal as _Decimal
+        try:
+            dec = _Decimal(str(float(params["value"])))
+            params = {**params, "value": f"{dec:f}".rstrip("0").rstrip(".")}
+        except Exception:
+            pass
 
     # 1. Verify → correct answer
     try:
@@ -1335,25 +1378,18 @@ async def generate_session_questions(
         else:
             logger.warning("Top-up pool empty; cannot fill %d deficit slots", count - len(questions))
 
-    # Deduplicate by question_text — only for curated bank templates.
-    # Curated banks have a finite, fixed set of question texts; if the same text appears
-    # more than once (e.g. T-9A-05 before distinct texts were added, or any future bank
-    # with accidental duplicates), drop the extra. Parametric questions are excluded: their
-    # question_text is generated from varied AI params, so repetition is a test artifact only.
-    curated_template_ids: set[str] = (
-        set(MULTI_SELECT_BANKS.keys()) | {t["id"] for t in curated_single}
-    )
-    seen_curated_texts: set[str] = set()
+    # Deduplicate by question_text across ALL templates.
+    # Curated banks have a fixed set of items. Parametric templates can also produce identical
+    # question texts when the AI returns the same params for the same template multiple times
+    # (observed in Y9 Number where few templates exist and repeats are common).
+    seen_texts: set[str] = set()
     deduped: list[QuestionObject] = []
     for q in questions:
-        if q.template_id in curated_template_ids:
-            if q.question_text not in seen_curated_texts:
-                seen_curated_texts.add(q.question_text)
-                deduped.append(q)
-            else:
-                logger.warning("Dropped duplicate question_text from session (template %s)", q.template_id)
-        else:
+        if q.question_text not in seen_texts:
+            seen_texts.add(q.question_text)
             deduped.append(q)
+        else:
+            logger.warning("Dropped duplicate question_text from session (template %s)", q.template_id)
     questions = deduped
 
     random.shuffle(questions)

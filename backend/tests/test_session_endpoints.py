@@ -156,6 +156,27 @@ def test_submit_reveals_correct_index(client):
         assert r["correct_index"] == 2
 
 
+def test_submit_skipped_questions(client):
+    """
+    Skipped questions (no selected_index) must be marked correct=False and
+    selected_index must be None in the response so the frontend can display them
+    as 'skipped' rather than 'wrong answer selected'.
+    """
+    session_id, q_ids = _start_and_get_session(client)
+    # Submit with no selection for all questions (all skipped)
+    responses = [{"question_id": qid} for qid in q_ids]
+
+    resp = client.post(f"/api/session/{session_id}/submit", json={"responses": responses})
+
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["score"] == 0
+    assert all(not r["correct"] for r in data["responses"])
+    # selected_index must be null so the frontend isSkipped() check works
+    for r in data["responses"]:
+        assert r["selected_index"] is None
+
+
 def test_submit_double_submit_rejected(client):
     session_id, q_ids = _start_and_get_session(client)
     responses = [{"question_id": qid, "selected_index": 0} for qid in q_ids]
@@ -207,3 +228,173 @@ def test_health_endpoint(client):
     assert data["status"] == "ok"
     assert "ts" in data
     assert "cache_size" in data
+
+
+# ── Year 9 strand restrictions ────────────────────────────────────────────────
+
+def test_y9_mixed_rejected(client):
+    """Year 9 Mixed sessions must be rejected with 400."""
+    resp = client.post("/api/session/start", json={
+        "year_level": 9,
+        "strand": "Mixed",
+        "difficulty": "standard",
+        "count": 5,
+    })
+    assert resp.status_code == 400
+    assert "Mixed" in resp.json()["detail"]
+
+
+def test_y9_statistics_rejected(client):
+    """Year 9 Statistics sessions must be rejected with 400."""
+    resp = client.post("/api/session/start", json={
+        "year_level": 9,
+        "strand": "Statistics",
+        "difficulty": "standard",
+        "count": 5,
+    })
+    assert resp.status_code == 400
+    assert "Statistics" in resp.json()["detail"]
+
+
+def test_y8_mixed_allowed(client):
+    """Year 8 Mixed sessions must not be rejected by the Y9 guard."""
+    with patch(
+        "routers.session.generate_session_questions",
+        new=AsyncMock(return_value=MOCK_QUESTIONS),
+    ):
+        resp = client.post("/api/session/start", json={
+            "year_level": 8,
+            "strand": "Mixed",
+            "difficulty": "standard",
+            "count": 5,
+        })
+    assert resp.status_code == 200
+
+
+def test_y9_algebra_allowed(client):
+    """Year 9 single-strand sessions (other than Statistics) must proceed."""
+    with patch(
+        "routers.session.generate_session_questions",
+        new=AsyncMock(return_value=MOCK_QUESTIONS),
+    ):
+        resp = client.post("/api/session/start", json={
+            "year_level": 9,
+            "strand": "Algebra",
+            "difficulty": "standard",
+            "count": 5,
+        })
+    assert resp.status_code == 200
+
+
+# ── Question count enforcement ────────────────────────────────────────────────
+
+def test_count_below_minimum_rejected(client):
+    """count=4 is below the Pydantic ge=5 constraint — rejected with 422."""
+    resp = client.post("/api/session/start", json={
+        "year_level": 8,
+        "strand": "Algebra",
+        "difficulty": "standard",
+        "count": 4,
+    })
+    assert resp.status_code == 422  # Pydantic validation (ge=5) fires before endpoint logic
+
+
+def test_count_above_global_maximum_rejected(client):
+    """count=21 exceeds the Pydantic le=20 constraint — rejected with 422."""
+    resp = client.post("/api/session/start", json={
+        "year_level": 8,
+        "strand": "Algebra",
+        "difficulty": "standard",
+        "count": 21,
+    })
+    assert resp.status_code == 422  # Pydantic validation (le=20) fires before endpoint logic
+
+
+def test_count_above_tier_max_rejected(client):
+    """Free tier cap is 10; count=15 must be rejected by tier enforcement."""
+    with patch("routers.session.get_tier_config", return_value={
+        "tier": "free",
+        "daily_session_limit": 3,
+        "max_question_count": 10,
+        "question_count_options": [5, 10],
+    }):
+        resp = client.post("/api/session/start", json={
+            "year_level": 8,
+            "strand": "Algebra",
+            "difficulty": "standard",
+            "count": 15,
+        })
+    assert resp.status_code == 400
+    assert "10" in resp.json()["detail"]
+
+
+def test_count_at_minimum_accepted(client):
+    """count=5 is exactly the minimum — must be accepted."""
+    with patch(
+        "routers.session.generate_session_questions",
+        new=AsyncMock(return_value=MOCK_QUESTIONS),
+    ):
+        resp = client.post("/api/session/start", json={
+            "year_level": 8,
+            "strand": "Algebra",
+            "difficulty": "standard",
+            "count": 5,
+        })
+    assert resp.status_code == 200
+
+
+# ── Daily session limit (429) ─────────────────────────────────────────────────
+
+def test_daily_limit_returns_429(client):
+    """When a student exceeds their daily session cap, the endpoint must return 429."""
+    with patch("routers.session.get_tier_config", return_value={
+        "tier": "free",
+        "daily_session_limit": 3,
+        "max_question_count": 10,
+        "question_count_options": [5, 10],
+    }), patch("routers.session.session_cache") as mock_cache:
+        mock_cache.count_today.return_value = 3  # already at limit
+        resp = client.post("/api/session/start", json={
+            "year_level": 8,
+            "strand": "Algebra",
+            "difficulty": "standard",
+            "count": 5,
+            "student_id": "student-abc",
+        })
+    assert resp.status_code == 429
+
+
+def test_daily_limit_not_triggered_without_student_id(client):
+    """If no student_id is supplied, the daily limit check is skipped."""
+    with patch(
+        "routers.session.generate_session_questions",
+        new=AsyncMock(return_value=MOCK_QUESTIONS),
+    ), patch("routers.session.get_tier_config", return_value={
+        "tier": "free",
+        "daily_session_limit": 0,  # even 0-limit is bypassed without student_id
+        "max_question_count": 10,
+        "question_count_options": [5, 10],
+    }):
+        resp = client.post("/api/session/start", json={
+            "year_level": 8,
+            "strand": "Algebra",
+            "difficulty": "standard",
+            "count": 5,
+            # no student_id
+        })
+    assert resp.status_code == 200
+
+
+# ── GET /api/config/limits ────────────────────────────────────────────────────
+
+def test_config_limits_endpoint(client):
+    """GET /api/config/limits must return tier, daily_session_limit, and question_count_options."""
+    resp = client.get("/api/config/limits")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "tier" in data
+    assert "daily_session_limit" in data
+    assert "max_question_count" in data
+    assert "question_count_options" in data
+    assert isinstance(data["question_count_options"], list)
+    assert len(data["question_count_options"]) >= 1

@@ -109,7 +109,7 @@ export default function App() {
   if (view === 'progress') {
     return (
       <div data-testid={TEST_IDS.views.progress}>
-        <ProgressView onBack={() => setBaseView('setup')} />
+        <ProgressView onBack={() => setBaseView(session.result ? 'results' : 'setup')} />
       </div>
     )
   }

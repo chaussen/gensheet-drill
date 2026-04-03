@@ -358,6 +358,65 @@ def test_t7a04_in_curated_template_ids():
     assert "T-7A-04" in engine.curated_template_ids
 
 
+# ── T-9N-03: simple and compound interest ────────────────────────────────────
+
+def test_simple_interest_basic():
+    """500 at 5% for 3 years simple interest = 75.0."""
+    result = engine.verify("T-9N-03", {
+        "principal": 500, "rate": 5, "years": 3, "interest_type": "simple"
+    })
+    assert result == 75.0
+
+
+def test_simple_interest_one_year():
+    """Simple interest for 1 year: 1000 at 10% = 100.0."""
+    result = engine.verify("T-9N-03", {
+        "principal": 1000, "rate": 10, "years": 1, "interest_type": "simple"
+    })
+    assert result == 100.0
+
+
+def test_compound_interest_two_years():
+    """1000 at 10% for 2 years compound: A = 1210, I = 210.0."""
+    result = engine.verify("T-9N-03", {
+        "principal": 1000, "rate": 10, "years": 2, "interest_type": "compound"
+    })
+    assert result == 210.0
+
+
+def test_compound_interest_three_years():
+    """1000 at 6% for 3 years compound: A = 1000*(1.06)^3 ≈ 1191.02, I ≈ 191.02."""
+    result = engine.verify("T-9N-03", {
+        "principal": 1000, "rate": 6, "years": 3, "interest_type": "compound"
+    })
+    assert abs(result - 191.02) < 0.01
+
+
+def test_compound_vs_simple_differ_for_multi_year():
+    """For years > 1, compound interest must exceed simple interest on the same principal."""
+    simple = engine.verify("T-9N-03", {
+        "principal": 2000, "rate": 8, "years": 3, "interest_type": "simple"
+    })
+    compound = engine.verify("T-9N-03", {
+        "principal": 2000, "rate": 8, "years": 3, "interest_type": "compound"
+    })
+    assert compound > simple, "Compound interest must exceed simple interest over multiple years"
+
+
+def test_compound_equals_simple_for_one_year():
+    """For exactly 1 year, compound and simple interest are numerically equal."""
+    simple = engine.verify("T-9N-03", {
+        "principal": 1000, "rate": 10, "years": 1, "interest_type": "simple"
+    })
+    compound = engine.verify("T-9N-03", {
+        "principal": 1000, "rate": 10, "years": 1, "interest_type": "compound"
+    })
+    assert simple == compound, (
+        "1-year compound interest must equal simple interest — "
+        "this is why build_question overrides years=1 for compound questions"
+    )
+
+
 # ── Unknown template raises ───────────────────────────────────────────────────
 
 def test_unknown_template_raises():

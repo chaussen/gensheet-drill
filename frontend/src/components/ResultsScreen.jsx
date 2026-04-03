@@ -88,8 +88,8 @@ export default function ResultsScreen({ result, onNewSession, onViewHistory }) {
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
             <h2 className="text-base font-semibold text-slate-800 mb-3">Session Summary</h2>
 
-            {/* Strand breakdown */}
-            {Object.keys(summary.by_strand).length > 0 && (
+            {/* Strand breakdown — only shown when multiple strands are present */}
+            {Object.keys(summary.by_strand).length > 1 && (
               <div className="mb-4">
                 <h3 className="text-sm font-semibold text-slate-700 mb-2">By Strand</h3>
                 <div className="overflow-x-auto">
