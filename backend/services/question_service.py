@@ -6,6 +6,7 @@ Orchestrates: template selection → AI param generation → schema validation
 
 Chain per CLAUDE.md §5 Iteration 1, step 4.
 """
+import math
 import random
 import re
 import uuid
@@ -14,6 +15,7 @@ from collections import Counter
 from datetime import datetime, timezone
 
 from docs_loader import load_template_meta, get_templates_for, load_curated_bank
+from config.companions import get_companion_ids, should_expand, max_companions
 from services.engine import engine as _engine
 from services import ai_service
 from services.distractor_service import generate_distractors
@@ -1208,6 +1210,125 @@ def build_question(
     return _wrap_question_math(q)
 
 
+# ── Variety engine helpers ────────────────────────────────────────────────────
+
+
+def _select_templates_balanced(available: list[dict], count: int) -> list[dict]:
+    """
+    Select `count` templates with a capped round-robin shuffle so no single
+    template appears more than ceil(count / len(available)) times.
+
+    Replaces random.choices(available, k=count) for non-Mixed sessions.
+    Guarantees: every template in `available` appears at least
+    floor(count/n) times and at most ceil(count/n) times.
+
+    Edge cases:
+      n=1  → the one template fills all slots (correct behaviour).
+      count ≤ n → each template appears at most once (maximum variety).
+      n=0  → returns [] (caller guards against empty pool before calling).
+    """
+    n = len(available)
+    if n == 0:
+        return []
+    cap = math.ceil(count / n)
+    pool = available * cap   # each template dict repeated cap times
+    random.shuffle(pool)
+    return pool[:count]
+
+
+def _select_templates_balanced_mixed(available: list[dict], count: int) -> list[dict]:
+    """
+    Balanced selection for Mixed-strand sessions.
+
+    Preserves the existing strand-proportional weighting (strands with more
+    templates contribute proportionally more questions) while still capping
+    any single template at ceil(count / len(available)) occurrences.
+    """
+    n = len(available)
+    if n == 0:
+        return []
+    strand_counts = Counter(t.get("strand") for t in available)
+    cap = math.ceil(count / n)
+    pool: list[dict] = []
+    for t in available:
+        weight = strand_counts[t.get("strand", "")] * cap
+        pool.extend([t] * weight)
+    random.shuffle(pool)
+    return pool[:count]
+
+
+def _param_fingerprint(params: dict) -> frozenset:
+    """Hashable fingerprint of scalar values in a params dict."""
+    return frozenset(
+        (k, v) for k, v in params.items()
+        if isinstance(v, (int, float, str, bool))
+    )
+
+
+def _ensure_param_diversity(
+    params_list: list[dict],
+    template: dict,
+    difficulty: str,
+    target: int,
+    max_attempts: int = 10,
+) -> list[dict]:
+    """
+    Guarantee `target` param sets with distinct fingerprints.
+
+    Removes duplicates from `params_list` and replaces them with freshly
+    generated fallback params. If uniqueness cannot be fully achieved (e.g.
+    the template has very few legal param combinations), accepts a duplicate
+    rather than returning fewer than `target` items.
+
+    Called after the AI returns params and after initial fallback padding,
+    so it is always given at least `target` items to work with.
+    """
+    seen: set[frozenset] = set()
+    result: list[dict] = []
+
+    # First pass: accept unique params from the AI's list
+    for p in params_list:
+        if len(result) >= target:
+            break
+        fp = _param_fingerprint(p)
+        if fp not in seen:
+            seen.add(fp)
+            result.append(p)
+        else:
+            logger.debug(
+                "Duplicate params for template %s — slot queued for fallback replacement",
+                template.get("id"),
+            )
+
+    # Second pass: fill remaining slots with locally generated fallback params
+    slots_needed = target - len(result)
+    if slots_needed > 0:
+        logger.info(
+            "Template %s: %d/%d param set(s) were duplicates; generating %d fallback(s)",
+            template.get("id"), slots_needed, target, slots_needed,
+        )
+    for _ in range(slots_needed):
+        filled = False
+        for _attempt in range(max_attempts):
+            fb = _fallback_params(template, difficulty)
+            fp = _param_fingerprint(fb)
+            if fp not in seen:
+                seen.add(fp)
+                result.append(fb)
+                filled = True
+                break
+        if not filled:
+            # Accept duplicate rather than drop the slot — keeps session full
+            result.append(_fallback_params(template, difficulty))
+            logger.warning(
+                "Template %s: could not find unique fallback after %d attempts; "
+                "accepting duplicate to avoid question deficit",
+                template.get("id"), max_attempts,
+            )
+
+    return result[:target]
+
+
 # ── Session question generator ────────────────────────────────────────────────
 
 async def generate_session_questions(
@@ -1263,18 +1384,44 @@ async def generate_session_questions(
             f"No parametric templates available for Year {year_level} {strand}"
         )
 
-    # Distribute count across templates for variety.
-    # For Mixed sessions (Y7/Y8), weight strand selection by template count so that
-    # strands with fewer than 3 parametric templates appear proportionally less often.
-    # Each template's weight = number of templates in its strand. This means a strand
-    # with 8 templates gets 8× the total weight of a strand with 1 template, producing
-    # natural proportional representation rather than over-representing thin strands.
+    # ── Layer 2: Companion pool expansion ────────────────────────────────────
+    # When the native pool is critically thin (< count/2 unique templates),
+    # borrow companion templates from an adjacent year (same strand) so the
+    # balanced selector has enough variety to work with. Skipped for Mixed
+    # sessions which already draw from a large cross-strand pool.
+    if strand != "Mixed" and should_expand(len(available), count):
+        native_count = len(available)
+        companion_ids = get_companion_ids(year_level, strand)
+        limit = max_companions(count)
+        added = 0
+        existing_ids = {t["id"] for t in available}
+        for cid in companion_ids:
+            if added >= limit:
+                break
+            if cid in existing_ids:
+                continue
+            try:
+                tmpl = load_template_meta(cid)
+                if tmpl.get("generation_mode") in ("parametric", "curated_bank"):
+                    available.append(tmpl)
+                    existing_ids.add(cid)
+                    added += 1
+            except Exception as exc:
+                logger.warning("Could not load companion template %s: %s", cid, exc)
+        if added:
+            logger.info(
+                "Variety engine: expanded Y%d %s pool %d→%d (%d companion(s) added)",
+                year_level, strand, native_count, len(available), added,
+            )
+
+    # ── Layer 1: Balanced template selection ─────────────────────────────────
+    # Replace random.choices (with replacement) with a capped shuffle pool so
+    # no single template can appear more than ceil(count / pool_size) times.
+    # Mixed sessions retain strand-proportional weighting via the mixed variant.
     if strand == "Mixed":
-        strand_counts = Counter(t.get("strand") for t in available)
-        weights = [strand_counts[t.get("strand")] for t in available]
-        selected = random.choices(available, weights=weights, k=count)
+        selected = _select_templates_balanced_mixed(available, count)
     else:
-        selected = random.choices(available, k=count)
+        selected = _select_templates_balanced(available, count)
 
     # Group by template_id to batch the AI calls
     template_counts = Counter(t["id"] for t in selected)
@@ -1322,6 +1469,13 @@ async def generate_session_questions(
             # Pad with fallback if AI returned fewer than needed
             while len(params_list) < n:
                 params_list.append(_fallback_params(template, difficulty))
+
+            # ── Layer 3: Param diversity gate ─────────────────────────────────
+            # Deduplicate param sets by fingerprint and replace duplicates with
+            # locally generated fallback params. Prevents the same question
+            # appearing twice when Haiku returns identical values for a template
+            # that was selected multiple times (common in thin pools like Y9 Number).
+            params_list = _ensure_param_diversity(params_list, template, difficulty, target=n)
 
             preselected_items = [None] * n
 
