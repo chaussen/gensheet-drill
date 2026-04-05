@@ -1147,6 +1147,25 @@ def build_question(
         elif variant_lower.startswith("what is the y-intercept"):
             correct_answer = params.get("c", correct_answer)
 
+    # T-8N-05: context_variants hard-code the direction ("increases", "discounted") instead of
+    # using {change_type}. If the chosen variant's direction conflicts with params["change_type"],
+    # the verifier (already run above) computed the answer for the wrong direction. Re-derive
+    # params and correct_answer to match the question text.
+    if template_id == "T-8N-05":
+        v_lower = chosen_variant.lower()
+        if "increase" in v_lower:
+            inferred_type = "increased"
+        elif "discount" in v_lower or "decrease" in v_lower:
+            inferred_type = "decreased"
+        else:
+            inferred_type = params.get("change_type", "increased")
+        if inferred_type != params.get("change_type"):
+            params = {**params, "change_type": inferred_type}
+            try:
+                correct_answer = _engine.verify(template_id, params)
+            except Exception as e:
+                logger.warning("T-8N-05 re-verify after variant reconciliation failed: %s", e)
+
     correct_str = _format_answer(correct_answer)
 
     # 3. Distractors

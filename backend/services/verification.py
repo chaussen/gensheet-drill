@@ -685,6 +685,45 @@ class VerificationEngine:
         return [str(correct) + "_neg", str(correct) + "_a", str(correct) + "_b"]
 
     def _distractors_op_swap(self, correct, params, template_id) -> list:
+        # T-8N-05 percentage change: generate pedagogically meaningful wrong answers.
+        # Error 1 (op-swap):     did decrease instead of increase, or vice versa.
+        # Error 2 (raw arith):   added/subtracted the raw % number instead of % of original
+        #                        (e.g. 200 + 15 = 215 instead of 200 × 1.15 = 230).
+        # Error 3 (off-by-one):  arithmetic slip on the correct answer.
+        if template_id == "T-8N-05":
+            original = float(params.get("original", 0))
+            pct = float(params.get("pct", 0))
+            change_type = params.get("change_type", "increased")
+
+            def _fmt(v: float) -> str:
+                v = round(v, 2)
+                return str(int(v) if v == int(v) else v)
+
+            if change_type == "increased":
+                op_swapped = original * (1 - pct / 100)   # decrease instead of increase
+                raw_arith = original + pct                 # added raw % directly
+            else:
+                op_swapped = original * (1 + pct / 100)   # increase instead of decrease
+                raw_arith = original - pct                 # subtracted raw % directly
+
+            off_by_one = correct - 1 if isinstance(correct, (int, float)) else correct
+            alt = correct + 1 if isinstance(correct, (int, float)) else correct
+
+            # Build candidates in priority order; deduplicate against correct answer.
+            candidates = [
+                _fmt(op_swapped),   # best: wrong-direction error
+                _fmt(raw_arith),    # good: raw % instead of % of original
+                _fmt(off_by_one),   # ok: arithmetic slip
+                _fmt(alt),          # fallback: correct+1
+            ]
+            seen: set[str] = {_fmt(correct)}
+            result: list[str] = []
+            for c in candidates:
+                if c not in seen:
+                    seen.add(c)
+                    result.append(c)
+            return result[:3]
+
         # Generic fallback: off-by-one plus a ×2 error
         if isinstance(correct, (int, float)):
             return [str(correct - 1), str(correct + 1), str(correct * 2 if correct != 0 else correct + 5)]

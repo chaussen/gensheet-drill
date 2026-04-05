@@ -1083,3 +1083,124 @@ class TestBuildQuestionT9N03:
         q = build_question(template, {"principal": 500, "rate": 5, "years": 3, "interest_type": "simple"}, "standard")
         assert q is not None
         assert "I = P" in q.explanation
+
+
+class TestBuildQuestionT8N05:
+    """
+    Regression tests for the T-8N-05 variant/change_type mismatch bug.
+
+    Root cause: context_variants for T-8N-05 hard-code a direction ("increases" or
+    "discounted") instead of using {change_type}.  When the randomly-selected variant's
+    direction differed from params["change_type"], the verifier computed the answer for
+    the wrong direction — so the correct answer was absent from the options and three
+    wrong-direction distractors appeared instead.
+    """
+
+    def _build(self, original, pct, change_type):
+        template = load_template_meta("T-8N-05")
+        params = {"original": original, "pct": pct, "change_type": change_type}
+        return build_question(template, params, "standard")
+
+    # ── Correctness: correct answer must be in options ─────────────────────────
+
+    def test_correct_answer_matches_question_direction(self):
+        """
+        Core invariant: whatever direction the question text states, the correct answer
+        must be consistent with it. Tested over 60 builds to cover all variant paths.
+
+        - "increase" in question → correct > original
+        - "discount"/"decrease" in question → correct < original
+        - base template with {change_type} already substituted → read direction from text
+        """
+        template = load_template_meta("T-8N-05")
+        original = 200
+        mismatches = []
+        for change_type in ("increased", "decreased"):
+            for _ in range(30):
+                q = build_question(template, {"original": original, "pct": 15, "change_type": change_type}, "standard")
+                if q is None:
+                    continue
+                correct_val = float(q.options[q.correct_index])
+                text_lower = q.question_text.lower()
+                if "increase" in text_lower:
+                    if correct_val <= original:
+                        mismatches.append(
+                            f"text='...increases...' but correct={correct_val} ≤ {original}: {q.options}"
+                        )
+                elif "discount" in text_lower or "decrease" in text_lower:
+                    if correct_val >= original:
+                        mismatches.append(
+                            f"text='...decreases...' but correct={correct_val} ≥ {original}: {q.options}"
+                        )
+        assert not mismatches, "Direction/answer mismatches found:\n" + "\n".join(mismatches)
+
+    def test_correct_index_valid_range(self):
+        for change_type in ("increased", "decreased"):
+            q = self._build(100, 20, change_type)
+            assert q is not None
+            assert 0 <= q.correct_index < len(q.options)
+
+    def test_four_options_all_distinct(self):
+        for original, pct, ct in [(100, 10, "increased"), (200, 25, "decreased"), (50, 50, "increased")]:
+            q = self._build(original, pct, ct)
+            assert q is not None
+            assert len(set(q.options)) == 4, f"Duplicate options: {q.options}"
+
+    # ── Variant reconciliation: question text must match the correct answer ────
+
+    def test_question_text_increase_implies_increase_answer(self):
+        """If question text says 'increases', correct answer must be > original."""
+        template = load_template_meta("T-8N-05")
+        # Force the "increases" context variant by directly passing change_type="decreased"
+        # (the bug scenario: params say decrease but variant might say increase).
+        # We run build_question 50 times to catch the random variant selection.
+        mismatch_found = False
+        for _ in range(50):
+            q = build_question(template, {"original": 200, "pct": 15, "change_type": "decreased"}, "standard")
+            if q is None:
+                continue
+            if "increase" in q.question_text.lower():
+                correct_val = float(q.options[q.correct_index])
+                if correct_val < 200:
+                    mismatch_found = True
+                    break
+        assert not mismatch_found, (
+            "Question text said 'increases' but correct answer was less than original — "
+            "variant/change_type reconciliation is not working."
+        )
+
+    # ── Distractor quality: test the distractor engine directly ──────────────
+    # (Testing through build_question is fragile because variant selection is random
+    #  and changes which direction is "correct". Call the engine directly instead.)
+
+    def test_op_swap_distractor_is_opposite_direction(self):
+        """For 200 increases 15% (correct=230), op-swap distractor must be 170."""
+        from services.verification import VerificationEngine
+        eng = VerificationEngine()
+        distractors = eng.generate_distractors(
+            "T-8N-05", 230, {"original": 200, "pct": 15, "change_type": "increased"}
+        )
+        assert "170" in distractors, (
+            f"Expected op-swap distractor '170', got: {distractors}"
+        )
+
+    def test_raw_arithmetic_distractor_present(self):
+        """For 200 increases 15% (correct=230), raw-arithmetic distractor must be 215 (200+15)."""
+        from services.verification import VerificationEngine
+        eng = VerificationEngine()
+        distractors = eng.generate_distractors(
+            "T-8N-05", 230, {"original": 200, "pct": 15, "change_type": "increased"}
+        )
+        assert "215" in distractors, (
+            f"Expected raw-arithmetic distractor '215' (200+15), got: {distractors}"
+        )
+
+    def test_distractors_no_collision_when_original_is_100(self):
+        """original=100 causes raw_arith (100+20=120) to equal correct (120). Must not duplicate."""
+        from services.verification import VerificationEngine
+        eng = VerificationEngine()
+        distractors = eng.generate_distractors(
+            "T-8N-05", 120, {"original": 100, "pct": 20, "change_type": "increased"}
+        )
+        assert len(set(distractors)) == 3, f"Duplicate distractors: {distractors}"
+        assert "120" not in distractors, f"Correct answer '120' appeared as distractor: {distractors}"
