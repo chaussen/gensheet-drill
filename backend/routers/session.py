@@ -28,6 +28,7 @@ from services.question_service import generate_session_questions
 from services.session_service import generate_session_summary
 from cache import session_cache
 from config.tiers import get_tier_config
+import analytics
 
 MIN_QUESTIONS_LIMIT = int(os.getenv("MIN_QUESTIONS_PER_SESSION", "5"))
 MAX_QUESTIONS_LIMIT = int(os.getenv("MAX_QUESTIONS_PER_SESSION", "20"))
@@ -95,6 +96,11 @@ async def start_session(req: SessionStartRequest):
     if req.student_id:
         today_count = session_cache.count_today(req.student_id)
         if today_count >= tier["daily_session_limit"]:
+            analytics.track_limit_reached(
+                student_id=req.student_id,
+                limit_type="daily_session",
+                tier=tier["tier"],
+            )
             raise HTTPException(
                 status_code=429,
                 detail="Daily session limit reached",
@@ -147,6 +153,15 @@ async def start_session(req: SessionStartRequest):
         "analysis": None,
     }
     session_cache.put(session_id, session_data)
+
+    analytics.track_session_started(
+        session_id=session_id,
+        year_level=req.year_level,
+        strand=req.strand,
+        difficulty=req.difficulty,
+        count=len(questions),
+        student_id=req.student_id,
+    )
 
     # Send questions WITHOUT correct_index to frontend
     public_questions = [
@@ -230,6 +245,17 @@ async def submit_session(
     summary = generate_session_summary(session, session["questions"], req.total_time_ms)
     session["summary"] = summary.model_dump()
     session_cache.update(session_id, session)
+
+    analytics.track_session_submitted(
+        session_id=session_id,
+        year_level=session["year_level"],
+        strand=session["strand"],
+        difficulty=session["difficulty"],
+        score=score,
+        total=session["count"],
+        total_time_ms=req.total_time_ms,
+        student_id=session.get("student_id"),
+    )
 
     response_items = [
         _make_response_result_item(r, session["questions"][r["question_id"]])

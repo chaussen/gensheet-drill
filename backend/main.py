@@ -25,6 +25,7 @@ from routers import progress as progress_router  # noqa: E402
 from cache import session_cache, question_cache  # noqa: E402
 from config.tiers import get_tier_config  # noqa: E402
 from models.schemas import TierConfigResponse  # noqa: E402
+import analytics  # noqa: E402
 
 app = FastAPI(
     title="GenSheet Drill API",
@@ -75,6 +76,15 @@ async def health():
         "ts": datetime.now(timezone.utc).isoformat(),
         "cache_size": session_cache.size() + question_cache.size(),
     }
+
+
+@app.get("/api/stats")
+async def get_stats():
+    """
+    Return in-memory usage counters since the last redeploy.
+    For historical data, filter Render logs by the 'event' field.
+    """
+    return analytics.get_stats()
 
 
 @app.get("/{full_path:path}", include_in_schema=False)

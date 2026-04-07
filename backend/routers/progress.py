@@ -14,6 +14,7 @@ from models.schemas import AnalysisObject
 from services import ai_service
 from cache import session_cache
 from docs_loader import load_template_meta
+import analytics
 
 router = APIRouter(prefix="/api/progress")
 logger = logging.getLogger(__name__)
@@ -106,6 +107,11 @@ async def analyse_progress(body: ProgressAnalyseRequest):
                 f"Sessions may have expired — the server keeps sessions in memory only."
             ),
         )
+
+    analytics.track_progress_analyse_requested(
+        student_id=body.student_id,
+        session_count=len(resolved),
+    )
 
     # Build aggregated results table
     blocks = [_build_session_row(s, i + 1) for i, s in enumerate(resolved)]
