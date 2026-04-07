@@ -320,19 +320,24 @@ def _solution_is_integer(template_id: str, params: dict) -> bool:
 
 
 # Param types that can be generated locally without an AI call.
-_LOCAL_PARAM_TYPES: frozenset[str] = frozenset({"choice", "randint", "random_float", "derived"})
+# choice_template is a list of format strings (e.g. "{b}²", "√{n}") — selecting
+# one is identical to choice; the {placeholders} are filled by other params in the schema.
+_LOCAL_PARAM_TYPES: frozenset[str] = frozenset(
+    {"choice", "choice_template", "randint", "random_float", "derived"}
+)
 
 
 def _is_locally_generatable(param_schema: dict) -> bool:
     """
     Return True when ALL params in the schema can be handled by _fallback_params:
-    types choice, randint, random_float, or derived (resolved in second pass).
+    types choice, choice_template, randint, random_float, or derived.
 
     Templates that qualify skip the AI call entirely — the AI would only be
     picking from a finite list or a numeric range, which random.choice /
     random.randint does just as well, instantly and for free.
 
-    Any unknown or missing type causes the template to fall through to the AI.
+    Any unknown or missing type (e.g. generated_expression) causes the template
+    to fall through to the AI.
     """
     if not param_schema:
         return True  # no params at all — trivially local
@@ -362,7 +367,7 @@ def _fallback_params(template: dict, difficulty: str) -> dict:
             if not isinstance(spec, dict):
                 continue
             ptype = spec.get("type")
-            if ptype == "choice":
+            if ptype in ("choice", "choice_template"):
                 choices = spec.get(difficulty) or spec.get("all") or spec.get("standard") or []
                 if choices:
                     params[key] = random.choice(choices)
