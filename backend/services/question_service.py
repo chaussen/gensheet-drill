@@ -319,6 +319,32 @@ def _solution_is_integer(template_id: str, params: dict) -> bool:
     return True
 
 
+# Param types that can be generated locally without an AI call.
+_LOCAL_PARAM_TYPES: frozenset[str] = frozenset({"choice", "randint", "random_float", "derived"})
+
+
+def _is_locally_generatable(param_schema: dict) -> bool:
+    """
+    Return True when ALL params in the schema can be handled by _fallback_params:
+    types choice, randint, random_float, or derived (resolved in second pass).
+
+    Templates that qualify skip the AI call entirely — the AI would only be
+    picking from a finite list or a numeric range, which random.choice /
+    random.randint does just as well, instantly and for free.
+
+    Any unknown or missing type causes the template to fall through to the AI.
+    """
+    if not param_schema:
+        return True  # no params at all — trivially local
+    for spec in param_schema.values():
+        if not isinstance(spec, dict):
+            continue
+        ptype = spec.get("type", "")
+        if ptype not in _LOCAL_PARAM_TYPES:
+            return False
+    return True
+
+
 def _fallback_params(template: dict, difficulty: str) -> dict:
     """
     Generate random parameter values locally without the AI.
@@ -1471,23 +1497,34 @@ async def generate_session_questions(
             else:
                 preselected_items = [None] * n
         else:
-            # AI call for param batches
-            try:
-                params_list = await ai_service.generate_questions(
-                    template_id=template_id,
-                    difficulty=difficulty,
-                    count=n,
-                    param_schema=template.get("params", {}),
-                )
-            except Exception as e:
-                logger.warning(
-                    "AI call failed for %s (using fallback): %s", template_id, e
-                )
-                params_list = []
+            param_schema = template.get("params", {})
 
-            # Pad with fallback if AI returned fewer than needed
-            while len(params_list) < n:
-                params_list.append(_fallback_params(template, difficulty))
+            # ── Local param generation (skip AI for simple schemas) ────────────
+            # Templates whose params are all type choice / randint / random_float
+            # gain nothing from an AI call — random.choice / randint produces the
+            # same result instantly and for free. Only call AI when the schema
+            # contains param types that require creative selection.
+            if _is_locally_generatable(param_schema):
+                logger.debug("Skipping AI call for %s (all params locally generatable)", template_id)
+                params_list = [_fallback_params(template, difficulty) for _ in range(n)]
+            else:
+                # AI call for param batches
+                try:
+                    params_list = await ai_service.generate_questions(
+                        template_id=template_id,
+                        difficulty=difficulty,
+                        count=n,
+                        param_schema=param_schema,
+                    )
+                except Exception as e:
+                    logger.warning(
+                        "AI call failed for %s (using fallback): %s", template_id, e
+                    )
+                    params_list = []
+
+                # Pad with fallback if AI returned fewer than needed
+                while len(params_list) < n:
+                    params_list.append(_fallback_params(template, difficulty))
 
             # ── Layer 3: Param diversity gate ─────────────────────────────────
             # Deduplicate param sets by fingerprint and replace duplicates with
