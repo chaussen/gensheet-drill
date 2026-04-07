@@ -22,13 +22,15 @@ function SessionTimer({ startTime }) {
 export default function DrillSession({ session }) {
   const {
     currentQuestion, questionIndex, totalQuestions, questions, answers,
-    config, loading, sessionStartTime, answeredCount,
+    config, loading, sessionStartTime, answeredCount, error,
     startSessionTimer, setAnswer, goToQuestion, submitSession,
   } = session
 
   // All hooks must be called before any early return
   const timerStartedRef = useRef(false)
   const [showSkipWarning, setShowSkipWarning] = useState(false)
+
+  const allAnswered = answeredCount === totalQuestions
 
   useEffect(() => {
     if (questions.length > 0 && !timerStartedRef.current) {
@@ -51,7 +53,6 @@ export default function DrillSession({ session }) {
   if (!currentQuestion) return null
 
   const progressPct = (answeredCount / totalQuestions) * 100
-  const allAnswered = answeredCount === totalQuestions
   const isLastQuestion = questionIndex >= totalQuestions - 1
   const selectedAnswer = answers.get(currentQuestion.question_id) ?? null
 
@@ -145,7 +146,8 @@ export default function DrillSession({ session }) {
               <button
                 data-testid={TEST_IDS.drill.submitBtn}
                 onClick={handleSubmit}
-                className={`px-6 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                disabled={loading}
+                className={`px-6 py-2 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   allAnswered
                     ? 'bg-green-600 hover:bg-green-700 text-white'
                     : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
@@ -168,8 +170,8 @@ export default function DrillSession({ session }) {
             )}
           </div>
 
-          {/* Warning when submitting with unanswered questions */}
-          {showSkipWarning && (
+          {/* Warning when submitting with unanswered questions (hide once all are answered) */}
+          {showSkipWarning && !allAnswered && (
             <div className="mt-3 bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
               <p className="text-sm text-amber-800 mb-2">
                 You have {totalQuestions - answeredCount} unanswered question{totalQuestions - answeredCount > 1 ? 's' : ''}. Unanswered questions will be marked incorrect.
@@ -188,6 +190,21 @@ export default function DrillSession({ session }) {
                   Go back
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* Submission error — shown if the API call fails after clicking Submit */}
+          {error && (
+            <div className="mt-3 bg-red-50 border border-red-200 rounded-xl p-4 text-center">
+              <p className="text-sm text-red-800 mb-2">
+                Could not submit your session. Please try again.
+              </p>
+              <button
+                onClick={submitSession}
+                className="px-4 py-1.5 rounded-lg text-sm font-medium bg-red-600 hover:bg-red-700 text-white transition-colors"
+              >
+                Retry
+              </button>
             </div>
           )}
         </div>

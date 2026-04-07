@@ -271,6 +271,23 @@ def validate_question(q: "QuestionObject", correct_str: str) -> bool:
 # Algebra templates that must produce integer solutions (generation_constraint)
 _ALGEBRA_INTEGER_CONSTRAINT_TEMPLATES = {"T-7A-02", "T-8A-02", "T-9A-02", "T-9A-04"}
 
+# Probability templates where p_numerator must be strictly less than p_denominator
+_PROBABILITY_PARAM_TEMPLATES = {"T-7P-03", "T-8P-01"}
+
+
+def _probability_params_valid(template_id: str, params: dict) -> bool:
+    """Return True if probability params satisfy p_numerator < p_denominator."""
+    if template_id not in _PROBABILITY_PARAM_TEMPLATES:
+        return True
+    pn = params.get("p_numerator")
+    pd = params.get("p_denominator")
+    if pn is None or pd is None:
+        return True  # cannot validate; let downstream catch it
+    try:
+        return int(pn) < int(pd)
+    except (TypeError, ValueError):
+        return False
+
 
 def _has_integer_solution_constraint(schema: dict) -> bool:
     """Return True if the schema declares a solution_constraint requiring integer answers."""
@@ -357,7 +374,9 @@ def _fallback_params(template: dict, difficulty: str) -> dict:
     """
     schema = template.get("params", {})
     needs_integer = _has_integer_solution_constraint(schema)
-    max_attempts = 40 if needs_integer else 1
+    template_id = template.get("id", "")
+    needs_prob_check = template_id in _PROBABILITY_PARAM_TEMPLATES
+    max_attempts = 40 if (needs_integer or needs_prob_check) else 1
 
     for _ in range(max_attempts):
         params: dict = {}
@@ -407,8 +426,10 @@ def _fallback_params(template: dict, difficulty: str) -> dict:
         # Third pass: derived params
         params = _resolve_derived_params(template, params)
 
-        # Fourth pass: validate integer solution constraint before returning
-        if not needs_integer or _solution_is_integer(template["id"], params):
+        # Fourth pass: validate integer solution constraint and probability constraint
+        integer_ok = not needs_integer or _solution_is_integer(template["id"], params)
+        prob_ok = not needs_prob_check or _probability_params_valid(template_id, params)
+        if integer_ok and prob_ok:
             return params
 
     return params  # return last attempt if all retries exhausted
@@ -1569,6 +1590,24 @@ async def generate_session_questions(
                     if not replaced:
                         logger.warning(
                             "Could not find integer-solution params for %s after 3 retries — skipping slot",
+                            template_id,
+                        )
+                        continue
+
+            # Post-generation validation: ensure p_numerator < p_denominator for probability templates.
+            # The AI may return invalid fractions (e.g. 7/6); reject and retry with fallback params.
+            if template_id in _PROBABILITY_PARAM_TEMPLATES:
+                if not _probability_params_valid(template_id, params):
+                    replaced = False
+                    for _attempt in range(3):
+                        fb = _fallback_params(template, difficulty)
+                        if _probability_params_valid(template_id, fb):
+                            params = fb
+                            replaced = True
+                            break
+                    if not replaced:
+                        logger.warning(
+                            "Could not find valid probability params for %s after 3 retries — skipping slot",
                             template_id,
                         )
                         continue
