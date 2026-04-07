@@ -491,7 +491,10 @@ def _derive_t9a02_equation(params: dict) -> None:
 def _derive_t9p03_table(params: dict) -> None:
     """
     For T-9P-03: generate a 2×2 contingency table and derive the verifier fields
-    (table, query_cell / query_row) plus table_description for question text.
+    (table, query_cell / query_row) plus structured labels for frontend rendering.
+
+    table_description is set to the sentinel "[[TABLE]]" so the frontend replaces
+    it with a proper HTML table using params.table / params.row_labels / params.col_labels.
     """
     a1b1 = random.randint(5, 25)
     a1b2 = random.randint(5, 25)
@@ -501,9 +504,10 @@ def _derive_t9p03_table(params: dict) -> None:
     params["table"] = table
 
     r1, r2, c1, c2 = "Male", "Female", "Yes", "No"
-    params["table_description"] = (
-        f"{r1}: {c1}={a1b1}, {c2}={a1b2}; {r2}: {c1}={a2b1}, {c2}={a2b2}"
-    )
+    params["row_labels"] = [r1, r2]
+    params["col_labels"] = [c1, c2]
+    # Sentinel: frontend replaces this with a rendered HTML table
+    params["table_description"] = "[[TABLE]]"
 
     query = params.get("query", "is in a specific cell")
     if "specific cell" in query:
@@ -635,15 +639,15 @@ def _resolve_derived_params(template: dict, params: dict) -> dict:
             params["base_area"] = (a_side + b_side) * h // 2
 
     # T-8ST-01: generate actual values and frequencies lists (schema entries are prose
-    # descriptions, not typed params), then build table_description for question text.
+    # descriptions, not typed params). Use [[TABLE]] sentinel so the frontend renders a
+    # proper Value/Frequency table instead of the old inline "3(×2), 7(×4)" string.
     if template.get("id") == "T-8ST-01" and not isinstance(params.get("values"), list):
         n_vals = random.randint(4, 5)
         values = sorted(random.sample(range(1, 21), n_vals))
         frequencies = [random.randint(1, 8) for _ in range(n_vals)]
         params["values"] = values
         params["frequencies"] = frequencies
-        pairs = ", ".join(f"{v}(×{f})" for v, f in zip(values, frequencies))
-        params["table_description"] = pairs
+        params["table_description"] = "[[TABLE]]"
 
     # T-9A-02: derive {lhs} and {rhs} from lhs_template + solution.
     # lhs_template contains {a},{b},{c},{d} placeholders that are NOT in the schema;
@@ -895,13 +899,18 @@ def _render_question_text(
     candidates = [c for c in candidates if c]
     template_str = random.choice(candidates)
     base = template.get("question_template", "")
+    # Stringify list params so they render as "1, 2, 3" not "[1, 2, 3]"
+    fmt_params = {
+        k: ", ".join(str(v) for v in val) if isinstance(val, list) else val
+        for k, val in params.items()
+    }
     try:
-        text = template_str.format(**params)
+        text = template_str.format(**fmt_params)
         cleaned = _clean_math_coefficients(_apply_composite_placeholders(text, params))
         return cleaned, template_str
     except (KeyError, ValueError):
         try:
-            text = base.format(**params)
+            text = base.format(**fmt_params)
             cleaned = _clean_math_coefficients(_apply_composite_placeholders(text, params))
             return cleaned, base
         except Exception:

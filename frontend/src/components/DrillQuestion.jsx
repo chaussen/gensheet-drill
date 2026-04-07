@@ -4,6 +4,95 @@ import { TEST_IDS } from '../testing/testIds.ts'
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E']
 
+const TABLE_SENTINEL = '[[TABLE]]'
+
+/** Two-way contingency table for T-9P-03 */
+function TwoWayTable({ params }) {
+  const { table, row_labels: rows, col_labels: cols } = params
+  if (!table || !rows || !cols) return null
+  const total = table.a1b1 + table.a1b2 + table.a2b1 + table.a2b2
+  return (
+    <div className="overflow-x-auto my-3">
+      <table className="border-collapse text-sm text-center mx-auto">
+        <thead>
+          <tr>
+            <th className="border border-slate-300 px-3 py-1 bg-slate-100" />
+            {cols.map(c => (
+              <th key={c} className="border border-slate-300 px-4 py-1 bg-slate-100 font-semibold text-slate-700">{c}</th>
+            ))}
+            <th className="border border-slate-300 px-4 py-1 bg-slate-100 font-semibold text-slate-700">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="border border-slate-300 px-3 py-1 bg-slate-50 font-semibold text-slate-700">{rows[0]}</td>
+            <td className="border border-slate-300 px-4 py-1">{table.a1b1}</td>
+            <td className="border border-slate-300 px-4 py-1">{table.a1b2}</td>
+            <td className="border border-slate-300 px-4 py-1 text-slate-500">{table.a1b1 + table.a1b2}</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-300 px-3 py-1 bg-slate-50 font-semibold text-slate-700">{rows[1]}</td>
+            <td className="border border-slate-300 px-4 py-1">{table.a2b1}</td>
+            <td className="border border-slate-300 px-4 py-1">{table.a2b2}</td>
+            <td className="border border-slate-300 px-4 py-1 text-slate-500">{table.a2b1 + table.a2b2}</td>
+          </tr>
+          <tr>
+            <td className="border border-slate-300 px-3 py-1 bg-slate-100 font-semibold text-slate-700">Total</td>
+            <td className="border border-slate-300 px-4 py-1 bg-slate-50 text-slate-600">{table.a1b1 + table.a2b1}</td>
+            <td className="border border-slate-300 px-4 py-1 bg-slate-50 text-slate-600">{table.a1b2 + table.a2b2}</td>
+            <td className="border border-slate-300 px-4 py-1 bg-slate-100 font-semibold text-slate-700">{total}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/** Frequency table for T-8ST-01 */
+function FrequencyTable({ params }) {
+  const { values, frequencies } = params
+  if (!Array.isArray(values) || !Array.isArray(frequencies)) return null
+  return (
+    <div className="overflow-x-auto my-3">
+      <table className="border-collapse text-sm text-center mx-auto">
+        <thead>
+          <tr>
+            <th className="border border-slate-300 px-4 py-1 bg-slate-100 font-semibold text-slate-700">Value</th>
+            {values.map((v, i) => (
+              <th key={i} className="border border-slate-300 px-4 py-1 bg-slate-100 font-semibold text-slate-700">{v}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="border border-slate-300 px-4 py-1 bg-slate-50 font-semibold text-slate-700">Frequency</td>
+            {frequencies.map((f, i) => (
+              <td key={i} className="border border-slate-300 px-4 py-1">{f}</td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+/** Render [[TABLE]] sentinel as the appropriate structured table */
+function StructuredTable({ params }) {
+  if (params?.table && params?.row_labels) return <TwoWayTable params={params} />
+  if (Array.isArray(params?.values) && Array.isArray(params?.frequencies)) return <FrequencyTable params={params} />
+  return null
+}
+
+/**
+ * Split question_text on [[TABLE]] sentinel and return [before, after] parts.
+ * Returns null if no sentinel present.
+ */
+function splitOnTableSentinel(text) {
+  const idx = text.indexOf(TABLE_SENTINEL)
+  if (idx === -1) return null
+  return [text.slice(0, idx).trim(), text.slice(idx + TABLE_SENTINEL.length).trim()]
+}
+
 // NOTE: Parent uses key={question_id} so this component remounts on question change.
 // Initial state from selectedAnswer is set via useState initialiser (no useEffect needed).
 export default function DrillQuestion({ question, questionNumber, totalQuestions, selectedAnswer, onSelect }) {
@@ -55,9 +144,32 @@ export default function DrillQuestion({ question, questionNumber, totalQuestions
         Question {questionNumber} of {totalQuestions}
       </p>
 
-      <MathText className="text-lg font-medium text-slate-800 mb-6 leading-relaxed block">
-        {question.question_text}
-      </MathText>
+      {(() => {
+        const parts = splitOnTableSentinel(question.question_text)
+        if (parts) {
+          const [before, after] = parts
+          return (
+            <>
+              {before && (
+                <MathText className="text-lg font-medium text-slate-800 leading-relaxed block">
+                  {before}
+                </MathText>
+              )}
+              <StructuredTable params={question.params} />
+              {after && (
+                <MathText className="text-lg font-medium text-slate-800 mb-6 leading-relaxed block">
+                  {after}
+                </MathText>
+              )}
+            </>
+          )
+        }
+        return (
+          <MathText className="text-lg font-medium text-slate-800 mb-6 leading-relaxed block">
+            {question.question_text}
+          </MathText>
+        )
+      })()}
 
       {isMultiSelect && (
         <p data-testid={TEST_IDS.drill.multiWarning} className="text-xs font-medium text-amber-600 uppercase tracking-wide mb-3">
