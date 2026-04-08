@@ -237,9 +237,10 @@ _T9A04_EXCLUDED_VARIANTS: frozenset[str] = frozenset([
 ])
 
 
-def validate_question(q: "QuestionObject", correct_str: str) -> bool:
+def validate_question(q: "QuestionObject", correct_str: str) -> str:
     """
-    Structural validation gate. Returns False (reject) if ANY of these are true:
+    Structural validation gate. Returns "" if valid, or a human-readable
+    rejection reason string if any check fails:
       - question_text contains an unresolved {placeholder}
       - any option is empty / None / whitespace
       - options are not all distinct strings
@@ -247,20 +248,25 @@ def validate_question(q: "QuestionObject", correct_str: str) -> bool:
       - correct_index does not point to correct_str
     """
     if _PLACEHOLDER_RE.search(q.question_text):
-        return False
+        m = _PLACEHOLDER_RE.search(q.question_text)
+        return f"unresolved placeholder {m.group()!r} in question_text"
     for opt in q.options:
         if not opt or not str(opt).strip():
-            return False
+            return f"empty/blank option: {opt!r}"
     if len(set(q.options)) != len(q.options):
-        return False
+        return "duplicate options"
     for opt in q.options:
-        if any(pat in str(opt) for pat in _BAD_OPTION_PATTERNS):
-            return False
+        for pat in _BAD_OPTION_PATTERNS:
+            if pat in str(opt):
+                return f"garbage pattern {pat!r} in option {opt!r}"
     if not (0 <= q.correct_index < len(q.options)):
-        return False
+        return f"correct_index={q.correct_index} out of range (options len={len(q.options)})"
     if q.options[q.correct_index] != correct_str:
-        return False
-    return True
+        return (
+            f"correct_index={q.correct_index} points to "
+            f"{q.options[q.correct_index]!r}, expected {correct_str!r}"
+        )
+    return ""
 
 
 # ── Multi-select template registry (data in services/multi_select_data.py) ────
@@ -365,6 +371,64 @@ def _is_locally_generatable(param_schema: dict) -> bool:
         if ptype not in _LOCAL_PARAM_TYPES:
             return False
     return True
+
+
+def _validate_ai_params(
+    params: dict, param_schema: dict, difficulty: str, template_id: str
+) -> tuple[bool, str]:
+    """
+    Validate AI-generated params against the declared param_schema.
+    Checks types and value ranges for randint, choice, and random_float params.
+    Derived and generated_expression params are skipped (validated downstream).
+    Returns (True, "") on success or (False, reason) on first failure.
+    """
+    for key, spec in param_schema.items():
+        if not isinstance(spec, dict):
+            continue
+        ptype = spec.get("type", "")
+
+        # Skip params the AI isn't expected to supply
+        if ptype in ("derived",):
+            continue
+
+        if key not in params:
+            if ptype not in ("derived",):
+                return False, f"missing key '{key}' (type={ptype})"
+            continue
+
+        val = params[key]
+
+        if ptype == "randint":
+            lo = int(spec.get(f"{difficulty}_min", spec.get("min", 1)))
+            hi = int(spec.get(f"{difficulty}_max", spec.get("max", 10)))
+            try:
+                ival = int(val)
+            except (TypeError, ValueError):
+                return False, f"'{key}' not int: {val!r}"
+            if not (lo <= ival <= hi):
+                return False, f"'{key}'={ival} outside [{lo}, {hi}]"
+
+        elif ptype in ("choice", "choice_template"):
+            allowed = (
+                spec.get(difficulty)
+                or spec.get("all")
+                or spec.get("standard")
+                or []
+            )
+            if allowed and val not in allowed:
+                return False, f"'{key}'={val!r} not in allowed {allowed}"
+
+        elif ptype == "random_float":
+            lo = float(spec.get("min", 0.0))
+            hi = float(spec.get("max", 1e9))
+            try:
+                fval = float(val)
+            except (TypeError, ValueError):
+                return False, f"'{key}' not float: {val!r}"
+            if not (lo <= fval <= hi):
+                return False, f"'{key}'={fval} outside [{lo}, {hi}]"
+
+    return True, ""
 
 
 def _fallback_params(template: dict, difficulty: str) -> dict:
@@ -1282,8 +1346,9 @@ def build_question(
         return None
 
     # 7. Structural validation gate — rejects garbage/unresolved questions before returning
-    if not validate_question(q, correct_str):
-        logger.warning("validate_question rejected assembled question for %s", template_id)
+    rejection = validate_question(q, correct_str)
+    if rejection:
+        logger.warning("validate_question rejected %s: %s", template_id, rejection)
         return None
 
     # 8. Apply $...$ math wrapping now that the question is validated
@@ -1556,6 +1621,20 @@ async def generate_session_questions(
                         "AI call failed for %s (using fallback): %s", template_id, e
                     )
                     params_list = []
+
+                # Schema-validate each AI param set; replace invalid entries with fallback
+                validated: list[dict] = []
+                for raw_p in params_list:
+                    ok, reason = _validate_ai_params(raw_p, param_schema, difficulty, template_id)
+                    if ok:
+                        validated.append(raw_p)
+                    else:
+                        logger.warning(
+                            "AI params rejected for %s (%s) — substituting fallback",
+                            template_id, reason,
+                        )
+                        validated.append(_fallback_params(template, difficulty))
+                params_list = validated
 
                 # Pad with fallback if AI returned fewer than needed
                 while len(params_list) < n:

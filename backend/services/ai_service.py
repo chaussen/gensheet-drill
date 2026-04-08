@@ -88,6 +88,102 @@ RULES:
 - Do not include vc_codes where there were fewer than 2 questions attempted."""
 
 
+# ── Analysis tool schema (Anthropic tool_use — forces structured JSON output) ──
+
+_ANALYSIS_TOOL: dict = {
+    "name": "submit_analysis",
+    "description": "Submit the complete structured analysis of the student quiz session.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "overall_score_pct": {"type": "integer"},
+            "performance_band": {
+                "type": "string",
+                "enum": ["needs_support", "developing", "strong", "exceeding"],
+            },
+            "strong_areas": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "vc_code": {"type": "string"},
+                        "description": {"type": "string"},
+                        "score_pct": {"type": "integer"},
+                    },
+                    "required": ["vc_code", "description", "score_pct"],
+                },
+            },
+            "weak_areas": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "vc_code": {"type": "string"},
+                        "description": {"type": "string"},
+                        "score_pct": {"type": "integer"},
+                        "error_pattern": {"type": "string"},
+                        "tip": {"type": "string"},
+                    },
+                    "required": ["vc_code", "description", "score_pct", "error_pattern", "tip"],
+                },
+            },
+            "next_session_recommendation": {
+                "type": "object",
+                "properties": {
+                    "focus_vc_codes": {"type": "array", "items": {"type": "string"}},
+                    "difficulty": {
+                        "type": "string",
+                        "enum": ["foundation", "standard", "advanced"],
+                    },
+                    "rationale": {"type": "string"},
+                },
+                "required": ["focus_vc_codes", "difficulty", "rationale"],
+            },
+            "motivational_note": {"type": "string"},
+        },
+        "required": [
+            "overall_score_pct",
+            "performance_band",
+            "strong_areas",
+            "weak_areas",
+            "next_session_recommendation",
+        ],
+    },
+}
+
+
+# ── Prose sanitisation ────────────────────────────────────────────────────────
+
+import re as _re
+
+_MD_BOLD_RE      = _re.compile(r'\*\*(.+?)\*\*', _re.DOTALL)
+_MD_HEADER_RE    = _re.compile(r'^#{1,6}\s+', _re.MULTILINE)
+_MD_FENCE_RE     = _re.compile(r'```[^`]*```', _re.DOTALL)
+
+
+def _sanitize_prose(text: str) -> str:
+    """Remove the most common markdown artefacts from AI prose fields."""
+    if not isinstance(text, str):
+        return text
+    text = _MD_FENCE_RE.sub('', text)
+    text = _MD_BOLD_RE.sub(r'\1', text)
+    text = _MD_HEADER_RE.sub('', text)
+    return text.strip()
+
+
+def _sanitize_analysis(data: dict) -> dict:
+    """Strip markdown from the four free-text prose fields in an analysis result."""
+    for area in data.get("weak_areas", []):
+        area["error_pattern"] = _sanitize_prose(area.get("error_pattern", ""))
+        area["tip"]           = _sanitize_prose(area.get("tip", ""))
+    rec = data.get("next_session_recommendation", {})
+    if "rationale" in rec:
+        rec["rationale"] = _sanitize_prose(rec["rationale"])
+    if "motivational_note" in data:
+        data["motivational_note"] = _sanitize_prose(data.get("motivational_note", ""))
+    return data
+
+
 # ── Shared helper ─────────────────────────────────────────────────────────────
 
 def _strip_markdown(text: str) -> str:
@@ -125,6 +221,26 @@ async def _anthropic_call(system: str, user: str, model: str, max_tokens: int) -
     return response.content[0].text
 
 
+async def _anthropic_analysis_call(system: str, user: str, model: str, max_tokens: int) -> dict:
+    """
+    Use tool_use to force structured JSON from Anthropic without markdown wrapping.
+    Returns the tool input dict directly — no JSON parsing needed.
+    """
+    client = _get_anthropic_client()
+    response = await client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        system=system,
+        messages=[{"role": "user", "content": user}],
+        tools=[_ANALYSIS_TOOL],
+        tool_choice={"type": "tool", "name": "submit_analysis"},
+    )
+    for block in response.content:
+        if block.type == "tool_use" and block.name == "submit_analysis":
+            return block.input  # already a dict, no JSON parsing needed
+    raise ValueError("Anthropic analysis response contained no submit_analysis tool_use block")
+
+
 # ── Google (Gemini) provider ──────────────────────────────────────────────────
 
 _google_client = None
@@ -150,6 +266,26 @@ async def _google_call(system: str, user: str, model: str, max_tokens: int) -> s
         ),
     )
     return response.text
+
+
+async def _google_analysis_call(system: str, user: str, model: str, max_tokens: int) -> dict:
+    """
+    Use response_mime_type=application/json to force clean JSON from Gemini.
+    Returns a parsed dict.
+    """
+    from google.genai import types
+    client = _get_google_client()
+    response = await asyncio.to_thread(
+        client.models.generate_content,
+        model=model,
+        contents=user,
+        config=types.GenerateContentConfig(
+            system_instruction=system,
+            max_output_tokens=max_tokens,
+            response_mime_type="application/json",
+        ),
+    )
+    return json.loads(response.text)
 
 
 # ── Provider dispatch ─────────────────────────────────────────────────────────
@@ -196,7 +332,7 @@ async def generate_questions(
     last_err = None
     for attempt in range(2):
         try:
-            raw = await _call(_GEN_SYSTEM, user_prompt, QUESTION_GEN_MODEL, max_tokens=1000)
+            raw = await _call(_GEN_SYSTEM, user_prompt, QUESTION_GEN_MODEL, max_tokens=1500)
             result = json.loads(_strip_markdown(raw))
             if isinstance(result, list) and len(result) > 0:
                 return result
@@ -238,8 +374,15 @@ async def analyse_session(session_data: dict) -> dict | None:
 
     for attempt in range(2):
         try:
-            raw = await _call(_ANALYSIS_SYSTEM, user_prompt, ANALYSIS_MODEL, max_tokens=1500)
-            return json.loads(_strip_markdown(raw))
+            if AI_PROVIDER == "google":
+                result = await _google_analysis_call(
+                    _ANALYSIS_SYSTEM, user_prompt, ANALYSIS_MODEL, max_tokens=1500
+                )
+            else:
+                result = await _anthropic_analysis_call(
+                    _ANALYSIS_SYSTEM, user_prompt, ANALYSIS_MODEL, max_tokens=1500
+                )
+            return _sanitize_analysis(result)
         except Exception as e:
             logger.warning(
                 "analyse_session attempt %d failed (provider=%s): %s",
@@ -280,8 +423,15 @@ async def analyse_progress(sessions_data: dict) -> dict | None:
 
     for attempt in range(2):
         try:
-            raw = await _call(_ANALYSIS_SYSTEM, user_prompt, ANALYSIS_MODEL, max_tokens=1500)
-            return json.loads(_strip_markdown(raw))
+            if AI_PROVIDER == "google":
+                result = await _google_analysis_call(
+                    _ANALYSIS_SYSTEM, user_prompt, ANALYSIS_MODEL, max_tokens=1500
+                )
+            else:
+                result = await _anthropic_analysis_call(
+                    _ANALYSIS_SYSTEM, user_prompt, ANALYSIS_MODEL, max_tokens=1500
+                )
+            return _sanitize_analysis(result)
         except Exception as e:
             logger.warning(
                 "analyse_progress attempt %d failed (provider=%s): %s",
