@@ -26,6 +26,10 @@ from cache import session_cache, question_cache  # noqa: E402
 from config.tiers import get_tier_config  # noqa: E402
 from models.schemas import TierConfigResponse  # noqa: E402
 import analytics  # noqa: E402
+from services.session_logger import LOG_FILE, read_stats  # noqa: E402
+
+# Ensure the logs directory exists before any requests arrive
+LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(
     title="GenSheet Drill API",
@@ -76,6 +80,15 @@ async def health():
         "ts": datetime.now(timezone.utc).isoformat(),
         "cache_size": session_cache.size() + question_cache.size(),
     }
+
+
+@app.get("/api/admin/stats")
+async def get_admin_stats():
+    """
+    Return aggregated stats from the session log file.
+    No authentication required — log contains no personal data.
+    """
+    return read_stats()
 
 
 @app.get("/api/stats")

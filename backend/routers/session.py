@@ -10,7 +10,7 @@ import os
 import uuid
 import logging
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from models.schemas import (
     SessionStartRequest,
@@ -29,6 +29,7 @@ from services.session_service import generate_session_summary
 from cache import session_cache
 from config.tiers import get_tier_config
 import analytics
+from services.session_logger import log_session_start
 
 MIN_QUESTIONS_LIMIT = int(os.getenv("MIN_QUESTIONS_PER_SESSION", "5"))
 MAX_QUESTIONS_LIMIT = int(os.getenv("MAX_QUESTIONS_PER_SESSION", "20"))
@@ -60,7 +61,7 @@ def _make_response_result_item(r: dict, q: dict) -> ResponseResultItem:
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @router.post("/start", response_model=SessionStartResponse)
-async def start_session(req: SessionStartRequest):
+async def start_session(req: SessionStartRequest, request: Request):
     """
     Create a new drill session. Generates questions, stores full objects
     (with correct_index) in server memory, returns public view to frontend.
@@ -161,6 +162,14 @@ async def start_session(req: SessionStartRequest):
         difficulty=req.difficulty,
         count=len(questions),
         student_id=req.student_id,
+    )
+
+    log_session_start(
+        request=request,
+        year_level=req.year_level,
+        strand=req.strand,
+        difficulty=req.difficulty,
+        count=len(questions),
     )
 
     # Send questions WITHOUT correct_index to frontend
