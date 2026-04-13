@@ -21,11 +21,24 @@ TIME_ACCURACY_MESSAGES = {
 }
 
 REASON_TEMPLATES = {
-    "weak":     "You got {correct}/{attempted} on {strand}. Try foundation difficulty next.",
-    "medium":   "You scored {pct}% on {strand}. Keep practising at this level.",
-    "strong":   "Great work on {strand}! Try advanced difficulty next.",
-    "all_good": "You're performing well across all strands. Try advanced next.",
+    "weak":          "You got {correct}/{attempted} on {strand}. Try foundation difficulty next.",
+    "medium":        "You scored {pct}% on {strand}. Keep practising at this level.",
+    "strong":        "Great work on {strand}! Try {next_difficulty} difficulty next.",
+    "strong_at_top": "Great work on {strand}! Keep challenging yourself at advanced level.",
+    "all_good":      "You're performing well across all strands. Try advanced next.",
+    "all_good_at_top": "Excellent across all strands. Keep it up at advanced level.",
 }
+
+_DIFFICULTY_ORDER = ["foundation", "standard", "advanced"]
+
+
+def _step_up_difficulty(current: str) -> str:
+    """Return the next difficulty level up, or the same if already at advanced."""
+    try:
+        idx = _DIFFICULTY_ORDER.index(current)
+    except ValueError:
+        idx = 1  # default to standard if unknown
+    return _DIFFICULTY_ORDER[min(idx + 1, len(_DIFFICULTY_ORDER) - 1)]
 
 
 def _performance_band(score_pct: int) -> str:
@@ -106,8 +119,14 @@ def generate_session_summary(session: dict, questions: dict, total_time_ms: int 
             suggested_difficulty = current_difficulty
             reason = REASON_TEMPLATES["medium"].format(pct=weak_pct, strand=weakest_strand)
         else:
-            suggested_difficulty = "advanced"
-            reason = REASON_TEMPLATES["strong"].format(strand=weakest_strand)
+            suggested_difficulty = _step_up_difficulty(current_difficulty)
+            if suggested_difficulty == current_difficulty:
+                # Already at advanced — no higher level exists
+                reason = REASON_TEMPLATES["strong_at_top"].format(strand=weakest_strand)
+            else:
+                reason = REASON_TEMPLATES["strong"].format(
+                    strand=weakest_strand, next_difficulty=suggested_difficulty
+                )
 
         suggestion = NextSessionSuggestion(
             strand=weakest_strand,
@@ -127,10 +146,16 @@ def generate_session_summary(session: dict, questions: dict, total_time_ms: int 
             remaining = [s for s in STRAND_ORDER if s not in taken]
             next_strand = remaining[0] if remaining else (STRAND_ORDER[0] if STRAND_ORDER else "Algebra")
 
+        all_good_difficulty = _step_up_difficulty(current_difficulty)
+        all_good_reason = (
+            REASON_TEMPLATES["all_good_at_top"]
+            if all_good_difficulty == current_difficulty
+            else REASON_TEMPLATES["all_good"]
+        )
         suggestion = NextSessionSuggestion(
             strand=next_strand,
-            difficulty="advanced",
-            reason=REASON_TEMPLATES["all_good"],
+            difficulty=all_good_difficulty,
+            reason=all_good_reason,
         )
 
     # Time band

@@ -1291,6 +1291,34 @@ def build_question(
             except Exception as e:
                 logger.warning("T-8N-05 re-verify after variant reconciliation failed: %s", e)
 
+    # T-7A-03: "Find the common difference" variant asks for d, but the verifier always returns
+    # the 5th term (t1 + 4d). Override when this variant is selected.
+    if template_id == "T-7A-03" and "common difference" in chosen_variant.lower():
+        correct_answer = params.get("d", correct_answer)
+
+    # T-9N-03: "total amount" variant asks for principal + compound interest, but the verifier
+    # always returns only the interest portion. Recompute directly from params.
+    if template_id == "T-9N-03" and "total amount" in chosen_variant.lower():
+        try:
+            principal = float(params.get("principal", 0))
+            rate = float(params.get("rate", 0)) / 100
+            years = int(params.get("years", 1))
+            correct_answer = round(principal * (1 + rate) ** years, 2)
+        except Exception as e:
+            logger.warning("T-9N-03 total amount recompute failed: %s", e)
+
+    # T-9A-01: "Expand: ({ax} + {b})²" variant should give the perfect square (ax+b)², but the
+    # verifier computes the general binomial (ax±b)(cx±d) using unrelated params c, d, op1, op2.
+    if template_id == "T-9A-01" and "²" in chosen_variant:
+        try:
+            from sympy import symbols as _sym_s, expand as _sym_exp
+            _xv = _sym_s("x")
+            _a = int(params.get("a", 1))
+            _b = int(params.get("b", 1))
+            correct_answer = str(_sym_exp((_a * _xv + _b) ** 2))
+        except Exception as e:
+            logger.warning("T-9A-01 perfect square recompute failed: %s", e)
+
     correct_str = _format_answer(correct_answer)
 
     # 3. Distractors

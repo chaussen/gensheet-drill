@@ -88,3 +88,80 @@ Bugs are logged here. Fixed bugs are kept for historical reference.
 **Root cause class:** SCHEMA_DRIFT (error field is in schema/state but never rendered)
 **Fix applied:** Added error display in DrillSession.jsx showing `session.error` with a retry button when submission fails. Changed skip warning condition to `showSkipWarning && !allAnswered` so stale warning state is ignored once all questions are answered. Added `disabled={loading}` to the Submit button to prevent double-clicks during submission. (`frontend/src/components/DrillSession.jsx`)
 **Resolved:** 2026-04-07
+
+---
+
+## BUG-007 — T-7A-03: "Find the common difference" variant answers with the next term instead of d
+**Found:** 2026-04-13
+**Status:** Resolved
+**Reproduce:**
+  Year 7 Mix, 20 questions, advanced difficulty.
+  Question shown: "Find the common difference of the sequence 17, 23, 29, 35."
+  Actual:   options were 42, 40, 41, 39 (OFF_BY_ONE variants around 41 = next term)
+  Expected: options should include 6 (the common difference d) and plausible near-misses like 5, 7, 8
+**Root cause:** The verifier `_arithmetic_sequence_next` always returns `t1 + 4*d` (the 5th/next term).
+  When context_variants[1] "Find the common difference…" is selected, the answer should be `d`,
+  but no post-verifier override existed to switch the answer.
+**Root cause class:** CONTEXT_VARIANT_ANSWER_MISMATCH
+**Fix applied:** Added T-7A-03 block in `question_service.py` after verifier call: when chosen variant
+  contains "common difference", override `correct_answer = params["d"]`.
+**Resolved:** 2026-04-13
+
+---
+
+## BUG-008 — T-9N-03: "total amount" variant returns the interest amount, not principal + interest
+**Found:** 2026-04-13
+**Status:** Resolved
+**Reproduce:**
+  Discovered during blast-radius check for BUG-007.
+  Question shown: "What is the total amount after 3 years on a $1000 investment at 5% p.a. compound interest?"
+  Actual:   correct answer would be ~$157.63 (just the compound interest portion)
+  Expected: correct answer should be ~$1157.63 (total amount = principal + compound interest)
+**Root cause:** The verifier `_simple_compound_interest` always returns the interest earned, not the total.
+  The context variant asks for the total amount, requiring `principal * (1 + rate)^years`.
+**Root cause class:** CONTEXT_VARIANT_ANSWER_MISMATCH
+**Fix applied:** Added T-9N-03 block in `question_service.py`: when chosen variant contains
+  "total amount", override `correct_answer` with `principal * (1 + rate)^years` directly.
+**Resolved:** 2026-04-13
+
+---
+
+## BUG-009 — T-9A-01: "Expand: (ax+b)²" variant computes wrong binomial product
+**Found:** 2026-04-13
+**Status:** Resolved
+**Reproduce:**
+  Discovered during blast-radius check for BUG-007.
+  Question shown: "Expand: (2x + 3)²"
+  Actual:   correct answer was the full binomial product using unrelated params c, d, op1, op2
+            e.g. "(2x+3)(x-5) = 2x²-7x-15" used as answer for "(2x+3)²"
+  Expected: correct answer should be "4*x**2 + 12*x + 9"
+**Root cause:** The verifier `_expand_binomial` uses all four params (a, b, c, d) and both ops to
+  compute `(ax±b)(cx±d)`. When the perfect-square context variant is selected it still runs the
+  same computation using mismatched params, producing the wrong polynomial.
+**Root cause class:** CONTEXT_VARIANT_ANSWER_MISMATCH
+**Fix applied:** Added T-9A-01 block in `question_service.py`: when chosen variant contains "²",
+  recompute `correct_answer = str(expand((a*x + b)**2))` using only params a and b.
+**Resolved:** 2026-04-13
+
+---
+
+## BUG-010 — Recommendation says "Try advanced difficulty next" when already at advanced
+**Found:** 2026-04-13
+**Status:** Resolved
+**Reproduce:**
+  Year 9, Number, advanced difficulty, 15 questions.
+  After finishing, the Next Session box showed:
+    "Number · advanced difficulty"
+    "Great work on Number! Try advanced difficulty next."
+  Expected: reason should not say "Try advanced difficulty next" when the student is already
+  at advanced (the maximum difficulty). Should instead encourage continuing at advanced level.
+**Root cause:** `session_service.py` hard-codes `suggested_difficulty = "advanced"` and uses
+  `REASON_TEMPLATES["strong"]` ("Try advanced difficulty next") for any session scoring > 70%
+  on the weakest strand, regardless of what `current_difficulty` is. The same hard-coded
+  "advanced" appears in the "all_good" fallback branch.
+**Root cause class:** PARAM_CONSTRAINT_VIOLATED (difficulty recommendation ignores current level)
+**Fix applied:** Replaced hard-coded "advanced" with a step-up function in `session_service.py`.
+  Added REASON_TEMPLATES "strong_at_top" and "all_good_at_top" for when already at advanced.
+  "strong" branch now steps up one tier (foundation→standard or standard→advanced); when already
+  at advanced it stays advanced with the "at_top" reason. Same for "all_good" branch.
+**Resolved:** 2026-04-13
