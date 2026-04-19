@@ -1,12 +1,12 @@
 name: Keep Render Alive
 
 on:
-  schedule:
+  #schedule:
     # Every 5 minutes — the minimum GitHub allows.
     # GitHub Actions can run a few minutes late in practice, so using
     # the minimum interval gives the best chance of staying within
     # Render's 15-min inactivity spindown window.
-    - cron: "*/5 * * * *"
+   # - cron: "*/5 * * * *"
   workflow_dispatch: # allow manual trigger from GitHub UI
 
 jobs:
