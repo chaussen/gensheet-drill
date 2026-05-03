@@ -1,31 +1,57 @@
 """
 Pure Python session summary computation — zero AI calls.
 """
-from models.schemas import SessionSummaryObject, StrandStat, NextSessionSuggestion
 
-STRAND_ORDER = ["Algebra", "Measurement", "Number", "Probability", "Space", "Statistics"]
+from models.schemas import NextSessionSuggestion, SessionSummaryObject, StrandStat
+
+STRAND_ORDER = [
+    "Algebra",
+    "Measurement",
+    "Number",
+    "Probability",
+    "Space",
+    "Statistics",
+]
 
 TIME_ACCURACY_MESSAGES = {
-    ("exceeding", "fast"):         "Excellent — high accuracy and fast responses.",
-    ("exceeding", "moderate"):     "Great accuracy. You're taking your time — that's fine.",
-    ("exceeding", "slow"):         "Great accuracy. Try to pick up the pace next session.",
-    ("strong", "fast"):            "Good score and quick responses. Watch for careless errors.",
-    ("strong", "moderate"):        "Solid session overall.",
-    ("strong", "slow"):            "Good accuracy but slow pacing — try to move more confidently.",
-    ("developing", "fast"):        "Fast but some errors — slow down slightly and check your work.",
-    ("developing", "moderate"):    "Some questions are tricky — focus on your weak strand next.",
-    ("developing", "slow"):        "Take your time — accuracy is more important than speed right now.",
-    ("needs_support", "fast"):     "Moving quickly but missing too many — slow down and check each step.",
-    ("needs_support", "moderate"): "This strand needs more practice. Try foundation difficulty.",
-    ("needs_support", "slow"):     "Take your time — try foundation difficulty to build confidence.",
+    ("exceeding", "fast"): "Excellent — high accuracy and fast responses.",
+    ("exceeding", "moderate"): "Great accuracy. You're taking your time — that's fine.",
+    ("exceeding", "slow"): "Great accuracy. Try to pick up the pace next session.",
+    ("strong", "fast"): "Good score and quick responses. Watch for careless errors.",
+    ("strong", "moderate"): "Solid session overall.",
+    ("strong", "slow"): "Good accuracy but slow pacing — try to move more confidently.",
+    (
+        "developing",
+        "fast",
+    ): "Fast but some errors — slow down slightly and check your work.",
+    (
+        "developing",
+        "moderate",
+    ): "Some questions are tricky — focus on your weak strand next.",
+    (
+        "developing",
+        "slow",
+    ): "Take your time — accuracy is more important than speed right now.",
+    (
+        "needs_support",
+        "fast",
+    ): "Moving quickly but missing too many — slow down and check each step.",
+    (
+        "needs_support",
+        "moderate",
+    ): "This strand needs more practice. Try foundation difficulty.",
+    (
+        "needs_support",
+        "slow",
+    ): "Take your time — try foundation difficulty to build confidence.",
 }
 
 REASON_TEMPLATES = {
-    "weak":          "You got {correct}/{attempted} on {strand}. Try foundation difficulty next.",
-    "medium":        "You scored {pct}% on {strand}. Keep practising at this level.",
-    "strong":        "Great work on {strand}! Try {next_difficulty} difficulty next.",
+    "weak": "You got {correct}/{attempted} on {strand}. Try foundation difficulty next.",
+    "medium": "You scored {pct}% on {strand}. Keep practising at this level.",
+    "strong": "Great work on {strand}! Try {next_difficulty} difficulty next.",
     "strong_at_top": "Great work on {strand}! Keep challenging yourself at advanced level.",
-    "all_good":      "You're performing well across all strands. Try advanced next.",
+    "all_good": "You're performing well across all strands. Try advanced next.",
     "all_good_at_top": "Excellent across all strands. Keep it up at advanced level.",
 }
 
@@ -52,27 +78,30 @@ def _performance_band(score_pct: int) -> str:
 
 
 def _build_time_accuracy_summary(performance_band: str, time_band: str) -> str:
-    return TIME_ACCURACY_MESSAGES.get((performance_band, time_band), "Session complete.")
+    return TIME_ACCURACY_MESSAGES.get(
+        (performance_band, time_band), "Session complete."
+    )
 
 
-def generate_session_summary(session: dict, questions: dict, total_time_ms: int = 0) -> SessionSummaryObject:
+def generate_session_summary(
+    session: dict, questions: dict, total_time_ms: int = 0
+) -> SessionSummaryObject:
     """
     Compute SessionSummaryObject from completed session data.
 
     Args:
-        session: session cache dict with 'responses', 'config', etc.
+        session: session cache dict with 'responses', 'config', 'score', etc.
         questions: dict mapping question_id → QuestionObject
+        total_time_ms: total session duration in milliseconds
     """
     responses = session.get("responses", [])
     config = session.get("config", {})
+    score = session.get("score", 0)  # use pre-computed score from submit endpoint
     current_difficulty = config.get("difficulty", "standard")
 
     strand_data: dict[str, dict] = {}
-    score = 0
     for r in responses:
         correct = r.get("correct", False)
-        if correct:
-            score += 1
         qid = r.get("question_id")
         q = questions.get(qid)
         if q is None:
@@ -89,7 +118,9 @@ def generate_session_summary(session: dict, questions: dict, total_time_ms: int 
         attempted = data["attempted"]
         correct = data["correct"]
         pct = round(correct / attempted * 100) if attempted > 0 else 0
-        by_strand[strand] = StrandStat(attempted=attempted, correct=correct, score_pct=pct)
+        by_strand[strand] = StrandStat(
+            attempted=attempted, correct=correct, score_pct=pct
+        )
 
     total = len(responses)
     score_pct = round(score / total * 100) if total > 0 else 0
@@ -117,7 +148,9 @@ def generate_session_summary(session: dict, questions: dict, total_time_ms: int 
             )
         elif weak_pct <= 70:
             suggested_difficulty = current_difficulty
-            reason = REASON_TEMPLATES["medium"].format(pct=weak_pct, strand=weakest_strand)
+            reason = REASON_TEMPLATES["medium"].format(
+                pct=weak_pct, strand=weakest_strand
+            )
         else:
             suggested_difficulty = _step_up_difficulty(current_difficulty)
             if suggested_difficulty == current_difficulty:
@@ -144,7 +177,11 @@ def generate_session_summary(session: dict, questions: dict, total_time_ms: int 
             # Fall back to global strand order
             taken = set(strand_data.keys())
             remaining = [s for s in STRAND_ORDER if s not in taken]
-            next_strand = remaining[0] if remaining else (STRAND_ORDER[0] if STRAND_ORDER else "Algebra")
+            next_strand = (
+                remaining[0]
+                if remaining
+                else (STRAND_ORDER[0] if STRAND_ORDER else "Algebra")
+            )
 
         all_good_difficulty = _step_up_difficulty(current_difficulty)
         all_good_reason = (

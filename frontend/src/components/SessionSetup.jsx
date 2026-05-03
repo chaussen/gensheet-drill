@@ -34,7 +34,7 @@ export default function SessionSetup({ onStart, onViewHistory, error, tierConfig
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div className="bg-slate-50 flex items-center justify-center p-4 pt-16">
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 w-full max-w-md">
         <h1 className="text-2xl font-bold text-slate-800 mb-1">GenSheet Drill</h1>
         <p className="text-slate-500 text-sm mb-6">Victorian Curriculum Mathematics — Years 7–9</p>

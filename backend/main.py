@@ -5,27 +5,28 @@ FastAPI application entry point for GenSheet Drill.
 Run from the backend/ directory:
     uvicorn main:app --reload --port 8000
 """
-from datetime import datetime, timezone
 
+import os
+from datetime import datetime, timezone
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 # Load .env from project root (parent of backend/), falling back to cwd
 load_dotenv(Path(__file__).parent.parent / ".env")
 load_dotenv()  # also check cwd for local overrides
 
+import analytics  # noqa: E402
+from cache import question_cache, session_cache  # noqa: E402
+from config.tiers import get_tier_config  # noqa: E402
 from fastapi import FastAPI  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from fastapi.responses import FileResponse, JSONResponse, Response  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
-
-from routers import session as session_router  # noqa: E402
-from routers import questions as questions_router  # noqa: E402
-from routers import progress as progress_router  # noqa: E402
-from cache import session_cache, question_cache  # noqa: E402
-from config.tiers import get_tier_config  # noqa: E402
 from models.schemas import TierConfigResponse  # noqa: E402
-import analytics  # noqa: E402
+from routers import progress as progress_router  # noqa: E402
+from routers import questions as questions_router  # noqa: E402
+from routers import session as session_router  # noqa: E402
 from services.session_logger import LOG_FILE, read_stats  # noqa: E402
 
 # Ensure the logs directory exists before any requests arrive
@@ -37,10 +38,16 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Allow all origins during development; Iteration 4 will tighten this
+# CORS origins — scoped to production origin via env var, open in dev
+_CORS_ORIGINS = os.getenv("CORS_ORIGINS", "")
+if _CORS_ORIGINS:
+    _allow_origins = [o.strip() for o in _CORS_ORIGINS.split(",") if o.strip()]
+else:
+    _allow_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_allow_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
