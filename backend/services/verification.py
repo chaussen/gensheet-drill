@@ -262,16 +262,31 @@ class VerificationEngine:
         return round(result, 2) if result != int(result) else int(result)
 
     def _expand_simplify(self, p):
-        from sympy import symbols, expand as sym_expand
+        import re as _re
+        from sympy import symbols, expand as sym_expand, sympify
         xv = symbols("x")
+
+        # Use the pre-rendered "expr" param (resolved from expr_template by question_service)
+        # so all six template variants (including squared and double-bracket) expand correctly.
+        expr_raw = p.get("expr", "")
+        if expr_raw:
+            safe = str(expr_raw)
+            safe = safe.replace("²", "**2").replace("³", "**3")
+            safe = _re.sub(r'(\d)\(', r'\1*(', safe)   # 5(x+2) → 5*(x+2)
+            safe = _re.sub(r'(\d)x', r'\1*x', safe)    # 2x → 2*x
+            try:
+                return str(sym_expand(sympify(safe, {"x": xv})))
+            except Exception:
+                pass  # fall through to legacy method
+
+        # Legacy fallback: handles only {a}({b}x ± {c})
         a, b_coef, c_val = int(p["a"]), int(p["b"]), int(p["c"])
         op = p.get("op", "+")
         if op == "+":
             expr = a * (b_coef * xv + c_val)
         else:
             expr = a * (b_coef * xv - c_val)
-        result = sym_expand(expr)
-        return str(result)
+        return str(sym_expand(expr))
 
     def _solve_linear_both_sides(self, p):
         a, b_val, c_val, d_val = int(p["a"]), int(p["b"]), int(p["c"]), int(p["d"])
@@ -1004,6 +1019,12 @@ if __name__ == "__main__":
         ("T-9SP-02", {"original": 10, "k": 5, "direction": "reduce"}, "10"),
         # T-9SP-02: enlarge — large values (original=15, k=6 → 90)
         ("T-9SP-02", {"original": 15, "k": 6, "direction": "enlarge"}, "90"),
+        # T-8A-01: squared advanced template 5(x+2)² → 5x²+20x+20
+        ("T-8A-01", {"a": 5, "b": 2, "c": 3, "expr": "5(x + 2)²"}, "5*x**2 + 20*x + 20"),
+        # T-8A-01: double-bracket advanced 3(2x+5) - 2(x-3) → 4x+21
+        ("T-8A-01", {"a": 3, "b": 2, "c": 5, "d": 2, "e": 1, "f": 3, "expr": "3(2x + 5) - 2(x - 3)"}, "4*x + 21"),
+        # T-8A-01: simple foundation {a}({b}x+{c}) via legacy path (no expr key)
+        ("T-8A-01", {"a": 3, "b": 2, "c": 5, "op": "+"}, "6*x + 15"),
     ]
 
     passed, failed = 0, 0

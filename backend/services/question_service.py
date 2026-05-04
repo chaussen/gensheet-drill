@@ -1319,6 +1319,20 @@ def build_question(
         except Exception as e:
             logger.warning("T-9A-01 perfect square recompute failed: %s", e)
 
+    # T-8M-05: verifier always returns speed because _resolve_derived_params pre-computes dist,
+    # making all three params (speed, time, dist) non-zero before the verifier runs. The verifier
+    # then defaults query="speed" and returns dist/time regardless of which variant was chosen.
+    if template_id == "T-8M-05":
+        variant_lower = chosen_variant.lower()
+        if "how far" in variant_lower:
+            correct_answer = params.get("dist", correct_answer)
+        elif "how long" in variant_lower or "journey take" in variant_lower:
+            try:
+                t = round(float(params["dist"]) / float(params["speed"]), 2)
+                correct_answer = int(t) if t == int(t) else t
+            except Exception as e:
+                logger.warning("T-8M-05 time recompute failed: %s", e)
+
     correct_str = _format_answer(correct_answer)
 
     # 3. Distractors

@@ -165,3 +165,45 @@ Bugs are logged here. Fixed bugs are kept for historical reference.
   "strong" branch now steps up one tier (foundation→standard or standard→advanced); when already
   at advanced it stays advanced with the "at_top" reason. Same for "all_good" branch.
 **Resolved:** 2026-04-13
+
+---
+
+## BUG-011 — T-8A-01 advanced: "Expand and simplify: 5(x + 2)²" shows no correct answer
+**Found:** 2026-05-04
+**Status:** Resolved
+**Reproduce:**
+  Session: Year 8, Algebra, advanced difficulty
+  Question shown: "Expand and simplify: 5(x + 2)²"
+  Actual: all four options were linear expressions (10x + 30, 10x + 3, 5x + 15, 10x + 8)
+  Expected: correct answer 5x² + 20x + 20 (quadratic) should appear as one of the four options
+**Root cause:** `_expand_simplify` in `verification.py` always computes `a*(b_coef*x ± c_val)` —
+  a single-bracket linear form. It has no branch for the four non-trivial `expr_template` variants:
+  advanced `{a}(x + {b})²` (quadratic), advanced `{a}({b}x + {c}) - {d}({e}x - {f})` (double-bracket),
+  standard `{a}({b}x + {c}) + {d}x` (extra term), and standard `{a}(x + {c}) + {b}(x + {d})` (double-bracket).
+  For the squared template, `b` (the constant) was used as the x-coefficient and `c` (unrelated) as
+  the constant, producing a wrong linear answer; the correct quadratic never appeared in the options.
+**Root cause class:** WRONG_VERIFIER_BRANCH
+**Fix applied:** Updated `_expand_simplify` to first check for the pre-rendered `expr` param
+  (already resolved from `expr_template` by `_resolve_derived_params` before the verifier is called).
+  When present, normalises implicit multiplication and `²`→`**2`, then uses `sympy.sympify` + `expand`
+  to expand the actual expression directly. Legacy `a*(b*x ± c)` path retained as fallback.
+  Added 3 new test cases to the `__main__` block (squared, double-bracket, legacy path).
+  (`backend/services/verification.py`)
+**Resolved:** 2026-05-04
+
+---
+
+## BUG-012 — T-8M-05: distance/time context variants always return speed as correct answer
+**Found:** 2026-05-04
+**Status:** Resolved
+**Reproduce:**
+  Session: Year 8, Measurement (or Mixed), any difficulty
+  Question shown: "If speed is 120 km/h, how far does a car travel in 1.5 hours?"
+  Options: A=119, B=121, C=120, D=240
+  Actual: "Correct: 120" — the speed value, not the distance
+  Expected: correct answer should be 180 km (120 × 1.5); option 180 should appear
+  Also affected: "A car travels {dist} km at {speed} km/h. How long does the journey take?" variant returns speed instead of time
+**Root cause:** `_rate_speed_distance_time` verifier defaults `query="speed"` when no `query` param is supplied. Since `_resolve_derived_params` pre-computes `dist = speed × time` before the verifier runs, all three params are non-zero, so the speed branch always fires regardless of which context variant is displayed.
+**Root cause class:** CONTEXT_VARIANT_ANSWER_MISMATCH
+**Fix applied:** Added T-8M-05 post-verifier override in `question_service.py` (after the variant is known): "how far" variant → `correct_answer = params["dist"]`; "how long"/"journey take" variant → `correct_answer = round(dist/speed, 2)`. Blast-radius check confirmed no other template with derived params has the same mismatch. (`backend/services/question_service.py`)
+**Resolved:** 2026-05-04
